@@ -3,32 +3,34 @@ import { useRef, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-export default function CameraPicker({ isOn, active }) {
+export default function CameraPicker({ isOn, active, takePicture }) {
   const [hasPermission, setHasPermission] = useState(active);
   const [type, setType] = useState(CameraType.back);
   const [flash, setFlash] = useState(FlashMode.off);
 
   const handlePermission = async () => {
     const { status } = await Camera.requestCameraPermissionsAsync();
-    isOn(status === "granted");
     setHasPermission(status === "granted");
+    isOn(status === "granted");
   };
 
   let cameraRef = useRef(null);
 
-  const takePicture = async () => {
+  const handlePicture = async () => {
     const photo = await cameraRef.takePictureAsync({ quality: 0.3 });
-    console.log(photo);
+    isOn(false);
+    takePicture(photo);
   };
 
   if (!hasPermission) {
     return (
       <TouchableOpacity
         style={{
-          width: "70%",
+          marginTop: 10,
+          width: 300,
           height: 100,
           borderRadius: 8,
-          borderWidth: 2,
+          borderWidth: 1,
           alignItems: "center",
           justifyContent: "center",
         }}
@@ -44,18 +46,15 @@ export default function CameraPicker({ isOn, active }) {
     <Camera
       style={{
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
+        flexDirection: "row",
+        justifyContent: "space-around",
+        alignItems: "flex-end",
+        paddingBottom: 50,
       }}
       ref={(ref) => (cameraRef = ref)}
       type={type}
       flashMode={flash}
     >
-      <FontAwesome
-        name="circle-thin"
-        size={25}
-        onPress={() => takePicture()}
-      ></FontAwesome>
       <FontAwesome
         name="rotate-right"
         size={25}
@@ -64,14 +63,19 @@ export default function CameraPicker({ isOn, active }) {
             type === CameraType.back ? CameraType.front : CameraType.back
           );
         }}
-      ></FontAwesome>
+      />
+      <FontAwesome
+        name="circle-thin"
+        size={25}
+        onPress={() => handlePicture()}
+      />
       <FontAwesome
         name="flash"
         size={25}
         onPress={() => {
           setFlash(flash === FlashMode.off ? FlashMode.torch : FlashMode.off);
         }}
-      ></FontAwesome>
+      />
     </Camera>
   );
 }

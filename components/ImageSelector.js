@@ -29,7 +29,7 @@ export default function ImageSelector({ pickImage, images, deleteImage }) {
     <TouchableOpacity
       style={{
         width: "80%",
-        height: "70%",
+        height: "65%",
         borderRadius: 8,
         borderWidth: 1,
         borderColor: "#1F6F78",

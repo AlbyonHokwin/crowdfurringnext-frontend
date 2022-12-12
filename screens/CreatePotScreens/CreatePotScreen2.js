@@ -16,6 +16,7 @@ import CameraPicker from "../../components/CameraPicker";
 
 export default function PotScreen2({ navigation }) {
   const [images, setImages] = useState([]);
+  const [isOn, setIsOn] = useState(false);
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -38,7 +39,15 @@ export default function PotScreen2({ navigation }) {
     setImages(arr);
   }
 
-  return (
+  const handleCamera = (isOn) => setIsOn(isOn);
+  const takePicture = (picture) =>
+    images.length >= 4
+      ? alert("Delete a picture before to add new ones")
+      : setImages([...images, picture.uri]);
+
+  return isOn ? (
+    <CameraPicker active={true} takePicture={takePicture} isOn={handleCamera} />
+  ) : (
     <SafeAreaView style={styles.container}>
       <View
         style={{
@@ -52,7 +61,7 @@ export default function PotScreen2({ navigation }) {
       >
         <Text style={{ fontSize: 32 }}>General Miaou</Text>
       </View>
-      <View>
+      <View style={{ marginTop: 10 }}>
         <Text>Ajouter au minimum 3 photos de votre animal</Text>
         <ImageSelector
           title="Pick an image from camera roll"
@@ -60,8 +69,8 @@ export default function PotScreen2({ navigation }) {
           images={images}
           deleteImage={deleteImage}
         />
+        <CameraPicker isOn={handleCamera} active={false} />
       </View>
-      {/* <CameraPicker /> */}
       <View
         style={{
           width: "100%",
@@ -89,6 +98,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-around",
   },
 });
