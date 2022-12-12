@@ -1,20 +1,27 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from "react-native";
+import CreatePotScreen1 from "./screens/CreatePotScreens/CreatePotScreen1";
+import CreatePotScreen2 from "./screens/CreatePotScreens/CreatePotScreen2";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { NavigationContainer } from "@react-navigation/native";
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer style={styles.container}>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="CreatePotScreen1" component={CreatePotScreen1} />
+        <Stack.Screen name="CreatePotScreen2" component={CreatePotScreen2} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
