@@ -12,8 +12,9 @@ import {
     Modal,
 } from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import * as colors from '../styles/colors';
 
-const BACKEND_URL = 'http://192.168.10.140:3000';
+const BACKEND_URL = 'http://192.168.10.157:3000';
 
 const PotScreen = ({ route, navigation }) => {
     const [pot, setPot] = useState(null);
@@ -23,7 +24,7 @@ const PotScreen = ({ route, navigation }) => {
     useEffect(() => {
         (async () => {
             const slug = "testSlug";
-            const response = await fetch(`${BACKEND_URL}/pots/${slug}`);
+            const response = await fetch(`${BACKEND_URL}/pots/slug/${slug}`);
             const data = await response.json();
 
             data.result && setPot(data.pot);
@@ -47,7 +48,7 @@ const PotScreen = ({ route, navigation }) => {
                     <FontAwesome name='angle-left' size={50} color='black' />
                 </TouchableOpacity>
                 <TouchableOpacity activeOpacity={1} >
-                    <Image source={photo} style={styles.bigPhoto} />
+                    <Image source={{ uri: photo }} style={styles.bigPhoto} />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.arrowButton} activeOpacity={0.8} onPress={() => pressRight()} >
                     <FontAwesome name='angle-right' size={50} color='black' />
@@ -112,8 +113,6 @@ const PotScreen = ({ route, navigation }) => {
                 </View>
 
                 <View style={styles.voidContainer}></View>
-
-                <View><Text>FIN</Text></View>
             </ScrollView>
 
             <View style={styles.buttonsContainer}>
@@ -134,10 +133,8 @@ const PotScreen = ({ route, navigation }) => {
                 }}
                 statusBarTranslucent={true}
             >
-                <TouchableOpacity style={styles.centeredView} onPress={() => setModalVisible(!modalVisible)} activeOpacity={1} >
-                    <View style={styles.modalView}>
-                        {modalPhotos[modalIndex]}
-                    </View>
+                <TouchableOpacity style={styles.modalView} onPress={() => setModalVisible(!modalVisible)} activeOpacity={1} >
+                    {modalPhotos[modalIndex]}
                 </TouchableOpacity>
             </Modal>
 
@@ -165,25 +162,24 @@ const styles = StyleSheet.create({
     name: {
         fontSize: 30,
         fontWeight: 'bold',
-        color: 'black',
+        color: colors.dark,
     },
     city: {
         fontSize: 20,
-        color: 'black',
+        color: colors.dark,
     },
     amounts: {
         fontSize: 30,
-        color: 'black',
         marginVertical: 5,
         padding: 10,
         borderRadius: 20,
-        backgroundColor: '#aaaaaa',
+        backgroundColor: colors.secondary,
+        color: colors.light,
     },
     photos: {
         width: '100%',
         marginVertical: 10,
     },
-    photosScroll: {},
     photo: {
         height: Dimensions.get('screen').width / 2.5,
         width: Dimensions.get('screen').width / 2.5,
@@ -199,7 +195,7 @@ const styles = StyleSheet.create({
     infoText: {
         width: '40%',
         fontSize: 20,
-        color: 'grey',
+        color: colors.tertiary,
         textAlign: 'left',
         marginVertical: 2,
     },
@@ -230,23 +226,11 @@ const styles = StyleSheet.create({
         fontSize: 20,
         width: '100%',
     },
-    centeredView: {
+    modalView: {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: 'rgba(100, 100, 100, 0.7)',
-    },
-    modalView: {
-        backgroundColor: "transparent",
-        alignItems: "center",
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5
     },
     bigPhotoContainer: {
         width: '100%',
@@ -280,7 +264,7 @@ const styles = StyleSheet.create({
     },
     button: {
         alignItems: 'center',
-        backgroundColor: '#aaaaaa',
+        backgroundColor: colors.secondary,
         borderRadius: 10,
         padding: 10,
         justifyContent: 'center',
@@ -289,11 +273,11 @@ const styles = StyleSheet.create({
     textBackButton: {
         fontWeight: '600',
         fontSize: 20,
-        color: 'black',
+        color: colors.light,
     },
     textGiveButton: {
         fontWeight: '600',
         fontSize: 30,
-        color: 'black',
+        color: colors.light,
     },
 });
