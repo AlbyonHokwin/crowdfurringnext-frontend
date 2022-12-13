@@ -1,5 +1,6 @@
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import * as colors from "../styles/colors";
 
 export default function ImageSelector({ pickImage, images, deleteImage }) {
   const image = images.map((image, i) => {
@@ -29,10 +30,11 @@ export default function ImageSelector({ pickImage, images, deleteImage }) {
     <TouchableOpacity
       style={{
         width: "80%",
-        height: "65%",
+        height: "55%",
         borderRadius: 8,
         borderWidth: 1,
-        borderColor: "#1F6F78",
+        borderColor: colors.accent,
+        backgroundColor: colors.shade,
         alignItems: "center",
       }}
       onPress={() => handleNewPicture()}

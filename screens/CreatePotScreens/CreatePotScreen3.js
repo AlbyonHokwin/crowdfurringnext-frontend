@@ -10,6 +10,8 @@ import Button from "../../components/Button";
 import { Picker } from "@react-native-picker/picker";
 import DescriptionComponent from "../../components/DescriptionComponent";
 
+import * as colors from "../../styles/colors";
+
 export default function PotScreen3({ navigation }) {
   const [selectedLanguage, setSelectedLanguage] = useState();
   return (
@@ -26,7 +28,7 @@ export default function PotScreen3({ navigation }) {
             alignItems: "center",
             width: "80%",
             margin: 20,
-            backgroundColor: "#1F6F78",
+            backgroundColor: colors.primary,
             borderRadius: 8,
             padding: 10,
           }}
@@ -81,8 +83,8 @@ export default function PotScreen3({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.light,
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
   },
 });

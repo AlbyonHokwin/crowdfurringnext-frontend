@@ -14,6 +14,8 @@ import ImageSelector from "../../components/ImageSelector";
 import Button from "../../components/Button";
 import CameraPicker from "../../components/CameraPicker";
 
+import * as colors from "../../styles/colors";
+
 export default function PotScreen2({ navigation }) {
   const [images, setImages] = useState([]);
   const [isOn, setIsOn] = useState(false);
@@ -52,30 +54,31 @@ export default function PotScreen2({ navigation }) {
       <View
         style={{
           alignItems: "center",
+          justifyContent: "center",
           width: "80%",
-          margin: 20,
-          backgroundColor: "#1F6F78",
+          margin: 10,
+          backgroundColor: colors.primary,
           borderRadius: 8,
           padding: 10,
         }}
       >
         <Text style={{ fontSize: 32 }}>General Miaou</Text>
       </View>
-      <View style={{ marginTop: 10 }}>
-        <Text>Ajouter au minimum 3 photos de votre animal</Text>
-        <ImageSelector
-          title="Pick an image from camera roll"
-          pickImage={pickImage}
-          images={images}
-          deleteImage={deleteImage}
-        />
-        <CameraPicker isOn={handleCamera} active={false} />
-      </View>
+
+      <Text>Ajouter au minimum 3 photos de votre animal</Text>
+      <ImageSelector
+        title="Pick an image from camera roll"
+        pickImage={pickImage}
+        images={images}
+        deleteImage={deleteImage}
+      />
+      <CameraPicker isOn={handleCamera} active={false} />
       <View
         style={{
           width: "100%",
           flexDirection: "row",
           justifyContent: "space-around",
+          margin: 10,
         }}
       >
         <Button
@@ -96,8 +99,8 @@ export default function PotScreen2({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.light,
     alignItems: "center",
-    justifyContent: "space-around",
+    justifyContent: "flex-start",
   },
 });

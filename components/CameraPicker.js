@@ -1,7 +1,8 @@
 import { Camera, CameraType, FlashMode } from "expo-camera";
 import { useRef, useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import * as colors from "../styles/colors";
 
 export default function CameraPicker({ isOn, active, takePicture }) {
   const [hasPermission, setHasPermission] = useState(active);
@@ -31,6 +32,8 @@ export default function CameraPicker({ isOn, active, takePicture }) {
           height: 100,
           borderRadius: 8,
           borderWidth: 1,
+          borderColor: colors.accent,
+          backgroundColor: colors.shade,
           alignItems: "center",
           justifyContent: "center",
         }}
@@ -54,6 +57,7 @@ export default function CameraPicker({ isOn, active, takePicture }) {
       ref={(ref) => (cameraRef = ref)}
       type={type}
       flashMode={flash}
+      ratio="16:9"
     >
       <FontAwesome
         name="rotate-right"

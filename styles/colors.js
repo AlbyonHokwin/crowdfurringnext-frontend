@@ -1,0 +1,9 @@
+export const light = "white";
+export const dark = "#434449";
+export const shade = "#F0F0F0";
+export const icon = "#696969";
+export const tertiary = "#C2F0BE";
+export const accent = "#A9F3A2";
+export const secondary = "#33BBAA";
+export const primary = "#1F6F78";
+export const gradient = "#1F6F78";

@@ -1,6 +1,7 @@
 import { Text, TouchableOpacity } from "react-native";
+import * as colors from "../styles/colors";
 
-export default function Button({ value, navigation, path, color = "#1F6F78" }) {
+export default function Button({ value, navigation, path }) {
   return (
     <TouchableOpacity
       style={{
@@ -8,7 +9,7 @@ export default function Button({ value, navigation, path, color = "#1F6F78" }) {
         height: 60,
         borderRadius: 8,
         borderWidth: 1,
-        backgroundColor: color,
+        backgroundColor: colors.primary,
         alignItems: "center",
         justifyContent: "center",
       }}

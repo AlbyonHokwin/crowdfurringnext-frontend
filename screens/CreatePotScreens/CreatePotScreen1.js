@@ -11,6 +11,8 @@ import DescriptionComponent from "../../components/DescriptionComponent";
 import SocialMedia from "../../components/SocialMedia";
 import Button from "../../components/Button";
 
+import * as colors from "../../styles/colors";
+
 export default function PotScreen1({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
@@ -41,7 +43,7 @@ export default function PotScreen1({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.light,
     alignItems: "center",
     justifyContent: "space-around",
   },
