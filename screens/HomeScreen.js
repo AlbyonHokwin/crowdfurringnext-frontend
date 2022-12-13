@@ -1,12 +1,11 @@
 import { View, Text, StyleSheet } from "react-native";
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import SignUpScreen from './SignUpScreen';
 
 export default function HomeScreen() {
     return (
-        <View style={styles.container}>  
-            <Text>HOME</Text>
-        </View>
+            <SignUpScreen />
     )
 }
 
