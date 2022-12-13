@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: 'rgba(100, 100, 100, 0.7)',
+        backgroundColor: colors.backgroundModal,
     },
     bigPhotoContainer: {
         width: '100%',
