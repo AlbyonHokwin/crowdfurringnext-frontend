@@ -4,15 +4,20 @@ import {
     View,
     Image,
     TouchableOpacity,
+    ProgressBarAndroidComponent,
 } from 'react-native';
 import React from 'react';
 import * as colors from '../styles/colors';
 
 const Pot = (props) => {
-    const { picture, slug, width, height } = props;
+    const { picture, slug, width, height, displayModal, pot } = props;
+
+    const pressOnPot = () => {
+        displayModal(pot);
+    }
 
     return (
-        <TouchableOpacity style={styles.container} onPress={() => console.log(slug)} activeOpacity={0.9}>
+        <TouchableOpacity style={styles.container} onPress={() => pressOnPot()} activeOpacity={0.9}>
             <Image source={{ uri: picture }} style={[{ width: width , height: height }, styles.image]} />
         </TouchableOpacity>
     );
