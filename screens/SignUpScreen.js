@@ -5,7 +5,6 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    KeyboardAvoidingView,
     ScrollView,
   } from 'react-native';
   import { login } from '../reducers/user';
@@ -67,7 +66,7 @@ import {
   
     return (
         
-         <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        
           <ScrollView style={styles.inputContainer}>
           <TextInput
             placeholder="Email"
@@ -137,7 +136,7 @@ import {
         placeholder="additionnal" />
         <TouchableOpacity onPress={() => handleSubmit()} style={styles.button} activeOpacity={0.8}><Text>Sign up</Text></TouchableOpacity>
         </ScrollView>
-        </KeyboardAvoidingView>
+        
         
     );
   }
@@ -156,6 +155,7 @@ import {
       inputContainer: {
         width: '100%',
         height: '100%',
+  
         backgroundColor: "#ffffff",
         padding: 30,
         borderRadius: 1,
