@@ -1,3 +1,5 @@
+export const background = 'white';
+export const backgroundModal = 'rgba(100, 100, 100, 0.7)';
 export const light = "white";
 export const dark = "#434449";
 export const primary = "#1F6F78";
