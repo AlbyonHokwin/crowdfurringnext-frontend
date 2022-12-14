@@ -76,8 +76,7 @@ import {
             onChangeText={(value) => setEmail(value)}
             value={email}
             style={styles.input}
-            />
-            {emailError && <Text style={styles.error}>Invalid email address</Text>}
+            />{emailError && <Text style={styles.error}>Invalid email address</Text>}
         <TextInput keyboardType="default"
             placeholder={'Enter password'}
             autoCorrect={false}
@@ -85,48 +84,42 @@ import {
             textContentType={'password'}
             style={styles.input}
             onChangeText={(value) => setPassword(value)} 
-            value={password} />
-        {passwordError && <Text style={styles.error}>password empty</Text>}
+            value={password} />{passwordError && <Text style={styles.error}>password empty</Text>}
         <TextInput 
         textContentType="lastname" 
         keyboardType=""
         style={styles.input} 
         onChangeText={(value) => setLastname(value)} 
         value={lastname} 
-        placeholder="lastname" />
-        {lastnameError && <Text style={styles.error}>lastname empty</Text>}
+        placeholder="lastname" />{lastnameError && <Text style={styles.error}>lastname empty</Text>}
         <TextInput 
         textContentType="firstname" 
         keyboardType=""
         style={styles.input} 
         onChangeText={(value) => setFirstname(value)} 
         value={firstname} 
-        placeholder="firstname" />
-        {firstnameError && <Text style={styles.error}>firstname empty</Text>}
+        placeholder="firstname" />{firstnameError && <Text style={styles.error}>firstname empty</Text>}
         <TextInput 
         textContentType="street" 
         keyboardType=""
         style={styles.input} 
         onChangeText={(value) => setStreet(value)} 
         value={street} 
-        placeholder="street" />
-        {streetError && <Text style={styles.error}>street empty</Text>}
+        placeholder="street" />{streetError && <Text style={styles.error}>street empty</Text>}
         <TextInput 
         textContentType="zipCode"  
         keyboardType="numeric" 
         style={styles.input} 
         onChangeText={(value) => setZipCode(value)} 
         value={zipCode} 
-        placeholder="zipCode" />
-        {zipCodeError && <Text style={styles.error}>zipCode empty</Text>}
+        placeholder="zipCode" />{zipCodeError && <Text style={styles.error}>zipCode empty</Text>}
         <TextInput 
         textContentType="city" 
         keyboardType=""
         style={styles.input} 
         onChangeText={(value) => setCity(value)} 
         value={city} 
-        placeholder="city" />
-        {cityError && <Text style={styles.error}>city empty</Text>}
+        placeholder="city" />{cityError && <Text style={styles.error}>city empty</Text>}
         <TextInput 
         textContentType="additionnal"
         keyboardType="" 
