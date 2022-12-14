@@ -1,7 +1,13 @@
-import { TextInput } from "react-native";
+import { Text, TextInput, View } from "react-native";
 import * as colors from "../styles/colors";
 
-export default function InputComponent({ placeholder, name, input, value }) {
+export default function InputComponent({
+  placeholder,
+  name,
+  input,
+  value,
+  error,
+}) {
   return (
     <TextInput
       style={{

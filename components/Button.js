@@ -7,6 +7,9 @@ export default function Button({
   number,
   navigation = "",
   path = "",
+  reset,
+  error,
+  ...rest
 }) {
   return (
     <TouchableOpacity
@@ -22,8 +25,11 @@ export default function Button({
       onPress={() => {
         if (navigation) {
           navigation.navigate(path);
-        } else {
+          reset(1);
+        } else if (Object.keys(rest).every((key) => !!rest[key])) {
           step(number);
+        } else {
+          error();
         }
       }}
     >

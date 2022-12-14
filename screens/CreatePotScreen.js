@@ -27,10 +27,11 @@ import FileSelector from "../components/FileSelector";
 import * as DocumentPicker from "expo-document-picker";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import ModalComponent from "../components/ModalComponent";
 
 export default function CreatePotScreen({ navigation }) {
   const [isOn, setIsOn] = useState(false);
-  const [membership, setMembership] = useState();
+  const [modalVisible, setModalVisible] = useState(false);
 
   // ***************FORM STATE*******************//
 
@@ -41,12 +42,54 @@ export default function CreatePotScreen({ navigation }) {
   const [compensation, setCompensation] = useState("");
   const [images, setImages] = useState([]);
   const [files, setFiles] = useState([]);
+  const [membership, setMembership] = useState();
   const [count, setCount] = useState(1);
+  const [amount, setAmount] = useState("");
+  const [urgent, setUrgent] = useState("");
+  const [explanation, setExplanation] = useState();
 
   //*********************************************//
 
   //  This function increment the state count to switch page
-  const step = (value) => setCount(count + value);
+  const step = (value) => {
+    console.log(count);
+    if (count === 6) {
+      fetch("http://192.168.10.145:3000/pots/create", {
+        method: "POST",
+        headers: {
+          // 'Authorization':'Bearer' + token il sera dans le store reduce
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          animalName,
+          infos,
+          description,
+          compensation,
+          images,
+          files,
+          membership,
+          amount,
+          urgent,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => console.log(data));
+
+      setAnimalName("");
+      setCity("");
+      setInfos("");
+      setDescription("");
+      setCompensation("");
+      setImages([]);
+      setFiles([]);
+      setAmount("");
+    }
+    setCount(count + value);
+  };
+  const reset = (value) => setCount(value);
+  const handleError = () => {
+    setModalVisible(true);
+  };
 
   // This logic is here to set sthe state for each onChangeText prop from TextInput
   const input = (value, name) => {
@@ -55,15 +98,32 @@ export default function CreatePotScreen({ navigation }) {
     if (name === "infos") return setInfos(value);
     if (name === "description") return setDescription(value);
     if (name === "compensation") return setCompensation(value);
+    if (name === "amount") return setAmount(value);
+    if (name === "explanation") return setExplanation(value);
   };
 
   // *****************First Screen************************ //
 
   if (count === 1) {
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView
+        style={{
+          backgroundColor: colors.light,
+          flex: 1,
+          justifyContent: "space-between",
+        }}
+      >
+        <ModalComponent
+          modalVisible={modalVisible}
+          setModal={setModalVisible}
+          error="Please complete each fields"
+        />
         <KeyboardAvoidingView
-          style={{ width: "100%", alignItems: "center" }}
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+            height: "100%",
+          }}
           behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
           <InputComponent
@@ -95,7 +155,16 @@ export default function CreatePotScreen({ navigation }) {
             <SocialMedia value={"twitter"} />
           </View>
           <View style={{ width: "100%", alignItems: "flex-end", padding: 10 }}>
-            <Button value="Suivant" step={step} number={1} />
+            <Button
+              value="Suivant"
+              step={step}
+              number={1}
+              animalName={animalName}
+              city={city}
+              infos={infos}
+              description={description}
+              error={handleError}
+            />
           </View>
         </KeyboardAvoidingView>
       </SafeAreaView>
@@ -142,6 +211,11 @@ export default function CreatePotScreen({ navigation }) {
       />
     ) : (
       <SafeAreaView style={styles.container}>
+        <ModalComponent
+          modalVisible={modalVisible}
+          setModal={setModalVisible}
+          error="Please add three pictures minimum"
+        />
         <View
           style={{
             alignItems: "center",
@@ -153,7 +227,7 @@ export default function CreatePotScreen({ navigation }) {
             padding: 10,
           }}
         >
-          <Text style={{ fontSize: 32 }}>General Miaou</Text>
+          <Text style={{ fontSize: 32 }}>{animalName}</Text>
         </View>
 
         <Text>Ajouter au minimum 3 photos de votre animal</Text>
@@ -173,7 +247,13 @@ export default function CreatePotScreen({ navigation }) {
           }}
         >
           <Button value={"Retour"} step={step} number={-1} />
-          <Button value="Suivant" step={step} number={1} />
+          <Button
+            value="Suivant"
+            step={step}
+            number={1}
+            images={images[2]}
+            error={handleError}
+          />
         </View>
       </SafeAreaView>
     );
@@ -184,6 +264,93 @@ export default function CreatePotScreen({ navigation }) {
   // *****************Third Screen************************ //
 
   if (count === 3) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <ModalComponent
+          modalVisible={modalVisible}
+          setModal={setModalVisible}
+          error="Please add an amount"
+        />
+        <KeyboardAvoidingView
+          style={{
+            alignItems: "center",
+            width: "100%",
+          }}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
+          <View
+            style={{
+              alignItems: "center",
+              width: "80%",
+              backgroundColor: colors.primary,
+              borderRadius: 8,
+              padding: 10,
+            }}
+          >
+            <Text style={{ fontSize: 32 }}>{animalName}</Text>
+          </View>
+          <View
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              padding: 1,
+            }}
+          >
+            <Text style={{ fontSize: 24, textAlign: "center" }}>
+              Faites-vous partie d'une association ?
+            </Text>
+            <Picker
+              style={{ width: 200, height: 180 }}
+              selectedValue={membership}
+              onValueChange={(itemValue, itemIndex) => setMembership(itemValue)}
+            >
+              <Picker.Item label="Oui" value={true} />
+              <Picker.Item label="Non" value={false} />
+            </Picker>
+          </View>
+          <View style={{ width: "100%", alignItems: "center" }}>
+            <Text>Montant de votre cagnotte</Text>
+            <InputComponent
+              placeholder="200"
+              name="amount"
+              input={input}
+              value={amount}
+            />
+            <Text>Qu'offrez-vous en contrepartie ?</Text>
+            <DescriptionComponent
+              placeholder={`J'offre en contrepartie`}
+              name="compensation"
+              input={input}
+              value={compensation}
+            />
+          </View>
+          <View
+            style={{
+              width: "100%",
+              flexDirection: "row",
+              justifyContent: "space-around",
+              padding: 10,
+            }}
+          >
+            <Button value={"Retour"} step={step} number={-1} />
+            <Button
+              value="Suivant"
+              step={step}
+              number={1}
+              amount={amount}
+              error={handleError}
+            />
+          </View>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    );
+  }
+
+  // ***************************************************** //
+
+  // *****************Fourth Screen************************ //
+
+  if (count === 4) {
     return (
       <SafeAreaView style={styles.container}>
         <KeyboardAvoidingView
@@ -197,13 +364,12 @@ export default function CreatePotScreen({ navigation }) {
             style={{
               alignItems: "center",
               width: "80%",
-              margin: 20,
               backgroundColor: colors.primary,
               borderRadius: 8,
               padding: 10,
             }}
           >
-            <Text style={{ fontSize: 32 }}>General Miaou</Text>
+            <Text style={{ fontSize: 32 }}>{animalName}</Text>
           </View>
           <View
             style={{
@@ -213,24 +379,24 @@ export default function CreatePotScreen({ navigation }) {
             }}
           >
             <Text style={{ fontSize: 24, textAlign: "center" }}>
-              Faites-vous partie d'une association ?
+              Votre cagnotte est-elle urgente ?
             </Text>
             <Picker
-              style={{ width: 200 }}
-              selectedValue={membership}
-              onValueChange={(itemValue, itemIndex) => setMembership(itemValue)}
+              style={{ width: 200, height: 180 }}
+              selectedValue={urgent}
+              onValueChange={(itemValue, itemIndex) => setUrgent(itemValue)}
             >
-              <Picker.Item label="Oui" value="Oui" />
-              <Picker.Item label="Non" value="Non" />
+              <Picker.Item label="Oui" value={true} />
+              <Picker.Item label="Non" value={false} />
             </Picker>
           </View>
           <View style={{ width: "100%", alignItems: "center" }}>
-            <Text>Qu'offrez-vous en contrepartie ?</Text>
+            <Text>Dites nous pourquoi ?</Text>
             <DescriptionComponent
-              placeholder={`J'offre en contrepartie`}
-              name="compensation"
+              placeholder={`Mon chat est entre la vie et la mort`}
+              name="explanation"
               input={input}
-              value={compensation}
+              value={explanation}
             />
           </View>
           <View
@@ -251,9 +417,9 @@ export default function CreatePotScreen({ navigation }) {
 
   // ***************************************************** //
 
-  // *****************Fourth Screen************************ //
+  // *****************Fifth Screen************************ //
 
-  if (count === 4) {
+  if (count === 5) {
     const pickFile = async () => {
       // No permissions request is necessary for launching the image library
       let result = await DocumentPicker.getDocumentAsync({
@@ -273,6 +439,11 @@ export default function CreatePotScreen({ navigation }) {
 
     return (
       <SafeAreaView style={styles.container}>
+        <ModalComponent
+          modalVisible={modalVisible}
+          setModal={setModalVisible}
+          error="Please add one evidence"
+        />
         <KeyboardAvoidingView
           style={{
             alignItems: "center",
@@ -290,7 +461,7 @@ export default function CreatePotScreen({ navigation }) {
               padding: 10,
             }}
           >
-            <Text style={{ fontSize: 32 }}>General Miaou</Text>
+            <Text style={{ fontSize: 32 }}>{animalName}</Text>
           </View>
           <Text style={{ fontSize: 24 }}>Justificatifs</Text>
           <View
@@ -327,7 +498,13 @@ export default function CreatePotScreen({ navigation }) {
               }}
             >
               <Button value="Retour" step={step} number={-1} />
-              <Button value="Suivant" step={step} number={1} />
+              <Button
+                value="Suivant"
+                step={step}
+                number={1}
+                files={files[0]}
+                error={handleError}
+              />
             </View>
           </View>
         </KeyboardAvoidingView>
@@ -337,9 +514,42 @@ export default function CreatePotScreen({ navigation }) {
 
   // ***************************************************** //
 
-  // *****************Fifth Screen************************ //
+  // *****************Sixth Screen************************ //
 
-  if (count === 5) {
+  if (count === 6) {
+    const pictures = images.map((image, i) => {
+      return (
+        <Image
+          key={i}
+          source={{ uri: image }}
+          style={{ width: 80, height: 80, margin: 10 }}
+          resizeMode="stretch"
+        />
+      );
+    });
+
+    const documents = files.map((file, i) => {
+      return (
+        <View
+          key={i}
+          style={{
+            alignItems: "center",
+            width: "35%",
+            height: 50,
+            borderRadius: 8,
+            borderWidth: 1,
+            margin: 5,
+            backgroundColor: colors.shade,
+            borderColor: colors.tertiary,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Text style={{ textAlign: "center" }}>{file.name}</Text>
+        </View>
+      );
+    });
+
     return (
       <SafeAreaView style={styles.container}>
         <KeyboardAvoidingView
@@ -362,55 +572,38 @@ export default function CreatePotScreen({ navigation }) {
             </Text>
           </View>
           <View style={{ alignItems: "left", width: "80%", margin: 30 }}>
-            <Text style={{ fontSize: 18, fontWeight: "600", margin: 10 }}>
-              Nom de l'animal : General Miaou
+            <Text style={{ fontSize: 18, fontWeight: "600", margin: 7 }}>
+              Nom de l'animal : {animalName}
             </Text>
-            <Text style={{ fontSize: 18, fontWeight: "600", margin: 10 }}>
-              Ville : Paris{" "}
+            <Text style={{ fontSize: 18, fontWeight: "600", margin: 7 }}>
+              Ville : {city}
             </Text>
-            <Text style={{ fontSize: 18, fontWeight: "600", margin: 10 }}>
+            <Text style={{ fontSize: 18, fontWeight: "600", margin: 7 }}>
               Photos de l'animal :{" "}
             </Text>
             <View style={{ flexDirection: "row", justifyContent: "center" }}>
-              <Image
-                source={require("../assets/images/instagram.png")}
-                style={{ width: 80, height: 80, margin: 10 }}
-                resizeMode="stretch"
-              />
-              <Image
-                source={require("../assets/images/instagram.png")}
-                style={{ width: 80, height: 80, margin: 10 }}
-                resizeMode="stretch"
-              />
-              <Image
-                source={require("../assets/images/instagram.png")}
-                style={{ width: 80, height: 80, margin: 10 }}
-                resizeMode="stretch"
-              />
+              {pictures}
             </View>
-            <Text style={{ fontSize: 18, fontWeight: "600", margin: 10 }}>
-              Informations diverses :
+            <Text style={{ fontSize: 18, fontWeight: "600", margin: 7 }}>
+              Informations diverses : {infos}
             </Text>
-            <Text style={{ fontSize: 18, fontWeight: "600", margin: 10 }}>
-              Description :
+            <Text style={{ fontSize: 18, fontWeight: "600", margin: 7 }}>
+              Description : {description}
             </Text>
-            <Text style={{ fontSize: 18, fontWeight: "600", margin: 10 }}>
-              Contrepartie :
+            <Text style={{ fontSize: 18, fontWeight: "600", margin: 7 }}>
+              Cagnotte : {amount}€
             </Text>
-            <Text style={{ fontSize: 18, fontWeight: "600", margin: 10 }}>
+            <Text style={{ fontSize: 18, fontWeight: "600", margin: 7 }}>
+              Contrepartie : {compensation}
+            </Text>
+            <Text style={{ fontSize: 18, fontWeight: "600", margin: 7 }}>
+              Urgent : {urgent}
+            </Text>
+            <Text style={{ fontSize: 18, fontWeight: "600", margin: 7 }}>
               Justificatif :
             </Text>
             <View style={{ flexDirection: "row", justifyContent: "center" }}>
-              <Image
-                source={require("../assets/images/instagram.png")}
-                style={{ width: 80, height: 80, margin: 5 }}
-                resizeMode="stretch"
-              />
-              <Image
-                source={require("../assets/images/instagram.png")}
-                style={{ width: 80, height: 80, margin: 5 }}
-                resizeMode="stretch"
-              />
+              {documents}
             </View>
           </View>
           <View
@@ -421,7 +614,7 @@ export default function CreatePotScreen({ navigation }) {
             }}
           >
             <Button value="Retour" step={step} number={-1} />
-            <Button value="Valider" step={step} number={1} />
+            <Button value="Valider" step={step} number={2} />
           </View>
         </KeyboardAvoidingView>
       </SafeAreaView>
@@ -430,7 +623,7 @@ export default function CreatePotScreen({ navigation }) {
 
   // ***************************************************** //
 
-  // *****************Sixth Screen************************ //
+  // *****************Seventh Screen************************ //
 
   return (
     <SafeAreaView style={styles.container}>
@@ -468,7 +661,7 @@ export default function CreatePotScreen({ navigation }) {
             />
           </View>
           <Text style={{ fontSize: 24, textAlign: "center" }}>
-            General Miaou
+            {animalName}
           </Text>
         </View>
         <View
@@ -540,7 +733,8 @@ export default function CreatePotScreen({ navigation }) {
           <Button
             value="Retour à l'accueil"
             navigation={navigation}
-            path={"CreatePotScreen1"}
+            path={"Home"}
+            reset={reset}
           />
         </View>
       </KeyboardAvoidingView>
@@ -553,6 +747,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.light,
     alignItems: "center",
-    justifyContent: "space-around",
+    justifyContent: "space-between",
   },
 });
