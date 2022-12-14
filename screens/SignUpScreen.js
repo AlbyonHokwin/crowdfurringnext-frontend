@@ -127,7 +127,10 @@ import {
         onChangeText={(value) => setAdditionnal(value)} 
         value={additionnal} 
         placeholder="additionnal" />
-        <TouchableOpacity onPress={() => handleSubmit()} style={styles.button} activeOpacity={0.8}><Text>Sign up</Text></TouchableOpacity>
+        <Text>
+        <TouchableOpacity onPress={() => handleSubmit()} style={styles.button} activeOpacity={0.8}><Text>retour</Text></TouchableOpacity>
+        <TouchableOpacity onPress={() => handleSubmit()} style={styles.button} activeOpacity={0.8}><Text>créer un compte</Text></TouchableOpacity>
+        </Text>
         </ScrollView>
         
         
@@ -163,10 +166,12 @@ import {
       button: {
         alignItems: 'center',
         paddingTop: 8,
+        margin: 20,
         width: '100%',
         marginTop: 30,
-        backgroundColor: '#fbe29c',
+        backgroundColor: 'green',
         borderRadius: 1,
+        borderRadius: 10,
       },
       textButton: {
         fontFamily: 'Futura',
