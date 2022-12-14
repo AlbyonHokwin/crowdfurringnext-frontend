@@ -1,7 +1,7 @@
 import { TextInput } from "react-native";
 import * as colors from "../styles/colors";
 
-export default function InputComponent({ placeholder }) {
+export default function InputComponent({ placeholder, name, input, value }) {
   return (
     <TextInput
       style={{
@@ -18,6 +18,8 @@ export default function InputComponent({ placeholder }) {
         margin: 6,
       }}
       placeholder={placeholder}
+      onChangeText={(value) => input(value, name)}
+      value={value}
     />
   );
 }

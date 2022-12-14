@@ -1,7 +1,13 @@
 import { Text, TouchableOpacity } from "react-native";
 import * as colors from "../styles/colors";
 
-export default function Button({ value, navigation, path }) {
+export default function Button({
+  value,
+  step,
+  number,
+  navigation = "",
+  path = "",
+}) {
   return (
     <TouchableOpacity
       style={{
@@ -14,7 +20,11 @@ export default function Button({ value, navigation, path }) {
         justifyContent: "center",
       }}
       onPress={() => {
-        navigation.navigate(path);
+        if (navigation) {
+          navigation.navigate(path);
+        } else {
+          step(number);
+        }
       }}
     >
       <Text>{value}</Text>

@@ -1,7 +1,12 @@
 import { TextInput, Keyboard } from "react-native";
 import * as colors from "../styles/colors";
 
-export default function DescriptionComponent({ placeholder }) {
+export default function DescriptionComponent({
+  placeholder,
+  input,
+  name,
+  value,
+}) {
   return (
     <TextInput
       style={{
@@ -22,6 +27,8 @@ export default function DescriptionComponent({ placeholder }) {
       multiline={true}
       placeholder={placeholder}
       blurOnSubmit={true}
+      onChangeText={(value) => input(value, name)}
+      value={value}
     />
   );
 }
