@@ -14,7 +14,7 @@ import Pot from "../components/Pot";
 import PotLayout from "../components/PotLayout";
 import SearchInput from "../components/SearchInput";
 
-const BACKEND_URL = 'http://192.168.10.157:3000';
+const BACKEND_URL = 'http://192.168.10.150:3000';
 
 export default function HomeScreen() {
     const [pots, setPots] = useState([]);

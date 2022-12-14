@@ -6,6 +6,8 @@ import {
     TextInput,
     TouchableOpacity,
     ScrollView,
+    View,
+    StatusBar,
   } from 'react-native';
   import { login } from '../reducers/user';
 
@@ -67,7 +69,9 @@ import {
     return (
         
         
-          <ScrollView style={styles.inputContainer}>
+          
+      <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.inputContainer}>
           <TextInput
             placeholder="Email"
             keyboardType="email-address" 
@@ -78,7 +82,7 @@ import {
             style={styles.input}
             />{emailError && <Text style={styles.error}>Invalid email address</Text>}
         <TextInput keyboardType="default"
-            placeholder={'Enter password'}
+            placeholder={'Mot de passe'}
             autoCorrect={false}
             secureTextEntry={true}
             textContentType={'password'}
@@ -86,103 +90,140 @@ import {
             onChangeText={(value) => setPassword(value)} 
             value={password} />{passwordError && <Text style={styles.error}>password empty</Text>}
         <TextInput 
-        textContentType="lastname" 
-        keyboardType=""
+        type="lastname" 
         style={styles.input} 
         onChangeText={(value) => setLastname(value)} 
         value={lastname} 
-        placeholder="lastname" />{lastnameError && <Text style={styles.error}>lastname empty</Text>}
+        placeholder="Nom" />{lastnameError && <Text style={styles.error}>lastname empty</Text>}
         <TextInput 
-        textContentType="firstname" 
-        keyboardType=""
+        type="firstname" 
         style={styles.input} 
         onChangeText={(value) => setFirstname(value)} 
         value={firstname} 
-        placeholder="firstname" />{firstnameError && <Text style={styles.error}>firstname empty</Text>}
+        placeholder="Prénom" />{firstnameError && <Text style={styles.error}>firstname empty</Text>}
         <TextInput 
-        textContentType="street" 
-        keyboardType=""
+        textContentType="streetAddressLine1" 
         style={styles.input} 
         onChangeText={(value) => setStreet(value)} 
         value={street} 
-        placeholder="street" />{streetError && <Text style={styles.error}>street empty</Text>}
-        <TextInput 
-        textContentType="zipCode"  
-        keyboardType="numeric" 
-        style={styles.input} 
-        onChangeText={(value) => setZipCode(value)} 
-        value={zipCode} 
-        placeholder="zipCode" />{zipCodeError && <Text style={styles.error}>zipCode empty</Text>}
-        <TextInput 
-        textContentType="city" 
-        keyboardType=""
-        style={styles.input} 
-        onChangeText={(value) => setCity(value)} 
-        value={city} 
-        placeholder="city" />{cityError && <Text style={styles.error}>city empty</Text>}
-        <TextInput 
-        textContentType="additionnal"
-        keyboardType="" 
+        placeholder="Adresse" />{streetError && <Text style={styles.error}>street empty</Text>}
+         <TextInput 
+        type="additionnal"
         style={styles.input} 
         onChangeText={(value) => setAdditionnal(value)} 
         value={additionnal} 
-        placeholder="additionnal" />
-        <Text>
-        <TouchableOpacity onPress={() => handleSubmit()} style={styles.button} activeOpacity={0.8}><Text>retour</Text></TouchableOpacity>
-        <TouchableOpacity onPress={() => handleSubmit()} style={styles.button} activeOpacity={0.8}><Text>créer un compte</Text></TouchableOpacity>
-        </Text>
-        </ScrollView>
+        placeholder="Complément d'adresse" />
+        <View style={styles.city}>
+        <TextInput 
+        textContentType="postalCode"  
+        keyboardType="numeric" 
+        style={styles.input1} 
+        onChangeText={(value) => setZipCode(value)} 
+        value={zipCode} 
+        placeholder="C.P" />{zipCodeError && <Text style={styles.error}>zipCode empty</Text>}
+        <TextInput 
+        textContentType="addressCity" 
+        style={styles.input2} 
+        onChangeText={(value) => setCity(value)} 
+        value={city} 
+        placeholder="Ville" />{cityError && <Text style={styles.error}>city empty</Text>}
+        </View>
+       
+        </View>
+        <View style={styles.group}>
+          
+        <TouchableOpacity style={styles.button} activeOpacity={0.8}><Text style={styles.text2} >retour</Text></TouchableOpacity>
+        <TouchableOpacity onPress={() => handleSubmit()} style={styles.button2} activeOpacity={0.8}><Text style={styles.text2} >créer un compte</Text></TouchableOpacity>
+        </View>
+      </ScrollView>
         
         
     );
   }
   const styles = StyleSheet.create({
-    background: {
-        width: '100%',
-        height: '100%',
-      },
       container: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'rgba(	255, 190, 11, 0.4)'
+        backgroundColor: 'white',
+        justifyContent: 'space-between',
+        paddingTop: StatusBar.currentHeight+20,
+        paddingBottom: 20,
       },
-      
       inputContainer: {
         width: '100%',
-        height: '100%',
-  
         backgroundColor: "#ffffff",
-        padding: 30,
         borderRadius: 1,
+        alignItems: 'center',
+
       },
       input: {
-        width: '100%',
-        borderBottomColor: '#000000',
-        borderBottomWidth: 1,
-        fontSize: 16,
-        margin: 10,
+        flexDirection: 'row',
+        width: '90%',
+        padding: 10,
+        borderWidth: 1,
+        borderColor: 'black',
+        fontSize: 20,
+        marginVertical: 5,
+        borderRadius: 5,
       },
       button: {
+        padding: 8,
+        width: '25%',
+        backgroundColor: "#1F6F78",
+        borderRadius: 5,
         alignItems: 'center',
-        paddingTop: 8,
-        margin: 20,
-        width: '100%',
-        marginTop: 30,
-        backgroundColor: 'green',
-        borderRadius: 1,
-        borderRadius: 10,
-      },
-      textButton: {
-        fontFamily: 'Futura',
-        height: 30,
-        fontWeight: '600',
-        fontSize: 16,
-      },
+        justifyContent: 'center',
+        },
+      button2: {
+        padding: 8,
+        width: '57%',
+        backgroundColor: "#1F6F78",
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+        },
       error: {
         marginTop: 10,
         color: 'red',
       },
+      text2: {
+        color: "white",
+        alignContent: 'center',
+        fontSize: 18,
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      group: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-end',
+        width: '90%',
+      },
+      input1: {
+        flexDirection: 'row',
+        width: '30%',
+        padding: 10,
+        borderWidth: 1,
+        borderColor: 'black',
+        fontSize: 20,
+        borderRadius: 5,
+      },
+      input2: {
+        flexDirection: 'row',
+        width: '68%',
+        padding: 10,
+        borderWidth: 1,
+        borderColor: 'black',
+        fontSize: 20,
+        borderRadius: 5,
+      },
+      city: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '90%',
+        marginVertical: 5,
+      }
 
   })
   
