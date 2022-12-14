@@ -30,7 +30,9 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 export default function PotScreen1({ navigation }) {
   const [isOn, setIsOn] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState();
+  const [membership, setMembership] = useState();
+
+  // ***************FORM STATE*******************//
 
   const [animalName, setAnimalName] = useState("");
   const [city, setCity] = useState("");
@@ -41,8 +43,12 @@ export default function PotScreen1({ navigation }) {
   const [files, setFiles] = useState([]);
   const [count, setCount] = useState(1);
 
+  //*********************************************//
+
+  //  This function increment the state count to switch page
   const step = (value) => setCount(count + value);
 
+  // This logic is here to set sthe state for each onChangeText prop from TextInput
   const input = (value, name) => {
     if (name === "animalName") return setAnimalName(value);
     if (name === "city") return setCity(value);
@@ -95,6 +101,8 @@ export default function PotScreen1({ navigation }) {
       </SafeAreaView>
     );
   }
+
+  // ****************************************************** //
 
   // *****************Second Screen************************ //
 
@@ -171,6 +179,8 @@ export default function PotScreen1({ navigation }) {
     );
   }
 
+  // ***************************************************** //
+
   // *****************Third Screen************************ //
 
   if (count === 3) {
@@ -207,10 +217,8 @@ export default function PotScreen1({ navigation }) {
             </Text>
             <Picker
               style={{ width: 200 }}
-              selectedValue={selectedLanguage}
-              onValueChange={(itemValue, itemIndex) =>
-                setSelectedLanguage(itemValue)
-              }
+              selectedValue={membership}
+              onValueChange={(itemValue, itemIndex) => setMembership(itemValue)}
             >
               <Picker.Item label="Oui" value="Oui" />
               <Picker.Item label="Non" value="Non" />
@@ -240,6 +248,8 @@ export default function PotScreen1({ navigation }) {
       </SafeAreaView>
     );
   }
+
+  // ***************************************************** //
 
   // *****************Fourth Screen************************ //
 
@@ -325,6 +335,8 @@ export default function PotScreen1({ navigation }) {
       </SafeAreaView>
     );
   }
+
+  // ***************************************************** //
 
   // *****************Fifth Screen************************ //
 
@@ -416,6 +428,8 @@ export default function PotScreen1({ navigation }) {
       </SafeAreaView>
     );
   }
+
+  // ***************************************************** //
 
   // *****************Sixth Screen************************ //
 
