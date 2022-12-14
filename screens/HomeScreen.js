@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import * as colors from '../styles/colors';
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import * as Location from 'expo-location';
 import PotLayout from "../components/PotLayout";
 import SearchInput from "../components/SearchInput";
 
@@ -25,12 +25,23 @@ export default function HomeScreen({ navigation }) {
 
     useEffect(() => {
         (async () => {
-            const response = await fetch(`${BACKEND_URL}/pots/all`);
+            let latitude = '';
+            let longitude = '';
+            const { status } = await Location.requestForegroundPermissionsAsync();
+            
+            if (status === 'granted') {
+                const location = await Location.getCurrentPositionAsync({});
+                latitude = `${location.coords.latitude}`;
+                longitude = `${location.coords.longitude}`;
+            }
+
+            const response = await fetch(`${BACKEND_URL}/pots/all?latitude=${latitude}&longitude=${longitude}`);
             const data = await response.json();
 
             if (data.result) {
                 const layout = [];
                 const copiedPots = [...data.pots];
+                
                 let key = 0;
                 while (copiedPots[0]) {
                     let randomDist = (4 + Math.floor((Math.random() * 3))) / 10;
