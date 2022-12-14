@@ -15,7 +15,6 @@ const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
     const user = useSelector(state => state.user.value);
-    // const user = { token: 'areza' };
 
     return (
         <Tab.Navigator screenOptions={({ route }) => ({

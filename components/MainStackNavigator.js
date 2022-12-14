@@ -13,7 +13,6 @@ const MainStack = createNativeStackNavigator();
 
 const MainStackNavigator = () => {
     const user = useSelector(state => state.user.value);
-    // const user = { token: 'areza' };
 
     return (
         <MainStack.Navigator screenOptions={{ headerShown: false }}>
