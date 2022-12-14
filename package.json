@@ -13,6 +13,7 @@
     "@react-navigation/bottom-tabs": "6",
     "@react-navigation/native": "6",
     "@react-navigation/native-stack": "6",
+    "@reduxjs/toolkit": "^1.9.1",
     "expo": "~47.0.8",
     "expo-camera": "~13.1.0",
     "expo-document-picker": "~11.0.1",
@@ -21,7 +22,12 @@
     "react": "18.1.0",
     "react-native": "0.70.5",
     "react-native-safe-area-context": "4.4.1",
+<<<<<<< HEAD
     "react-native-screens": "~3.18.0"
+=======
+    "react-native-screens": "~3.18.0",
+    "react-redux": "^8.0.5"
+>>>>>>> 9f3828877ae30e2df86534de9e23c078e6335c1d
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"
