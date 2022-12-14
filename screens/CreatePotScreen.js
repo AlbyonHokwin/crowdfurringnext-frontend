@@ -28,7 +28,7 @@ import * as DocumentPicker from "expo-document-picker";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-export default function PotScreen1({ navigation }) {
+export default function CreatePotScreen({ navigation }) {
   const [isOn, setIsOn] = useState(false);
   const [membership, setMembership] = useState();
 
@@ -254,7 +254,6 @@ export default function PotScreen1({ navigation }) {
   // *****************Fourth Screen************************ //
 
   if (count === 4) {
-    console.log(compensation);
     const pickFile = async () => {
       // No permissions request is necessary for launching the image library
       let result = await DocumentPicker.getDocumentAsync({
