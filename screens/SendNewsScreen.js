@@ -3,12 +3,16 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 
-export default function PotsScreen() {
+export default function SendNewsScreen({ navigation }) {
     return (
 
         
         <View style={styles.container}>  
-            <Text>POTS</Text>
+            <Text>Send notifications</Text>
+            <TouchableOpacity style={styles.button} activeOpacity={0.8}title="Go to Profile"
+             onPress={() => navigation.navigate('Profile')}>
+             <Text style={styles.text2} >retour</Text></TouchableOpacity>
+
         </View>
     )
 }

@@ -2,19 +2,32 @@ import { View, Text, StyleSheet, TouchableOpacity, StatusBar } from "react-nativ
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-export default function ProfileScreen() {
+
+
+export default function ProfileScreen({ navigation }) {
+
+
     return (
         <View style={styles.container}>
         <View style={styles.gestion}>
          <View style={styles.menu} >
             <View style={styles.title}>
             <Text style={styles.text}>Gestion du compte</Text>
-            </View>
-            <TouchableOpacity style={styles.menu1} activeOpacity={0.8}><Text style={styles.text3} >Modifier ses informations</Text></TouchableOpacity>
-            <TouchableOpacity style={styles.menu1} activeOpacity={0.8}><Text style={styles.text3} >Gestion des moyens de paiements</Text></TouchableOpacity>
-            <TouchableOpacity style={styles.menu1} activeOpacity={0.8}><Text style={styles.text3} >Gestion des notifications</Text></TouchableOpacity>
-            <TouchableOpacity style={styles.menu1} activeOpacity={0.8}><Text style={styles.text3} >Réglages</Text></TouchableOpacity>
+            </View >
+            <TouchableOpacity style={styles.menu1} activeOpacity={0.8} title="Go to modify your info"
+             onPress={() => navigation.navigate('modify info')}>
+            <Text style={styles.text3} >Modifier ses informations</Text></TouchableOpacity>
+            <TouchableOpacity style={styles.menu1} activeOpacity={0.8}title="Go to add payment"
+              onPress={() => navigation.navigate('add payment')}>
+            <Text style={styles.text3} >Gestion des moyens de paiements</Text></TouchableOpacity>
+            <TouchableOpacity style={styles.menu1} activeOpacity={0.8}title="Go to send news"
+             onPress={() => navigation.navigate('send news')}>
+            <Text style={styles.text3} >Gestion des notifications</Text></TouchableOpacity>
+            <TouchableOpacity style={styles.menu1} activeOpacity={0.8}title="Go to settings"
+             onPress={() => navigation.navigate('settings')}>
+            <Text style={styles.text3} >Réglages</Text></TouchableOpacity>
          </View>
+      
             <View style={styles.endMenu}>
             <TouchableOpacity style={styles.button} activeOpacity={0.8}><Text style={styles.text2} >retour</Text></TouchableOpacity>
             <TouchableOpacity style={styles.button} activeOpacity={0.8}><Text style={styles.text2}>Valider</Text></TouchableOpacity>
@@ -50,6 +63,7 @@ menu: {
 },
 title: {
     height: '30%',
+    justifyContent: 'center',
 },
 endMenu: {
     flexDirection: 'row',
@@ -70,8 +84,6 @@ menu1: {
     flexDirection: 'row',
     width: '90%',
     padding: 10,
-    borderWidth: 1,
-    borderColor: 'black',
     fontSize: 20,
     marginVertical: 5,
     borderRadius: 5,
@@ -81,6 +93,7 @@ menu1: {
 }, 
 text2: {
     color: 'white',
+    fontSize: 17,
 
 },
 text: {
@@ -94,6 +107,8 @@ text3: {
     width: '90%',
     alignItems: "center",
     justifyContent: "center",
-    
+    textAlign: 'center',
+    fontWeight: "bold",
+    fontSize: 17,
 }
 });
