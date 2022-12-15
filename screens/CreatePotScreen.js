@@ -36,53 +36,75 @@ export default function CreatePotScreen({ navigation }) {
   // ***************FORM STATE*******************//
 
   const [animalName, setAnimalName] = useState("");
-  const [city, setCity] = useState("");
-  const [infos, setInfos] = useState("");
+  const [infos, setInfos] = useState({});
   const [description, setDescription] = useState("");
   const [compensation, setCompensation] = useState("");
   const [images, setImages] = useState([]);
   const [files, setFiles] = useState([]);
-  const [membership, setMembership] = useState();
   const [count, setCount] = useState(1);
   const [amount, setAmount] = useState("");
-  const [urgent, setUrgent] = useState("");
-  const [explanation, setExplanation] = useState();
+  const [urgent, setUrgent] = useState(false);
+  const [explanation, setExplanation] = useState("");
+
+  console.log(count);
 
   //*********************************************//
-
   //  This function increment the state count to switch page
   const step = (value) => {
-    console.log(count);
+    setCount(count + 1);
+
     if (count === 6) {
-      fetch("http://192.168.10.145:3000/pots/create", {
+      const data = new FormData();
+
+      for (const file of files) {
+        console.log(file);
+        data.append("documents", {
+          uri: file.file,
+          name: "document.jpg",
+          type: "image/jpeg",
+        });
+      }
+
+      for (const image of images) {
+        data.append("images", {
+          uri: image,
+          name: "photo.jpg",
+          type: "image/jpeg",
+        });
+      }
+
+      data.append("animalName", animalName);
+      data.append("infos", JSON.stringify(infos));
+      data.append("description", description);
+      data.append("compensation", compensation);
+      data.append("amount", amount);
+      data.append("urgent", urgent);
+      data.append("explanation", explanation);
+
+      fetch("http://192.168.10.141:3000/pots/create", {
         method: "POST",
         headers: {
           // 'Authorization':'Bearer' + token il sera dans le store reduce
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
         },
-        body: JSON.stringify({
-          animalName,
-          infos,
-          description,
-          compensation,
-          images,
-          files,
-          membership,
-          amount,
-          urgent,
-        }),
+        body: data,
       })
         .then((response) => response.json())
-        .then((data) => console.log(data));
+        .then((data) => {
+          if (data.result) {
+            setCount(count + 1);
+          }
+        });
 
       setAnimalName("");
-      setCity("");
-      setInfos("");
+      setInfos({});
       setDescription("");
       setCompensation("");
       setImages([]);
       setFiles([]);
       setAmount("");
+      setUrgent(false);
+      setExplanation("");
     }
     setCount(count + value);
   };
@@ -94,8 +116,10 @@ export default function CreatePotScreen({ navigation }) {
   // This logic is here to set sthe state for each onChangeText prop from TextInput
   const input = (value, name) => {
     if (name === "animalName") return setAnimalName(value);
-    if (name === "city") return setCity(value);
-    if (name === "infos") return setInfos(value);
+    if (name === "specie") return setInfos({ ...infos, specie: value });
+    if (name === "breed") return setInfos({ ...infos, breed: value });
+    if (name === "age") return setInfos({ ...infos, age: value });
+    if (name === "sex") return setInfos({ ...infos, sex: value });
     if (name === "description") return setDescription(value);
     if (name === "compensation") return setCompensation(value);
     if (name === "amount") return setAmount(value);
@@ -103,7 +127,6 @@ export default function CreatePotScreen({ navigation }) {
   };
 
   // *****************First Screen************************ //
-
   if (count === 1) {
     return (
       <SafeAreaView
@@ -133,16 +156,28 @@ export default function CreatePotScreen({ navigation }) {
             value={animalName}
           />
           <InputComponent
-            placeholder="Ville*"
-            name="city"
+            placeholder="Espèce"
+            name="specie"
             input={input}
-            value={city}
+            value={infos.specie}
           />
           <InputComponent
-            placeholder="Infos diverses*"
-            name="infos"
+            placeholder="Race"
+            name="breed"
             input={input}
-            value={infos}
+            value={infos.breed}
+          />
+          <InputComponent
+            placeholder="Age"
+            name="age"
+            input={input}
+            value={infos.age}
+          />
+          <InputComponent
+            placeholder="Sexe"
+            name="sex"
+            input={input}
+            value={infos.sex}
           />
           <DescriptionComponent
             placeholder="Description"
@@ -160,7 +195,6 @@ export default function CreatePotScreen({ navigation }) {
               step={step}
               number={1}
               animalName={animalName}
-              city={city}
               infos={infos}
               description={description}
               error={handleError}
@@ -288,25 +322,6 @@ export default function CreatePotScreen({ navigation }) {
             }}
           >
             <Text style={{ fontSize: 32 }}>{animalName}</Text>
-          </View>
-          <View
-            style={{
-              alignItems: "center",
-              justifyContent: "center",
-              padding: 1,
-            }}
-          >
-            <Text style={{ fontSize: 24, textAlign: "center" }}>
-              Faites-vous partie d'une association ?
-            </Text>
-            <Picker
-              style={{ width: 200, height: 180 }}
-              selectedValue={membership}
-              onValueChange={(itemValue, itemIndex) => setMembership(itemValue)}
-            >
-              <Picker.Item label="Oui" value={true} />
-              <Picker.Item label="Non" value={false} />
-            </Picker>
           </View>
           <View style={{ width: "100%", alignItems: "center" }}>
             <Text>Montant de votre cagnotte</Text>
@@ -572,34 +587,48 @@ export default function CreatePotScreen({ navigation }) {
             </Text>
           </View>
           <View style={{ alignItems: "left", width: "80%", margin: 30 }}>
-            <Text style={{ fontSize: 18, fontWeight: "600", margin: 7 }}>
+            <Text style={{ fontSize: 18, fontWeight: "600", margin: 4 }}>
               Nom de l'animal : {animalName}
             </Text>
-            <Text style={{ fontSize: 18, fontWeight: "600", margin: 7 }}>
-              Ville : {city}
-            </Text>
-            <Text style={{ fontSize: 18, fontWeight: "600", margin: 7 }}>
+            <Text style={{ fontSize: 18, fontWeight: "600", margin: 4 }}>
               Photos de l'animal :{" "}
             </Text>
             <View style={{ flexDirection: "row", justifyContent: "center" }}>
               {pictures}
             </View>
-            <Text style={{ fontSize: 18, fontWeight: "600", margin: 7 }}>
-              Informations diverses : {infos}
-            </Text>
-            <Text style={{ fontSize: 18, fontWeight: "600", margin: 7 }}>
+            {infos.specie && (
+              <Text style={{ fontSize: 18, fontWeight: "600", margin: 4 }}>
+                Espèce : {infos.specie}
+              </Text>
+            )}
+            {infos.breed && (
+              <Text style={{ fontSize: 18, fontWeight: "600", margin: 4 }}>
+                Race : {infos.breed}
+              </Text>
+            )}
+            {infos.age && (
+              <Text style={{ fontSize: 18, fontWeight: "600", margin: 4 }}>
+                Age : {infos.age}
+              </Text>
+            )}
+            {infos.sex && (
+              <Text style={{ fontSize: 18, fontWeight: "600", margin: 4 }}>
+                Sexe : {infos.sex}
+              </Text>
+            )}
+            <Text style={{ fontSize: 18, fontWeight: "600", margin: 4 }}>
               Description : {description}
             </Text>
-            <Text style={{ fontSize: 18, fontWeight: "600", margin: 7 }}>
+            <Text style={{ fontSize: 18, fontWeight: "600", margin: 4 }}>
               Cagnotte : {amount}€
             </Text>
-            <Text style={{ fontSize: 18, fontWeight: "600", margin: 7 }}>
+            <Text style={{ fontSize: 18, fontWeight: "600", margin: 4 }}>
               Contrepartie : {compensation}
             </Text>
-            <Text style={{ fontSize: 18, fontWeight: "600", margin: 7 }}>
+            <Text style={{ fontSize: 18, fontWeight: "600", margin: 4 }}>
               Urgent : {urgent}
             </Text>
-            <Text style={{ fontSize: 18, fontWeight: "600", margin: 7 }}>
+            <Text style={{ fontSize: 18, fontWeight: "600", margin: 4 }}>
               Justificatif :
             </Text>
             <View style={{ flexDirection: "row", justifyContent: "center" }}>
@@ -614,7 +643,7 @@ export default function CreatePotScreen({ navigation }) {
             }}
           >
             <Button value="Retour" step={step} number={-1} />
-            <Button value="Valider" step={step} number={2} />
+            <Button value="Valider" step={step} number={1} />
           </View>
         </KeyboardAvoidingView>
       </SafeAreaView>

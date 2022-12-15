@@ -10,8 +10,8 @@ export default function SocialMedia({ value }) {
     >
       <Image
         style={{
-          maxHeight: 60,
-          maxWidth: 60,
+          maxHeight: 40,
+          maxWidth: 40,
         }}
         source={
           value === "instagram"

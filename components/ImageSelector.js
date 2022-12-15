@@ -8,7 +8,7 @@ export default function ImageSelector({ pickImage, images, deleteImage }) {
       <View key={i}>
         <Image
           source={{ uri: image }}
-          style={{ width: 100, height: 100, margin: 8 }}
+          style={{ width: 100, height: 80, margin: 8 }}
         />
         <FontAwesome
           name="trash-o"

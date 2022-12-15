@@ -13,7 +13,7 @@ export default function InputComponent({
       style={{
         flexDirection: "column",
         width: "80%",
-        height: 60,
+        height: 40,
         borderRadius: 8,
         borderWidth: 1,
         borderColor: colors.accent,
