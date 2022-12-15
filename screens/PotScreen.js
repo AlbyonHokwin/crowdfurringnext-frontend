@@ -15,7 +15,7 @@ import {
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import * as colors from '../styles/colors';
 
-const BACKEND_URL = 'http://192.168.10.137:3000';
+const BACKEND_URL = 'http://192.168.143.89:3000';
 
 const PotScreen = ({ route, navigation }) => {
     const [pot, setPot] = useState(null);
@@ -120,7 +120,7 @@ const PotScreen = ({ route, navigation }) => {
                 <TouchableOpacity onPress={() => navigation.goBack()} style={styles.button} activeOpacity={0.8}>
                     <Text style={styles.textBackButton}>Retour</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => console.log('++++')} style={styles.button} activeOpacity={0.8}>
+                <TouchableOpacity onPress={() => navigation.navigate('Payment', { pot })} style={styles.button} activeOpacity={0.8}>
                     <Text style={styles.textGiveButton}>Donner</Text>
                 </TouchableOpacity>
             </View>

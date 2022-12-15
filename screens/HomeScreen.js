@@ -15,7 +15,7 @@ import * as Location from 'expo-location';
 import PotLayout from "../components/PotLayout";
 import SearchInput from "../components/SearchInput";
 
-const BACKEND_URL = 'http://192.168.10.137:3000';
+const BACKEND_URL = 'http://192.168.143.89:3000';
 
 export default function HomeScreen({ navigation }) {
     const [pots, setPots] = useState([]);
@@ -28,7 +28,7 @@ export default function HomeScreen({ navigation }) {
             let latitude = '';
             let longitude = '';
             const { status } = await Location.requestForegroundPermissionsAsync();
-            
+
             if (status === 'granted') {
                 const location = await Location.getCurrentPositionAsync({});
                 latitude = `${location.coords.latitude}`;
@@ -41,7 +41,7 @@ export default function HomeScreen({ navigation }) {
             if (data.result) {
                 const layout = [];
                 const copiedPots = [...data.pots];
-                
+
                 let key = 0;
                 while (copiedPots[0]) {
                     let randomDist = (4 + Math.floor((Math.random() * 3))) / 10;
@@ -69,6 +69,11 @@ export default function HomeScreen({ navigation }) {
         navigation.navigate('Pot', { slug });
     }
 
+    const pressGive = pot => {
+        setModalVisible(false);
+        navigation.navigate('Payment', { pot });
+    }
+
     const displayModal = pot => {
         setModalVisible(!modalVisible);
         setModalContent(
@@ -79,7 +84,10 @@ export default function HomeScreen({ navigation }) {
                         <Image source={{ uri: pot.pictures[0] }} style={styles.modalImage} />
                     </View>
                     <View style={styles.modalTexts}>
-                        <Text style={styles.modalTitle}>{pot.animalName}</Text>
+                        <View style={styles.modalTextsHeader}>
+                            <Text style={styles.modalTitle}>{pot.animalName}</Text>
+                            <Text style={styles.modalAmount}>{pot.currentAmount}€ / {pot.targetAmount}€</Text>
+                        </View>
                         <Text style={styles.modalText}>{`${pot.description.slice(0, 200)}...`}</Text>
                     </View>
                 </View>
@@ -87,7 +95,7 @@ export default function HomeScreen({ navigation }) {
                 <View style={styles.modalButtons}>
                     <TouchableOpacity
                         style={styles.modalButton}
-                        onPress={() => setModalVisible(!modalVisible)}
+                        onPress={() => pressGive(pot)}
                     >
                         <Text style={styles.modalButtonText}>Donner</Text>
                     </TouchableOpacity>
@@ -248,10 +256,23 @@ const styles = StyleSheet.create({
         paddingRight: 10,
         paddingTop: 10,
     },
+    modalTextsHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 5,
+    },
     modalTitle: {
         color: colors.dark,
         fontSize: 20,
-        marginBottom: 5,
+    },
+    modalAmount: {
+        color: colors.light,
+        fontSize: 16,
+        fontWeight: 'bold',
+        backgroundColor: colors.primary,
+        borderRadius: 5,
+        padding: 5,
     },
     modalText: {
         color: colors.dark,
