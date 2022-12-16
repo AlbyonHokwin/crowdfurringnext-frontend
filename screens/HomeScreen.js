@@ -7,16 +7,17 @@ import {
     ScrollView,
     Modal,
     TouchableOpacity,
+    SafeAreaView,
 } from "react-native";
 import * as colors from '../styles/colors';
 import { useState, useEffect } from 'react';
-import Pot from "../components/Pot";
+import * as Location from 'expo-location';
 import PotLayout from "../components/PotLayout";
 import SearchInput from "../components/SearchInput";
 
-const BACKEND_URL = 'http://192.168.10.157:3000';
+const BACKEND_URL = 'http://192.168.10.171:3000';
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }) {
     const [pots, setPots] = useState([]);
     const [potLayouts, setPotLayouts] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
@@ -24,12 +25,23 @@ export default function HomeScreen() {
 
     useEffect(() => {
         (async () => {
-            const response = await fetch(`${BACKEND_URL}/pots/all`);
+            let latitude = '';
+            let longitude = '';
+            const { status } = await Location.requestForegroundPermissionsAsync();
+
+            if (status === 'granted') {
+                const location = await Location.getCurrentPositionAsync({});
+                latitude = `${location.coords.latitude}`;
+                longitude = `${location.coords.longitude}`;
+            }
+
+            const response = await fetch(`${BACKEND_URL}/pots/all?latitude=${latitude}&longitude=${longitude}`);
             const data = await response.json();
 
             if (data.result) {
                 const layout = [];
                 const copiedPots = [...data.pots];
+
                 let key = 0;
                 while (copiedPots[0]) {
                     let randomDist = (4 + Math.floor((Math.random() * 3))) / 10;
@@ -52,6 +64,16 @@ export default function HomeScreen() {
 
     if (!pots) return (<></>);
 
+    const pressSeeMore = slug => {
+        setModalVisible(false);
+        navigation.navigate('Pot', { slug });
+    }
+
+    const pressGive = pot => {
+        setModalVisible(false);
+        navigation.navigate('Payment', { pot });
+    }
+
     const displayModal = pot => {
         setModalVisible(!modalVisible);
         setModalContent(
@@ -62,7 +84,10 @@ export default function HomeScreen() {
                         <Image source={{ uri: pot.pictures[0] }} style={styles.modalImage} />
                     </View>
                     <View style={styles.modalTexts}>
-                        <Text style={styles.modalTitle}>{pot.animalName}</Text>
+                        <View style={styles.modalTextsHeader}>
+                            <Text style={styles.modalTitle}>{pot.animalName}</Text>
+                            <Text style={styles.modalAmount}>{pot.currentAmount}€ / {pot.targetAmount}€</Text>
+                        </View>
                         <Text style={styles.modalText}>{`${pot.description.slice(0, 200)}...`}</Text>
                     </View>
                 </View>
@@ -70,15 +95,15 @@ export default function HomeScreen() {
                 <View style={styles.modalButtons}>
                     <TouchableOpacity
                         style={styles.modalButton}
-                        onPress={() => setModalVisible(!modalVisible)}
+                        onPress={() => pressGive(pot)}
                     >
-                        <Text style={styles.modalButtonText}>Voir plus</Text>
+                        <Text style={styles.modalButtonText}>Donner</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.modalButton}
-                        onPress={() => setModalVisible(!modalVisible)}
+                        onPress={() => pressSeeMore(pot.slug)}
                     >
-                        <Text style={styles.modalButtonText}>Donner</Text>
+                        <Text style={styles.modalButtonText}>Voir plus</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -87,7 +112,7 @@ export default function HomeScreen() {
     }
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <View style={styles.header}>
                 <Image source={require('../assets/logo.jpg')} style={styles.logo} />
                 <Text style={styles.title}>Crowd-furring</Text>
@@ -96,6 +121,12 @@ export default function HomeScreen() {
             <ScrollView contentContainerStyle={styles.potsContainer}>
                 {potLayouts}
             </ScrollView>
+
+            <View style={styles.floatingButtonContainer}>
+                <TouchableOpacity onPress={() => navigation.navigate("CreatePot")} style={styles.floatingButton} activeOpacity={0.8}>
+                    <Text style={styles.floatingButtonText}>Créer</Text>
+                </TouchableOpacity>
+            </View>
 
             <Modal
                 animationType="fade"
@@ -111,7 +142,7 @@ export default function HomeScreen() {
                 </TouchableOpacity>
             </Modal>
 
-        </View>
+        </SafeAreaView>
     );
 };
 
@@ -141,6 +172,37 @@ const styles = StyleSheet.create({
     },
     potsContainer: {
         width: '100%',
+    },
+    floatingButtonContainer: {
+        position: 'absolute',
+        right: 0,
+        bottom: 0,
+        zIndex: 999,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 25,
+    },
+    floatingButton: {
+        alignItems: 'center',
+        backgroundColor: colors.secondary,
+        borderRadius: 10,
+        padding: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        shadowColor: colors.accent,
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    floatingButtonText: {
+        fontWeight: '600',
+        fontSize: 40,
+        color: colors.light,
     },
     modalView: {
         flex: 1,
@@ -194,10 +256,23 @@ const styles = StyleSheet.create({
         paddingRight: 10,
         paddingTop: 10,
     },
+    modalTextsHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 5,
+    },
     modalTitle: {
         color: colors.dark,
         fontSize: 20,
-        marginBottom: 5,
+    },
+    modalAmount: {
+        color: colors.light,
+        fontSize: 16,
+        fontWeight: 'bold',
+        backgroundColor: colors.primary,
+        borderRadius: 5,
+        padding: 5,
     },
     modalText: {
         color: colors.dark,

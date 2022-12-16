@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import * as colors from "./styles/colors";
@@ -16,17 +17,27 @@ import MessageScreen from "./screens/MessageScreen";
 import PotsScreen from "./screens/PotsScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import CreatePotScreen from "./screens/CreatePotScreen";
+=======
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View } from 'react-native';
+
+import { Provider, useSelector } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import user from './reducers/user';
+
+import { NavigationContainer } from '@react-navigation/native';
+import TabNavigator from './components/TabNavigator';
+>>>>>>> b76af09ffb4a7d284e25381f4117043ac4be45c2
 
 const store = configureStore({
   reducer: { user },
 });
 
-const Tab = createBottomTabNavigator();
-
 export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
+<<<<<<< HEAD
         <Tab.Navigator
           screenOptions={({ route }) => ({
             tabBarIcon: ({ color, size }) => {
@@ -50,6 +61,9 @@ export default function App() {
           <Tab.Screen name="Pots" component={PotsScreen} />
           <Tab.Screen name="Profile" component={ProfileScreen} />
         </Tab.Navigator>
+=======
+        <TabNavigator />
+>>>>>>> b76af09ffb4a7d284e25381f4117043ac4be45c2
       </NavigationContainer>
     </Provider>
   );
