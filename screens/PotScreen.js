@@ -15,7 +15,7 @@ import {
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import * as colors from '../styles/colors';
 
-const BACKEND_URL = 'http://192.168.143.89:3000';
+const BACKEND_URL = 'http://192.168.10.171:3000';
 
 const PotScreen = ({ route, navigation }) => {
     const [pot, setPot] = useState(null);
@@ -149,6 +149,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: StatusBar.currentHeight + 5,
+        backgroundColor: colors.background,
     },
     scrollContainer: {
         flexGrow: 1,
