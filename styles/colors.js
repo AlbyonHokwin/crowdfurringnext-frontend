@@ -9,3 +9,4 @@ export const accent = "#A9F3A2";
 export const shade = "#F0F0F0";
 export const icon = "#696969";
 export const gradient = "#1F6F78";
+export const danger = "#F08080";

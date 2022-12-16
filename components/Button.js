@@ -9,6 +9,7 @@ export default function Button({
   path = "",
   reset,
   error,
+  message,
   ...rest
 }) {
   return (
@@ -29,7 +30,7 @@ export default function Button({
         } else if (Object.keys(rest).every((key) => !!rest[key])) {
           step(number);
         } else {
-          error();
+          error(message);
         }
       }}
     >

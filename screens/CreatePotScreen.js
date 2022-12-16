@@ -6,6 +6,8 @@ import {
   Text,
   SafeAreaView,
   Image,
+  TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import InputComponent from "../components/InputComponent";
 import DescriptionComponent from "../components/DescriptionComponent";
@@ -13,7 +15,7 @@ import SocialMedia from "../components/SocialMedia";
 import Button from "../components/Button";
 
 import * as colors from "../styles/colors";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import * as ImagePicker from "expo-image-picker";
 import ImageSelector from "../components/ImageSelector";
@@ -28,10 +30,15 @@ import * as DocumentPicker from "expo-document-picker";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import ModalComponent from "../components/ModalComponent";
+import FormFirstScreen from "../components/FormFirstScreen";
+import FormSecondScreen from "../components/FormSecondScreen";
+import FormThirdScreen from "../components/FormThirdScreen";
 
 export default function CreatePotScreen({ navigation }) {
   const [isOn, setIsOn] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [message, setMessage] = useState("");
+  const [double, setDouble] = useState(false);
 
   // ***************FORM STATE*******************//
 
@@ -45,72 +52,87 @@ export default function CreatePotScreen({ navigation }) {
   const [amount, setAmount] = useState("");
   const [urgent, setUrgent] = useState(false);
   const [explanation, setExplanation] = useState("");
+  const [socialNetworks, setSocialNetworks] = useState({
+    instagram: "",
+    twitter: "",
+  });
 
-  console.log(count);
-
+  const [status, setStatus] = useState(false);
   //*********************************************//
   //  This function increment the state count to switch page
   const step = (value) => {
-    setCount(count + 1);
-
-    if (count === 6) {
-      const data = new FormData();
-
-      for (const file of files) {
-        console.log(file);
-        data.append("documents", {
-          uri: file.file,
-          name: "document.jpg",
-          type: "image/jpeg",
-        });
-      }
-
-      for (const image of images) {
-        data.append("images", {
-          uri: image,
-          name: "photo.jpg",
-          type: "image/jpeg",
-        });
-      }
-
-      data.append("animalName", animalName);
-      data.append("infos", JSON.stringify(infos));
-      data.append("description", description);
-      data.append("compensation", compensation);
-      data.append("amount", amount);
-      data.append("urgent", urgent);
-      data.append("explanation", explanation);
-
-      fetch("http://192.168.10.141:3000/pots/create", {
-        method: "POST",
-        headers: {
-          // 'Authorization':'Bearer' + token il sera dans le store reduce
-          "Content-Type": "multipart/form-data",
-        },
-        body: data,
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.result) {
-            setCount(count + 1);
-          }
-        });
-
-      setAnimalName("");
-      setInfos({});
-      setDescription("");
-      setCompensation("");
-      setImages([]);
-      setFiles([]);
-      setAmount("");
-      setUrgent(false);
-      setExplanation("");
-    }
     setCount(count + value);
   };
+
   const reset = (value) => setCount(value);
-  const handleError = () => {
+  const handleError = (message) => {
+    setMessage(message);
     setModalVisible(true);
+  };
+
+  const fetcher = (boolean = "false") => {
+    setStatus("isLoading");
+    const data = new FormData();
+
+    for (const file of files) {
+      data.append("documents", {
+        uri: file.file,
+        name: "document.jpg",
+        type: "image/jpeg",
+      });
+    }
+
+    for (const image of images) {
+      data.append("images", {
+        uri: image,
+        name: "photo.jpg",
+        type: "image/jpeg",
+      });
+    }
+
+    data.append("animalName", animalName);
+    data.append("infos", JSON.stringify(infos));
+    data.append("socialNetworks", JSON.stringify(socialNetworks));
+    data.append("description", description);
+    data.append("compensation", compensation);
+    data.append("amount", amount);
+    data.append("urgent", urgent);
+    data.append("explanation", explanation);
+    fetch(`http://192.168.10.147:3000/pots/create/${boolean}`, {
+      method: "POST",
+      headers: {
+        // 'Authorization':'Bearer' + token il sera dans le store reduce
+        "Content-Type": "multipart/form-data",
+      },
+      body: data,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          setStatus(false);
+          if (count !== 6) {
+            setCount(1);
+            navigation.navigate("Home");
+          } else {
+            setCount(count + 1);
+          }
+          setAnimalName("");
+          setInfos({});
+          setDescription("");
+          setCompensation("");
+          setImages([]);
+          setFiles([]);
+          setAmount("");
+          setUrgent(false);
+          setExplanation("");
+          setSocialNetworks({
+            instagram: "",
+            twitter: "",
+          });
+        } else {
+          setStatus("error");
+        }
+      });
   };
 
   // This logic is here to set sthe state for each onChangeText prop from TextInput
@@ -126,242 +148,116 @@ export default function CreatePotScreen({ navigation }) {
     if (name === "explanation") return setExplanation(value);
   };
 
+  if (status === "isLoading") {
+    return (
+      <View style={{ flex: 1, justifyContent: "center" }}>
+        <Text style={{ textAlign: "center" }} fontSize={18}>
+          Votre demande est en cours de traitement
+        </Text>
+        <Text style={{ textAlign: "center" }} fontSize={18}>
+          Merci de bien vouloir patienter
+        </Text>
+        <ActivityIndicator size="large" color={colors.primary} />
+      </View>
+    );
+  }
+
+  if (status === "error") {
+    return (
+      <View>
+        <Text style={{ textAlign: "center" }} fontSize={18}>
+          Votre demande n'a pas pu être prise en compte
+        </Text>
+        <Text style={{ textAlign: "center" }} fontSize={18}>
+          Nous sommes désolé pour ce désagrément.
+        </Text>
+        <Text style={{ textAlign: "center" }} fontSize={18}>
+          Veuillez vérifier que vous êtes bien connecté à internet et cliqué de
+          nouveau sur le bouton suivant
+        </Text>
+        <TouchableOpacity
+          style={{
+            width: "35%",
+            height: 60,
+            borderRadius: 8,
+            borderWidth: 1,
+            backgroundColor: colors.primary,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          onPress={() => fetcher()}
+        >
+          <Text>Envoyer</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   // *****************First Screen************************ //
   if (count === 1) {
     return (
-      <SafeAreaView
-        style={{
-          backgroundColor: colors.light,
-          flex: 1,
-          justifyContent: "space-between",
-        }}
-      >
-        <ModalComponent
-          modalVisible={modalVisible}
-          setModal={setModalVisible}
-          error="Please complete each fields"
-        />
-        <KeyboardAvoidingView
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-            height: "100%",
-          }}
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-        >
-          <InputComponent
-            placeholder="Nom de l'animal*"
-            name="animalName"
-            input={input}
-            value={animalName}
-          />
-          <InputComponent
-            placeholder="Espèce"
-            name="specie"
-            input={input}
-            value={infos.specie}
-          />
-          <InputComponent
-            placeholder="Race"
-            name="breed"
-            input={input}
-            value={infos.breed}
-          />
-          <InputComponent
-            placeholder="Age"
-            name="age"
-            input={input}
-            value={infos.age}
-          />
-          <InputComponent
-            placeholder="Sexe"
-            name="sex"
-            input={input}
-            value={infos.sex}
-          />
-          <DescriptionComponent
-            placeholder="Description"
-            name="description"
-            input={input}
-            value={description}
-          />
-          <View style={{ width: "80%" }}>
-            <SocialMedia value={"instagram"} />
-            <SocialMedia value={"twitter"} />
-          </View>
-          <View style={{ width: "100%", alignItems: "flex-end", padding: 10 }}>
-            <Button
-              value="Suivant"
-              step={step}
-              number={1}
-              animalName={animalName}
-              infos={infos}
-              description={description}
-              error={handleError}
-            />
-          </View>
-        </KeyboardAvoidingView>
-      </SafeAreaView>
-    );
-  }
-
-  // ****************************************************** //
-
-  // *****************Second Screen************************ //
-
-  if (count === 2) {
-    const pickImage = async () => {
-      // No permissions request is necessary for launching the image library
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-
-      if (!result.canceled) {
-        if (images.length === 4) return;
-        setImages([...images, result.assets[0].uri]);
-      }
-    };
-
-    function deleteImage(props) {
-      const imageToDelete = images.findIndex((image) => props === image);
-      const arr = images.filter((image, i) => i !== imageToDelete);
-      setImages(arr);
-    }
-
-    const handleCamera = (isOn) => setIsOn(isOn);
-    const takePicture = (picture) =>
-      images.length >= 4
-        ? alert("Delete a picture before to add new ones")
-        : setImages([...images, picture.uri]);
-
-    return isOn ? (
-      <CameraPicker
-        active={true}
-        takePicture={takePicture}
-        isOn={handleCamera}
+      <FormFirstScreen
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        message={message}
+        double={double}
+        setDouble={setDouble}
+        fetcher={fetcher}
+        setMessage={setMessage}
+        input={input}
+        animalName={animalName}
+        infos={infos}
+        description={description}
+        socialNetworks={socialNetworks}
+        setSocialNetworks={setSocialNetworks}
+        step={step}
+        handleError={handleError}
       />
-    ) : (
-      <SafeAreaView style={styles.container}>
-        <ModalComponent
-          modalVisible={modalVisible}
-          setModal={setModalVisible}
-          error="Please add three pictures minimum"
-        />
-        <View
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-            width: "80%",
-            margin: 10,
-            backgroundColor: colors.primary,
-            borderRadius: 8,
-            padding: 10,
-          }}
-        >
-          <Text style={{ fontSize: 32 }}>{animalName}</Text>
-        </View>
-
-        <Text>Ajouter au minimum 3 photos de votre animal</Text>
-        <ImageSelector
-          title="Pick an image from camera roll"
-          pickImage={pickImage}
-          images={images}
-          deleteImage={deleteImage}
-        />
-        <CameraPicker isOn={handleCamera} active={false} />
-        <View
-          style={{
-            width: "100%",
-            flexDirection: "row",
-            justifyContent: "space-around",
-            margin: 10,
-          }}
-        >
-          <Button value={"Retour"} step={step} number={-1} />
-          <Button
-            value="Suivant"
-            step={step}
-            number={1}
-            images={images[2]}
-            error={handleError}
-          />
-        </View>
-      </SafeAreaView>
     );
   }
-
-  // ***************************************************** //
+  // *****************Second Screen************************ //
+  if (count === 2) {
+    return (
+      <FormSecondScreen
+        setImages={setImages}
+        images={images}
+        setIsOn={setIsOn}
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        animalName={animalName}
+        handleError={handleError}
+        isOn={isOn}
+        step={step}
+        message={message}
+        double={double}
+        setDouble={setDouble}
+        fetcher={fetcher}
+        setMessage={setMessage}
+      />
+    );
+  }
 
   // *****************Third Screen************************ //
 
   if (count === 3) {
     return (
-      <SafeAreaView style={styles.container}>
-        <ModalComponent
-          modalVisible={modalVisible}
-          setModal={setModalVisible}
-          error="Please add an amount"
-        />
-        <KeyboardAvoidingView
-          style={{
-            alignItems: "center",
-            width: "100%",
-          }}
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-        >
-          <View
-            style={{
-              alignItems: "center",
-              width: "80%",
-              backgroundColor: colors.primary,
-              borderRadius: 8,
-              padding: 10,
-            }}
-          >
-            <Text style={{ fontSize: 32 }}>{animalName}</Text>
-          </View>
-          <View style={{ width: "100%", alignItems: "center" }}>
-            <Text>Montant de votre cagnotte</Text>
-            <InputComponent
-              placeholder="200"
-              name="amount"
-              input={input}
-              value={amount}
-            />
-            <Text>Qu'offrez-vous en contrepartie ?</Text>
-            <DescriptionComponent
-              placeholder={`J'offre en contrepartie`}
-              name="compensation"
-              input={input}
-              value={compensation}
-            />
-          </View>
-          <View
-            style={{
-              width: "100%",
-              flexDirection: "row",
-              justifyContent: "space-around",
-              padding: 10,
-            }}
-          >
-            <Button value={"Retour"} step={step} number={-1} />
-            <Button
-              value="Suivant"
-              step={step}
-              number={1}
-              amount={amount}
-              error={handleError}
-            />
-          </View>
-        </KeyboardAvoidingView>
-      </SafeAreaView>
+      <FormThirdScreen
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        animalName={animalName}
+        input={input}
+        amount={amount}
+        compensation={compensation}
+        step={step}
+        handleError={handleError}
+        message={message}
+        double={double}
+        setDouble={setDouble}
+        fetcher={fetcher}
+        setMessage={setMessage}
+      />
     );
   }
-
-  // ***************************************************** //
 
   // *****************Fourth Screen************************ //
 
@@ -378,13 +274,25 @@ export default function CreatePotScreen({ navigation }) {
           <View
             style={{
               alignItems: "center",
+              justifyContent: "space-between",
+              flexDirection: "row",
               width: "80%",
-              backgroundColor: colors.primary,
+              margin: 10,
+              backgroundColor: colors.light,
               borderRadius: 8,
               padding: 10,
             }}
           >
             <Text style={{ fontSize: 32 }}>{animalName}</Text>
+            <FontAwesome
+              name="close"
+              size={25}
+              style={{
+                color: colors.danger,
+                borderColor: colors.danger,
+                textAlign: "right",
+              }}
+            />
           </View>
           <View
             style={{
@@ -430,8 +338,6 @@ export default function CreatePotScreen({ navigation }) {
     );
   }
 
-  // ***************************************************** //
-
   // *****************Fifth Screen************************ //
 
   if (count === 5) {
@@ -469,14 +375,25 @@ export default function CreatePotScreen({ navigation }) {
           <View
             style={{
               alignItems: "center",
+              justifyContent: "space-between",
+              flexDirection: "row",
               width: "80%",
               margin: 10,
-              backgroundColor: colors.primary,
+              backgroundColor: colors.light,
               borderRadius: 8,
               padding: 10,
             }}
           >
             <Text style={{ fontSize: 32 }}>{animalName}</Text>
+            <FontAwesome
+              name="close"
+              size={25}
+              style={{
+                color: colors.danger,
+                borderColor: colors.danger,
+                textAlign: "right",
+              }}
+            />
           </View>
           <Text style={{ fontSize: 24 }}>Justificatifs</Text>
           <View
@@ -570,21 +487,32 @@ export default function CreatePotScreen({ navigation }) {
         <KeyboardAvoidingView
           style={{
             width: "100%",
+            alignItems: "center",
           }}
           behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
           <View
             style={{
               alignItems: "center",
+              justifyContent: "space-between",
+              flexDirection: "row",
+              width: "80%",
               margin: 10,
+              backgroundColor: colors.light,
               borderRadius: 8,
               padding: 10,
-              backgroundColor: colors.primary,
             }}
           >
-            <Text style={{ fontSize: 24, textAlign: "center" }}>
-              Récapitulatif de la demande de la cagnotte
-            </Text>
+            <Text style={{ fontSize: 32 }}>Cagnootte {animalName}</Text>
+            <FontAwesome
+              name="close"
+              size={25}
+              style={{
+                color: colors.danger,
+                borderColor: colors.danger,
+                textAlign: "right",
+              }}
+            />
           </View>
           <View style={{ alignItems: "left", width: "80%", margin: 30 }}>
             <Text style={{ fontSize: 18, fontWeight: "600", margin: 4 }}>
@@ -643,7 +571,20 @@ export default function CreatePotScreen({ navigation }) {
             }}
           >
             <Button value="Retour" step={step} number={-1} />
-            <Button value="Valider" step={step} number={1} />
+            <TouchableOpacity
+              style={{
+                width: "35%",
+                height: 60,
+                borderRadius: 8,
+                borderWidth: 1,
+                backgroundColor: colors.primary,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              onPress={() => fetcher()}
+            >
+              <Text>Valider</Text>
+            </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>
       </SafeAreaView>
