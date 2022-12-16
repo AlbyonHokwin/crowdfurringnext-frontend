@@ -1,13 +1,19 @@
-import { TextInput } from "react-native";
+import { Text, TextInput, View } from "react-native";
 import * as colors from "../styles/colors";
 
-export default function InputComponent({ placeholder, name, input, value }) {
+export default function InputComponent({
+  placeholder,
+  name,
+  input,
+  value,
+  error,
+}) {
   return (
     <TextInput
       style={{
         flexDirection: "column",
         width: "80%",
-        height: 60,
+        height: 40,
         borderRadius: 8,
         borderWidth: 1,
         borderColor: colors.accent,
