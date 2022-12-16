@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import * as colors from '../styles/colors';
 
-const AddCard = ({ onPressFunction, paymentNameError, cardNumberError, securityCodeError, ownerError, dateError, isConnected }) => {
+const AddCard = ({ onPressFunction, onCloseFunction, paymentNameError, cardNumberError, securityCodeError, ownerError, dateError, isConnected }) => {
     const [paymentName, setPaymentName] = useState('');
     const [cardNumber, setCardNumber] = useState('');
     const cardNumberStr = (cardNumber.toString().match(/\d{1,4}/g) || []).join(' ');
@@ -84,9 +84,15 @@ const AddCard = ({ onPressFunction, paymentNameError, cardNumberError, securityC
                     value={date}
                 />
             </View>
-            <TouchableOpacity style={styles.button} onPress={() => onPressFunction({ paymentName, cardNumber, securityCode, owner, date })}>
-                <Text style={styles.textButton}>Ajouter</Text>
-            </TouchableOpacity>
+
+            <View style={styles.buttonsContainer}>
+                <TouchableOpacity style={styles.button} onPress={() => onCloseFunction()}>
+                    <Text style={styles.textButton}>Annuler</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={() => onPressFunction({ paymentName, cardNumber, securityCode, owner, date })}>
+                    <Text style={styles.textButton}>Ajouter</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     )
 };
@@ -102,6 +108,7 @@ const styles = StyleSheet.create({
         borderColor: colors.accent,
         borderRadius: 20,
         paddingVertical: 5,
+        marginVertical: 5,
     },
     title: {
         fontSize: 20,
@@ -148,9 +155,15 @@ const styles = StyleSheet.create({
         width: 80,
         textAlign: 'center',
     },
+    buttonsContainer: {
+        width: '90%',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
     button: {
         alignItems: 'center',
-        backgroundColor: colors.primary,
+        backgroundColor: colors.tertiary,
         borderRadius: 10,
         padding: 10,
         justifyContent: 'center',
@@ -168,6 +181,6 @@ const styles = StyleSheet.create({
     textButton: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: colors.light,
+        color: colors.dark,
     },
 });
