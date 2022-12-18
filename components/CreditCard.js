@@ -7,11 +7,13 @@ import {
 } from 'react-native';
 import * as colors from '../styles/colors';
 
-const CreditCard = ({ isConnected, ...card }) => {
+const CreditCard = ({ isConnected, isSelected, onPress, ...card }) => {
+    const expirationDate = new Date(card.expirationDate);
+    const expirationDateStr = `${expirationDate.getMonth() + 1}`.padStart(2, '0') + '/' + `${expirationDate.getFullYear()}`.slice(-2);
     const cardNumberStr = (card.number.toString().match(/\d{1,4}/g) || []).join(' ');
 
     return (
-        <View style={styles.container}>
+        <TouchableOpacity style={[styles.container, isSelected && { borderWidth: 2, backgroundColor: `${colors.tertiary}77` }]} activeOpacity={0.9} onPress={onPress}>
             {isConnected &&
                 <Text style={styles.title}>{card.paymentName}</Text>
             }
@@ -21,9 +23,9 @@ const CreditCard = ({ isConnected, ...card }) => {
             </View>
             <View style={styles.textsContainer}>
                 <Text style={[styles.text, styles.owner]}>{card.nameOnCard}</Text>
-                <Text style={[styles.text, styles.date]}>{card.expirationDate}</Text>
+                <Text style={[styles.text, styles.date]}>{expirationDateStr}</Text>
             </View>
-        </View>
+        </TouchableOpacity>
     )
 };
 
@@ -36,7 +38,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderWidth: 1,
         borderColor: colors.accent,
-        borderRadius: 20,
+        borderRadius: 10,
         paddingVertical: 5,
         marginVertical: 5,
     },
