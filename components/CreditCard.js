@@ -13,7 +13,7 @@ const CreditCard = ({ isConnected, isSelected, onPress, ...card }) => {
     const cardNumberStr = (card.number.toString().match(/\d{1,4}/g) || []).join(' ');
 
     return (
-        <TouchableOpacity style={[styles.container, isSelected && { borderWidth: 2, backgroundColor: `${colors.tertiary}77` }]} activeOpacity={0.9} onPress={onPress}>
+        <TouchableOpacity style={[styles.container, isSelected && { borderWidth: 2, backgroundColor: `${colors.accent}55` }]} activeOpacity={0.9} onPress={onPress}>
             {isConnected &&
                 <Text style={styles.title}>{card.paymentName}</Text>
             }
