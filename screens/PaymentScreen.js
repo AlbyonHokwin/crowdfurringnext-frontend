@@ -19,7 +19,7 @@ import CreditCard from '../components/CreditCard';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import * as colors from '../styles/colors';
 
-const BACKEND_URL = 'http://192.168.10.171:3000';
+const BACKEND_URL = 'http://192.168.1.110:3000';
 
 const PaymentScreen = ({ route, navigation }) => {
     // const user = useSelector(state => state.user.value);
@@ -33,6 +33,7 @@ const PaymentScreen = ({ route, navigation }) => {
     const [dateError, setDateError] = useState(false);
     const [addNewCard, setAddNewCard] = useState(true);
     const [paymentMethods, setPaymentMethods] = useState([]);
+    const [selectedCard, setSelectedCard] = useState(null);
 
     const photos = pot.pictures.map((photo, i) => {
         return (
@@ -41,6 +42,29 @@ const PaymentScreen = ({ route, navigation }) => {
             </View>
         );
     });
+
+    useEffect(() => {
+        (async () => {
+            if (user.token) {
+                const response = await fetch(`${BACKEND_URL}/users/payments`, {
+                    headers: {
+                        'Authorization': 'Bearer ' + user.token,
+                    },
+                });
+                const data = await response.json();
+
+                if (data.result) {
+                    const fetchedPaymentMethods = data.paymentMethods;
+                    setPaymentMethods(fetchedPaymentMethods);
+
+                    if (fetchedPaymentMethods[0]) {
+                        setAddNewCard(false);
+                        setSelectedCard({ key: 0, card: fetchedPaymentMethods[0] })
+                    }
+                }
+            }
+        })();
+    }, []);
 
     const addCard = async card => {
         let isValid = true;
@@ -63,6 +87,9 @@ const PaymentScreen = ({ route, navigation }) => {
         if (!/\d{2}\/\d{2}/.test(card.date)) {
             isValid = false;
             setDateError(true);
+        } else if (new Date(`20${card.date.split('/')[1]}`, card.date.split('/')[0]) <= new Date()) {
+            isValid = false;
+            setDateError(true);
         } else setDateError(false);
 
         if (!card.paymentName && user.token) {
@@ -72,10 +99,11 @@ const PaymentScreen = ({ route, navigation }) => {
 
         if (!isValid) return;
 
+        const expirationDate = new Date(`20${card.date.split('/')[1]}`, card.date.split('/')[0]);
         const newCard = {
             paymentName: 'Carte rajoutée',
             number: card.cardNumber,
-            expirationDate: card.date,
+            expirationDate,
             securityCode: card.securityCode,
             nameOnCard: card.owner,
         };
@@ -109,9 +137,11 @@ const PaymentScreen = ({ route, navigation }) => {
 
     const creditCards = paymentMethods.map((card, i) => {
         return (
-            <CreditCard key={i} isConnected={!!user.token} {...card} />
+            <CreditCard key={i} isSelected={selectedCard ? selectedCard.key === i : false} isConnected={!!user.token} onPress={() => setSelectedCard({ key: i, card })} {...card} />
         );
     });
+
+    console.log(selectedCard?.card.paymentName);
 
     return (
         <KeyboardAvoidingView
@@ -150,6 +180,7 @@ const PaymentScreen = ({ route, navigation }) => {
                                 <Text style={styles.textBackButton}>Rajouter une carte</Text>
                             </TouchableOpacity>
                         }
+                        <View style={styles.voidContainer}></View>
                     </ScrollView>
                 </View>
 
@@ -216,9 +247,9 @@ const styles = StyleSheet.create({
         marginVertical: 20,
     },
     buttonsContainer: {
-        // position: 'absolute',
-        // bottom: 0,
-        // zIndex: 999,
+        position: 'absolute',
+        bottom: 0,
+        zIndex: 999,
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -250,5 +281,8 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         fontSize: 30,
         color: colors.light,
+    },
+    voidContainer: {
+        height: 100,
     },
 });
