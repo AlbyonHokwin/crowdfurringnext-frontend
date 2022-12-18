@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderWidth: 1,
         borderColor: colors.accent,
-        borderRadius: 20,
+        borderRadius: 10,
         paddingVertical: 5,
         marginVertical: 5,
     },
