@@ -101,7 +101,8 @@ export default AddCard;
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
+        minWidth: '100%',
+        maxWidth: '100%',
         justifyContent: 'flex-start',
         alignItems: 'center',
         borderWidth: 1,
@@ -156,7 +157,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     buttonsContainer: {
-        width: '90%',
+        minWidth: '90%',
+        maxWidth: '90%',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
