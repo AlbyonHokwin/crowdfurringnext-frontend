@@ -1,17 +1,12 @@
 import { View, Text, StyleSheet } from "react-native";
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import LoginScreen from "./LoginScreen";
-
 
 export default function MessageScreen() {
     return (
-        // <View style={styles.container}>  
-        //     <Text>MESSAGE</Text>
-        // </View>
-        <LoginScreen />
-    )
-}
+        <View style={styles.container}>  
+            <Text>MESSAGE</Text>
+        </View>
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -20,4 +15,4 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         backgroundColor: "blue",
     }
-})
+});
