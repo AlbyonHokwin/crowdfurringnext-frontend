@@ -17,7 +17,7 @@ export default function LoginScreen() {
 
     const { onPress } = '';
     const token = useSelector(state => state.user.value);
-    console.log(token);
+
 
     const handleConnection = () => {         
         let signinOk = true;

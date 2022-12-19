@@ -52,7 +52,8 @@ export default function SignUpScreen() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, lastname, firstname, street, zipCode, city }),
-      }).then(response => response.json())
+      })
+      .then(response => response.json())
         .then(data => {
           if (data.result) {
             dispatch(login({ token: data.token, email, lastname, firstname, street, zipCode, city }));
