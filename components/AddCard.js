@@ -68,7 +68,7 @@ const AddCard = ({ onPressFunction, onCloseFunction, paymentNameError, cardNumbe
                     autoCapitalize='characters'
                     textContentType='name'
                     style={[styles.input, styles.owner, ownerError && styles.error]}
-                    placeholderTextColor={ownerError ? 'white' : undefined}
+                    placeholderTextColor={ownerError ? colors.light : undefined}
                     onChangeText={value => setOwner(value)}
                     value={owner}
                 />
@@ -78,7 +78,7 @@ const AddCard = ({ onPressFunction, onCloseFunction, paymentNameError, cardNumbe
                     textContentType='name'
                     keyboardType='numeric'
                     style={[styles.input, styles.date, dateError && styles.error]}
-                    placeholderTextColor={dateError ? 'white' : undefined}
+                    placeholderTextColor={dateError ? colors.light : undefined}
                     maxLength={5}
                     onChangeText={value => onChangeDate(value)}
                     value={date}
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
         color: colors.dark,
     },
     error: {
-        color: 'white',
+        color: colors.light,
         backgroundColor: colors.backgroundError,
         borderColor: colors.borderError,
     },
