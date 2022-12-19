@@ -9,8 +9,6 @@ const BACKEND_URL = 'http://192.168.10.140:3000';
 
 export default function LoginScreen({ navigation }) {
     const dispatch = useDispatch();
-    // const user = useSelector(state => state.user.value);
-    // console.log(user);
 
     const [signInEmail, setSignInEmail] = useState("");
     const [emailError, setEmailError] = useState(false);
