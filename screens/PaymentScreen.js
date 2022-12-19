@@ -165,7 +165,7 @@ const PaymentScreen = ({ route, navigation }) => {
         }
 
         if (step === 2) {
-            if (!EMAIL_REGEX.test(email) && !user.token) {
+            if (!EMAIL_REGEX.test(email) && email && !user.token) {
                 setEmailError(true);
                 return;
             }
@@ -313,7 +313,7 @@ const PaymentScreen = ({ route, navigation }) => {
 
             bottomContainer =
                 <View style={styles.buttonsContainer}>
-                    <TouchableOpacity onPress={() => navigation.navigate('Main', { screen: 'Home' })} style={[styles.button, { width: '100%' }]} activeOpacity={0.8}>
+                    <TouchableOpacity onPress={() => navigation.navigate('Main', { screen: 'Home', params: { refresh: true} })} style={[styles.button, { width: '100%' }]} activeOpacity={0.8}>
                         <Text style={styles.textGiveButton}>Revenir à l'accueil</Text>
                     </TouchableOpacity>
                 </View>

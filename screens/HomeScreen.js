@@ -16,15 +16,21 @@ import { useState, useEffect } from 'react';
 import * as Location from 'expo-location';
 import PotLayout from "../components/PotLayout";
 import SearchInput from "../components/SearchInput";
+import { CommonActions } from "@react-navigation/native";
 
 const BACKEND_URL = 'http://192.168.10.140:3000';
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen({ route, navigation }) {
     const [pots, setPots] = useState([]);
     const [potLayouts, setPotLayouts] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [modalContent, setModalContent] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+
+    if (route.params?.refresh && !isLoading) {
+        setIsLoading(true);
+        navigation.dispatch(CommonActions.setParams({ refresh: false }));
+    }
 
     useEffect(() => {
         if (isLoading) {
