@@ -8,6 +8,7 @@ import {
     Modal,
     TouchableOpacity,
     SafeAreaView,
+    ActivityIndicator,
 } from "react-native";
 import * as colors from '../styles/colors';
 import { useState, useEffect } from 'react';
@@ -15,16 +16,18 @@ import * as Location from 'expo-location';
 import PotLayout from "../components/PotLayout";
 import SearchInput from "../components/SearchInput";
 
-const BACKEND_URL = 'http://192.168.1.110:3000';
+const BACKEND_URL = 'http://192.168.10.140:3000';
 
 export default function HomeScreen({ navigation }) {
     const [pots, setPots] = useState([]);
     const [potLayouts, setPotLayouts] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [modalContent, setModalContent] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         (async () => {
+            setIsLoading(true);
             let latitude = '';
             let longitude = '';
             const { status } = await Location.requestForegroundPermissionsAsync();
@@ -59,6 +62,7 @@ export default function HomeScreen({ navigation }) {
                 setPotLayouts(layout);
                 setPots(data.pots);
             }
+            setIsLoading(false);
         })();
     }, []);
 
@@ -118,9 +122,24 @@ export default function HomeScreen({ navigation }) {
                 <Text style={styles.title}>Crowd-furring</Text>
             </View>
             <SearchInput />
-            <ScrollView contentContainerStyle={styles.potsContainer}>
-                {potLayouts}
-            </ScrollView>
+
+            {isLoading ?
+                <View style={{ flex: 1, justifyContent: "center" }}>
+                    <Text style={{ textAlign: "center" }} fontSize={24}>
+                        Récupération des cagnottes en cours
+                    </Text>
+                    <Text style={{ textAlign: "center", fontWeight: "600" }} fontSize={24}>
+                        Merci de bien vouloir patienter
+                    </Text>
+                    <ActivityIndicator
+                        style={{ margin: 10 }}
+                        size="large"
+                        color={colors.primary}
+                    />
+                </View> :
+                <ScrollView contentContainerStyle={styles.potsContainer}>
+                    {potLayouts}
+                </ScrollView>}
 
             <View style={styles.floatingButtonContainer}>
                 <TouchableOpacity onPress={() => navigation.navigate("CreatePot")} style={styles.floatingButton} activeOpacity={0.8}>
