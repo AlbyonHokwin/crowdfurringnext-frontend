@@ -19,7 +19,7 @@ export default function LoginScreen() {
     const token = useSelector(state => state.user.value);
     console.log(token);
 
-    const handleConnection = () => {         
+    const handleConnection = () => {
         let signinOk = true;
 
         if (!EMAIL_REGEX.test(signInEmail)) { setEmailError(true); signinOk = false }
@@ -27,7 +27,7 @@ export default function LoginScreen() {
 
         if (signinOk) {
 
-            fetch("http://192.168.10.182:3000/users/signin", {
+            fetch("http://192.168.10.136:3000/users/signin", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email: signInEmail, password: signInPassword })
@@ -36,7 +36,7 @@ export default function LoginScreen() {
                 .then(data => {
                     console.log(data);
                     if (data.result) {
-                        dispatch(login({token: data.token}));
+                        dispatch(login({ token: data.token }));
                         setSignInEmail("");
                         setSignInPassword("");
                     }
@@ -65,6 +65,8 @@ export default function LoginScreen() {
             <View style={styles.lineContainer}>
                 <View style={styles.line}></View>
                 <Text style={styles.textLine}>OU</Text>
+                <TouchableOpacity style={styles.menu1} activeOpacity={0.8} title="Disconnected" onPress={() => handleLogout()}>
+                    <Text style={styles.text3} >Se déconnecter</Text></TouchableOpacity>
             </View>
         </View>
     )
