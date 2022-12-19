@@ -3,9 +3,10 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 
+
 export default function PotsScreen() {
     return (
-
+          
         
         <View style={styles.container}>  
             <Text>POTS</Text>

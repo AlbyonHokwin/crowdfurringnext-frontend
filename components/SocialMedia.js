@@ -1,6 +1,10 @@
 import { Image, View, TextInput } from "react-native";
 
-export default function SocialMedia({ value }) {
+export default function SocialMedia({
+  name,
+  socialNetworks,
+  setSocialNetworks,
+}) {
   return (
     <View
       style={{
@@ -10,20 +14,30 @@ export default function SocialMedia({ value }) {
     >
       <Image
         style={{
-          maxHeight: 60,
-          maxWidth: 60,
+          maxHeight: 40,
+          maxWidth: 40,
         }}
         source={
-          value === "instagram"
+          name === "instagram"
             ? require("../assets/images/instagram.png")
             : require("../assets/images/twitter.png")
         }
       />
       <TextInput
         placeholder={
-          value === "instagram"
+          name === "instagram"
             ? "Compte instagram de l'animal"
             : "Compte twitter de l'animal"
+        }
+        value={
+          name === "instagram"
+            ? socialNetworks.instagram
+            : socialNetworks.twitter
+        }
+        onChangeText={(value) =>
+          name === "instagram"
+            ? setSocialNetworks({ ...socialNetworks, instagram: value })
+            : setSocialNetworks({ ...socialNetworks, twitter: value })
         }
       />
     </View>

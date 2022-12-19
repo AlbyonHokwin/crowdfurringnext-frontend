@@ -10,11 +10,12 @@ import {
     TouchableOpacity,
     Dimensions,
     Modal,
+    SafeAreaView,
 } from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import * as colors from '../styles/colors';
 
-const BACKEND_URL = 'http://192.168.10.157:3000';
+const BACKEND_URL = 'http://192.168.1.110:3000';
 
 const PotScreen = ({ route, navigation }) => {
     const [pot, setPot] = useState(null);
@@ -23,7 +24,7 @@ const PotScreen = ({ route, navigation }) => {
 
     useEffect(() => {
         (async () => {
-            const slug = "testSlug";
+            const slug = route.params.slug;
             const response = await fetch(`${BACKEND_URL}/pots/slug/${slug}`);
             const data = await response.json();
 
@@ -78,7 +79,7 @@ const PotScreen = ({ route, navigation }) => {
     }
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollContainer} nestedScrollEnabled={true} >
                 <View style={styles.header}>
                     <Text style={styles.name}>{pot.animalName}</Text>
@@ -116,10 +117,10 @@ const PotScreen = ({ route, navigation }) => {
             </ScrollView>
 
             <View style={styles.buttonsContainer}>
-                <TouchableOpacity onPress={() => console.log('----')} style={styles.button} activeOpacity={0.8}>
+                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.button} activeOpacity={0.8}>
                     <Text style={styles.textBackButton}>Retour</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => console.log('++++')} style={styles.button} activeOpacity={0.8}>
+                <TouchableOpacity onPress={() => navigation.navigate('Payment', { pot })} style={styles.button} activeOpacity={0.8}>
                     <Text style={styles.textGiveButton}>Donner</Text>
                 </TouchableOpacity>
             </View>
@@ -138,7 +139,7 @@ const PotScreen = ({ route, navigation }) => {
                 </TouchableOpacity>
             </Modal>
 
-        </View>
+        </SafeAreaView>
     );
 }
 
@@ -148,6 +149,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: StatusBar.currentHeight + 5,
+        backgroundColor: colors.background,
     },
     scrollContainer: {
         flexGrow: 1,
@@ -256,7 +258,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         width: '100%',
         bottom: 0,
-        zIndex: 1000,
+        zIndex: 999,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -269,6 +271,14 @@ const styles = StyleSheet.create({
         padding: 10,
         justifyContent: 'center',
         alignItems: 'center',
+        shadowColor: colors.accent,
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
     },
     textBackButton: {
         fontWeight: '600',

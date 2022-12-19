@@ -2,8 +2,7 @@ import { View, Text, StyleSheet } from "react-native";
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-
-export default function SendNewsScreen({ navigation }) {
+export default function NotificationScreen({ navigation }) {
     return (
 
         

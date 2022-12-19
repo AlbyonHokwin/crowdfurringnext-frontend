@@ -1,10 +1,10 @@
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView,TextInput, TouchableOpacity, } from "react-native";
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { login } from '../reducers/user';
 
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const BACKEND_ADDRESS = 'http://192.168.10.150:3000';
+const BACKEND_ADDRESS = 'http://192.168.10.126:3000';
 
 export default function ModifyInfoScreen({ navigation }) {
     const dispatch = useDispatch();
@@ -36,25 +36,26 @@ export default function ModifyInfoScreen({ navigation }) {
        if (!(city.trim().length !==0)) {setCityError(true); isOk=false} 
   
        if (isOk) {
-          fetch(`${BACKEND_ADDRESS}/users/street`, {
+          fetch(`${BACKEND_ADDRESS}/users/modify`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ token:email.token, street}),
+            authorization:'Bearer token',
+            body: JSON.stringify({ email: email, token: data.token, lastname: lastname, firstname: firstname, street: street, additionnal: additionnal, zipCode: zipCode, city:city}),
           }).then(response => response.json())
 
-            .then(data => {data.result && dispatch(login({ streetId: props._id, email: user.email }));
-                
-            //   if (data.result) {
-                // dispatch(login({ token: data.token, email, lastname, firstname, street, zipCode, city }));
-                // setEmail('');
-                // setPassword('');
-                // setLastname('');
-                // setFirstname('');
-                // setStreet('');
-                // setZipCode('');
-                // setCity('');
-            //   }
-            });
+            .then(data => {
+                if(data.result)
+                {data.result && dispatch(login({ email: email, token: data.token,  lastname: lastname, firstname: firstname, street: street, additionnal: additionnal, zipCode: zipCode, city:city }));
+                setEmail('');
+                setPassword('');
+                setLastname('');
+                setFirstname('');
+                setStreet('');
+                setZipCode('');
+                setCity('');
+              
+                }
+        });
           }
           
       };
@@ -126,7 +127,7 @@ export default function ModifyInfoScreen({ navigation }) {
              onPress={() => navigation.navigate('Profile')}>
             <Text style={styles.text2} >retour</Text></TouchableOpacity>
             <TouchableOpacity onPress={() => handleConfirm()} style={styles.button2} activeOpacity={0.8}>
-                <Text style={styles.text2} >créer un compte</Text></TouchableOpacity>
+                <Text style={styles.text2} >Valider</Text></TouchableOpacity>
       </View>
    </ScrollView>
     

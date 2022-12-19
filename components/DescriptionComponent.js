@@ -12,7 +12,7 @@ export default function DescriptionComponent({
       style={{
         flexDirection: "column",
         width: "80%",
-        height: 200,
+        height: 150,
         borderRadius: 8,
         borderWidth: 1,
         borderColor: colors.accent,
