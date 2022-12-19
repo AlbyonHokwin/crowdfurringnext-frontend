@@ -106,12 +106,12 @@ const PotScreen = ({ route, navigation }) => {
                     </ScrollView>
                 </View>
 
-                <View style={styles.compensations}>
+                {pot.compensations[0] && <View style={styles.compensations}>
                     <Text style={styles.compensationTitle}>Contre-parties :</Text>
                     <ScrollView style={styles.scrollCompensations} nestedScrollEnabled={true} >
                         {compensations}
                     </ScrollView>
-                </View>
+                </View>}
 
                 <View style={styles.voidContainer}></View>
             </ScrollView>
