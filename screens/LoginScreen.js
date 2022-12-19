@@ -1,25 +1,23 @@
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, StatusBar } from "react-native";
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { withSafeAreaInsets } from "react-native-safe-area-context";
 import { login } from "../reducers/user";
 
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-export default function LoginScreen() {
+const BACKEND_URL = 'http://192.168.10.140:3000';
+
+export default function LoginScreen({ navigation }) {
     const dispatch = useDispatch();
-    const user = useSelector((state) => state.user.value);
+    // const user = useSelector(state => state.user.value);
+    // console.log(user);
 
     const [signInEmail, setSignInEmail] = useState("");
     const [emailError, setEmailError] = useState(false);
     const [signInPassword, setSignInPassword] = useState("");
     const [passwordError, setPasswordError] = useState(false);
 
-    const { onPress } = '';
-    const token = useSelector(state => state.user.value);
-    console.log(token);
-
-    const handleConnection = () => {         
+    const handleConnection = () => {
         let signinOk = true;
 
         if (!EMAIL_REGEX.test(signInEmail)) { setEmailError(true); signinOk = false }
@@ -27,21 +25,19 @@ export default function LoginScreen() {
 
         if (signinOk) {
 
-            fetch("http://192.168.10.182:3000/users/signin", {
+            fetch(`${BACKEND_URL}/users/signin`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email: signInEmail, password: signInPassword })
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data);
                     if (data.result) {
-                        dispatch(login({token: data.token}));
+                        dispatch(login({ token: data.token, email: data.email }));
                         setSignInEmail("");
                         setSignInPassword("");
+                        navigation.goBack();
                     }
-
-
                 });
         }
     };
@@ -50,8 +46,8 @@ export default function LoginScreen() {
         <View style={styles.container}>
             <View>
                 <Text>Nouvel utilisateur ? Créez votre compte !</Text>
-                <TouchableOpacity style={styles.button}>
-                    <Text style={styles.text}>Créer un compte !</Text>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SignUp')}>
+                    <Text style={styles.text}>Créer un compte</Text>
                 </TouchableOpacity>
             </View>
             <View style={styles.inputContainer}>
