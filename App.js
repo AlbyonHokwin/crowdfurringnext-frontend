@@ -1,12 +1,12 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, View } from "react-native";
 
-import { Provider, useSelector } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
-import user from './reducers/user';
+import { Provider, useSelector } from "react-redux";
+import { configureStore } from "@reduxjs/toolkit";
+import user from "./reducers/user";
 
-import { NavigationContainer } from '@react-navigation/native';
-import TabNavigator from './components/TabNavigator';
+import { NavigationContainer } from "@react-navigation/native";
+import TabNavigator from "./components/TabNavigator";
 
 const store = configureStore({
   reducer: { user },

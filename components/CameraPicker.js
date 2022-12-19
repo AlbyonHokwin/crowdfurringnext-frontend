@@ -31,8 +31,7 @@ export default function CameraPicker({ isOn, active, takePicture }) {
           width: 300,
           height: 100,
           borderRadius: 8,
-          borderWidth: 1,
-          borderColor: colors.accent,
+
           backgroundColor: colors.shade,
           alignItems: "center",
           justifyContent: "center",

@@ -10,8 +10,6 @@ export default function FileSelector({
   name,
 }) {
   const handleNewFile = () => {
-    // if (image.length >= 4)
-    //   return alert("Pease delete some pictures before to add new ones");
     pickFile();
   };
   return (
@@ -22,9 +20,7 @@ export default function FileSelector({
           width: "35%",
           height: 150,
           borderRadius: 8,
-          borderWidth: 1,
           backgroundColor: colors.shade,
-          borderColor: colors.tertiary,
           alignItems: "center",
           justifyContent: "center",
         }}

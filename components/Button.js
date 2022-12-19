@@ -1,40 +1,21 @@
 import { Text, TouchableOpacity } from "react-native";
 import * as colors from "../styles/colors";
 
-export default function Button({
-  value,
-  step,
-  number,
-  navigation = "",
-  path = "",
-  reset,
-  error,
-  message,
-  ...rest
-}) {
+export default function Button({ value, onPress }) {
   return (
     <TouchableOpacity
       style={{
         width: "35%",
         height: 60,
         borderRadius: 8,
-        borderWidth: 1,
-        backgroundColor: colors.primary,
+        backgroundColor: colors.secondary,
         alignItems: "center",
         justifyContent: "center",
+        margin: 10,
       }}
-      onPress={() => {
-        if (navigation) {
-          navigation.navigate(path);
-          reset(1);
-        } else if (Object.keys(rest).every((key) => !!rest[key])) {
-          step(number);
-        } else {
-          error(message);
-        }
-      }}
+      onPress={() => onPress()}
     >
-      <Text>{value}</Text>
+      <Text style={{ color: colors.background }}>{value}</Text>
     </TouchableOpacity>
   );
 }
