@@ -15,7 +15,7 @@ import {
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import * as colors from '../styles/colors';
 
-const BACKEND_URL = 'http://192.168.10.171:3000';
+const BACKEND_URL = 'http://192.168.1.110:3000';
 
 const PotScreen = ({ route, navigation }) => {
     const [pot, setPot] = useState(null);

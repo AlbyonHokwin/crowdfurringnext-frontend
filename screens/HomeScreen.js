@@ -15,7 +15,7 @@ import * as Location from 'expo-location';
 import PotLayout from "../components/PotLayout";
 import SearchInput from "../components/SearchInput";
 
-const BACKEND_URL = 'http://192.168.10.171:3000';
+const BACKEND_URL = 'http://192.168.1.110:3000';
 
 export default function HomeScreen({ navigation }) {
     const [pots, setPots] = useState([]);
