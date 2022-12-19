@@ -33,7 +33,7 @@ const TabNavigator = () => {
             tabBarActiveTintColor: colors.accent,
             tabBarActiveBackgroundColor: colors.secondary,
             tabBarInactiveTintColor: colors.shade,
-            tabBarStyle: { backgroundColor: colors.primary, height: 70, borderTopWidth: 0 },
+            tabBarStyle: { backgroundColor: colors.primary, height: Platform.OS === "ios" ? 100 : 70, borderTopWidth: 0 },
             tabBarHideOnKeyboard: true,
             headerShown: false,
         })}>
