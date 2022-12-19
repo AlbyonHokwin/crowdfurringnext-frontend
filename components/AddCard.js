@@ -45,7 +45,7 @@ const AddCard = ({ onPressFunction, onCloseFunction, paymentNameError, cardNumbe
                 <TextInput
                     placeholder='Numéro de carte'
                     keyboardType='numeric'
-                    textContentType='creditC...ardNumber'
+                    textContentType='creditCardNumber'
                     style={[styles.input, styles.cardNumber, cardNumberError && styles.error]}
                     placeholderTextColor={cardNumberError ? 'white' : undefined}
                     maxLength={19}

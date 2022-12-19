@@ -7,6 +7,7 @@ import {
     View,
     StatusBar,
     Image,
+    TextInput,
     ScrollView,
     TouchableOpacity,
     Dimensions,
@@ -26,6 +27,7 @@ const PaymentScreen = ({ route, navigation }) => {
     const user = { token: 'fzealiujeqnejbnlz1367I4njliH' };
 
     const pot = route.params.pot;
+    const [currentAmount, setCurrentAmount] = useState(pot.currentAmount);
     const [paymentNameError, setPaymentNameError] = useState(false);
     const [cardNumberError, setCardNumberError] = useState(false);
     const [securityCodeError, setSecurityCodeError] = useState(false);
@@ -34,14 +36,8 @@ const PaymentScreen = ({ route, navigation }) => {
     const [addNewCard, setAddNewCard] = useState(true);
     const [paymentMethods, setPaymentMethods] = useState([]);
     const [selectedCard, setSelectedCard] = useState(null);
-
-    const photos = pot.pictures.map((photo, i) => {
-        return (
-            <View key={i} style={styles.touchablePhoto}>
-                <Image source={{ uri: photo }} style={styles.photo} />
-            </View>
-        );
-    });
+    const [amount, setAmount] = useState('');
+    const [step, setStep] = useState(1);
 
     useEffect(() => {
         (async () => {
@@ -111,6 +107,7 @@ const PaymentScreen = ({ route, navigation }) => {
         if (!user.token) {
             setAddNewCard(false);
             setPaymentMethods([...paymentMethods, newCard]);
+            !selectedCard && setSelectedCard({ key: 0, card: newCard })
         } else {
             newCard.paymentName = card.paymentName;
 
@@ -127,6 +124,7 @@ const PaymentScreen = ({ route, navigation }) => {
             if (data.result) {
                 setAddNewCard(false);
                 setPaymentMethods([...paymentMethods, newCard]);
+                !selectedCard && setSelectedCard({ key: 0, card: newCard })
             }
         }
     };
@@ -141,7 +139,108 @@ const PaymentScreen = ({ route, navigation }) => {
         );
     });
 
-    console.log(selectedCard?.card.paymentName);
+    const photos = pot.pictures.map((photo, i) => {
+        return (
+            <View key={i} style={styles.touchablePhoto}>
+                <Image source={{ uri: photo }} style={styles.photo} />
+            </View>
+        );
+    });
+
+    const pressBack = () => {
+        step === 1 ?
+            navigation.goBack() :
+            setStep(step - 1);
+    };
+
+    const pressNext = async () => {
+        if (step === 1) {
+            if (!selectedCard || !+amount) return;
+            setStep(step + 1);
+        }
+        if (step === 2) {
+            const response = await fetch(`${BACKEND_URL}/pots/pay/${pot.slug}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ amount, email: user.email }),
+            });
+            const data = await response.json();
+            if (data.result) {
+                setCurrentAmount(data.newAmount);
+                setStep(step + 1);
+            }
+        }
+    };
+
+    let paymentStep = null;
+    let nextBtnText = '';
+    switch (step) {
+        case 1:
+            paymentStep = <>
+                <View style={styles.photos}>
+                    <ScrollView horizontal={true} style={styles.photosScroll}>
+                        {photos}
+                    </ScrollView>
+                </View>
+
+                <ScrollView style={styles.paymentMethodsContainer} nestedScrollEnabled={true}>
+                    {creditCards}
+                    {addNewCard && <AddCard
+                        onPressFunction={addCard}
+                        onCloseFunction={closeAddCard}
+                        isConnected={!!user.token}
+                        paymentNameError={paymentNameError}
+                        cardNumberError={cardNumberError}
+                        securityCodeError={securityCodeError}
+                        ownerError={ownerError}
+                        dateError={dateError}
+                    />}
+                    {!addNewCard &&
+                        <TouchableOpacity onPress={() => setAddNewCard(true)} style={styles.button} activeOpacity={0.8}>
+                            <Text style={styles.textBackButton}>Rajouter une carte</Text>
+                        </TouchableOpacity>
+                    }
+                </ScrollView>
+
+                <View style={styles.divider} />
+
+                <View>
+                    <Text style={styles.textAmount}>Combien souhaitez-vous donner ?</Text>
+                    <View style={styles.amountContainer}>
+                        <TextInput style={styles.amountInput} placeholder='---' keyboardType='numeric' onChangeText={value => setAmount(value)} value={amount.replace(',', '.')} />
+                        <Text style={styles.textAmount}> €</Text>
+                    </View>
+                </View>
+            </>;
+            nextBtnText = 'Vérification';
+            break;
+        case 2:
+            paymentStep = <>
+                <View style={styles.amountToGiveContainer}>
+                    <Text style={styles.textAmountToGive}>Vous souhaitez donner :</Text>
+                    <Text style={styles.amountToGive}>{amount} €</Text>
+                </View>
+
+                <View style={styles.photos}>
+                    <ScrollView horizontal={true} style={styles.photosScroll}>
+                        {photos}
+                    </ScrollView>
+                </View>
+
+                {!user.token &&
+                    <View style={[styles.loginContainer, { flexDirection: 'column' }]}>
+                        <Text style={styles.textInformation}>En ayant un compte, vous pourrez suivre l'évolution de cette cagnotte.</Text>
+                        <TouchableOpacity onPress={() => pressBack()} style={[styles.button, { width: '100%' }]} activeOpacity={0.8}>
+                            <Text style={styles.textBackButton}>Se connecter ou créer un compte</Text>
+                        </TouchableOpacity>
+                    </View>
+                }
+            </>;
+            nextBtnText = 'Payer';
+            break;
+        case 3:
+            break;
+    }
 
     return (
         <KeyboardAvoidingView
@@ -150,47 +249,33 @@ const PaymentScreen = ({ route, navigation }) => {
         >
             <SafeAreaView style={styles.container}>
 
-                <View style={styles.content} >
+                <ScrollView contentContainerStyle={styles.content} >
                     <View style={styles.header}>
                         <Text style={styles.name}>{pot.animalName}</Text>
                         <Text style={styles.city}>{pot.user.address.city}</Text>
-                        <Text style={styles.amounts}>{pot.currentAmount}€ / {pot.targetAmount}€</Text>
+                        <Text style={styles.amounts}>{currentAmount}€ / {pot.targetAmount}€</Text>
                     </View>
 
-                    <View style={styles.photos}>
-                        <ScrollView horizontal={true} style={styles.photosScroll}>
-                            {photos}
-                        </ScrollView>
-                    </View>
-
-                    <ScrollView style={styles.paymentMethodsContainer}>
-                        {creditCards}
-                        {addNewCard && <AddCard
-                            onPressFunction={addCard}
-                            onCloseFunction={closeAddCard}
-                            isConnected={!!user.token}
-                            paymentNameError={paymentNameError}
-                            cardNumberError={cardNumberError}
-                            securityCodeError={securityCodeError}
-                            ownerError={ownerError}
-                            dateError={dateError}
-                        />}
-                        {!addNewCard &&
-                            <TouchableOpacity onPress={() => setAddNewCard(true)} style={styles.button} activeOpacity={0.8}>
-                                <Text style={styles.textBackButton}>Rajouter une carte</Text>
-                            </TouchableOpacity>
-                        }
-                        <View style={styles.voidContainer}></View>
-                    </ScrollView>
-                </View>
+                    {paymentStep}
+                    
+                </ScrollView>
 
                 <View style={styles.buttonsContainer}>
-                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.button} activeOpacity={0.8}>
-                        <Text style={styles.textBackButton}>Retour</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => console.log('next')} style={styles.button} activeOpacity={0.8}>
-                        <Text style={styles.textGiveButton}>Vérification</Text>
-                    </TouchableOpacity>
+                    {step < 3 ?
+                        <>
+                            <TouchableOpacity onPress={() => pressBack()} style={styles.button} activeOpacity={0.8}>
+                                <Text style={styles.textBackButton}>Retour</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => pressNext()} style={styles.button} activeOpacity={0.8}>
+                                <Text style={styles.textGiveButton}>{nextBtnText}</Text>
+                            </TouchableOpacity>
+                        </> :
+                        <>
+                            <TouchableOpacity onPress={() => navigation.navigate('Main', { screen: 'Home' })} style={[styles.button, { width: '100%' }]} activeOpacity={0.8}>
+                                <Text style={styles.textGiveButton}>Revenir à l'accueil</Text>
+                            </TouchableOpacity>
+                        </>
+                    }
                 </View>
 
             </SafeAreaView>
@@ -244,12 +329,38 @@ const styles = StyleSheet.create({
     },
     paymentMethodsContainer: {
         width: '80%',
-        marginVertical: 20,
+        marginVertical: 10,
+        maxHeight: Dimensions.get('screen').height / 2.5,
+    },
+    textAmount: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: colors.dark,
+    },
+    amountContainer: {
+        borderWidth: 1,
+        borderColor: colors.shade,
+        borderRadius: 5,
+        padding: 5,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    amountInput: {
+        flexGrow: 1,
+        fontSize: 20,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        color: colors.dark,
+    },
+    voidContainer: {
+        flexGrow: 1,
+        backgroundColor: 'blue',
     },
     buttonsContainer: {
-        position: 'absolute',
-        bottom: 0,
-        zIndex: 999,
+        // position: 'absolute',
+        // bottom: 0,
+        // zIndex: 999,
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -282,7 +393,37 @@ const styles = StyleSheet.create({
         fontSize: 30,
         color: colors.light,
     },
-    voidContainer: {
-        height: 100,
+    divider: {
+        width: '90%',
+        borderBottomWidth: 1,
+        borderColor: colors.accent,
+        marginVertical: 5,
+    },
+    amountToGiveContainer: {
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        marginVertical: 30,
+    },
+    textAmountToGive: {
+        fontSize: 30,
+        fontWeight: 'bold',
+        color: colors.dark,
+    },
+    amountToGive: {
+        fontSize: 40,
+        fontWeight: 'bold',
+        color: colors.dark,
+    },
+    loginContainer: {
+        flexGrow: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginVertical: 20,
+        width: '80%',
+    },
+    textInformation: {
+        fontSize: 20,
+        textAlign: 'center',
+        marginBottom: 10,
     },
 });
