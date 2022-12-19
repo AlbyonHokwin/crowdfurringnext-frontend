@@ -22,7 +22,9 @@ export default function ImageSelector({ pickImage, images, deleteImage }) {
 
   const handleNewPicture = () => {
     if (image.length >= 4)
-      return alert("Pease delete some pictures before to add new ones");
+      return alert(
+        "Merci de supprimer une photo avant d'en ajouter une nouvelle"
+      );
     pickImage();
   };
 
@@ -32,8 +34,6 @@ export default function ImageSelector({ pickImage, images, deleteImage }) {
         width: "80%",
         height: "55%",
         borderRadius: 8,
-        borderWidth: 1,
-        borderColor: colors.accent,
         backgroundColor: colors.shade,
         alignItems: "center",
       }}

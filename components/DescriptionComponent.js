@@ -14,8 +14,6 @@ export default function DescriptionComponent({
         width: "80%",
         height: 150,
         borderRadius: 8,
-        borderWidth: 1,
-        borderColor: colors.accent,
         backgroundColor: colors.shade,
         alignItems: "flex-start",
         justifyContent: "flex-start",

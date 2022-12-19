@@ -1,13 +1,7 @@
 import { Text, TextInput, View } from "react-native";
 import * as colors from "../styles/colors";
 
-export default function InputComponent({
-  placeholder,
-  name,
-  input,
-  value,
-  error,
-}) {
+export default function InputComponent({ placeholder, name, input, value }) {
   return (
     <TextInput
       style={{
@@ -15,8 +9,6 @@ export default function InputComponent({
         width: "80%",
         height: 40,
         borderRadius: 8,
-        borderWidth: 1,
-        borderColor: colors.accent,
         backgroundColor: colors.shade,
         alignItems: "center",
         justifyContent: "flex-start",

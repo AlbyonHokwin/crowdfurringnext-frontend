@@ -8,6 +8,7 @@ export default function ModalComponent({
   message,
   double,
   fetcher,
+  navigation,
 }) {
   let text;
   double ? (text = { oui: "Oui", non: "Non" }) : (text = { oui: "Compléter" });
@@ -26,16 +27,20 @@ export default function ModalComponent({
             height: 200,
             width: "70%",
             borderRadius: 20,
-            backgroundColor: colors.secondary,
+            backgroundColor: colors.background,
             alignItems: "center",
             justifyContent: "space-around",
           }}
         >
-          <Text style={{ fontSize: 30, textAlign: "center" }}>{message}</Text>
+          <Text
+            style={{ fontSize: 24, color: colors.icon, textAlign: "center" }}
+          >
+            {message}
+          </Text>
           <View style={{ display: "flex", flexDirection: "row" }}>
             <TouchableOpacity
               style={{
-                backgroundColor: colors.primary,
+                backgroundColor: colors.secondary,
                 width: "30%",
                 height: 40,
                 borderRadius: 10,
@@ -54,7 +59,7 @@ export default function ModalComponent({
             {double && (
               <TouchableOpacity
                 style={{
-                  backgroundColor: colors.primary,
+                  backgroundColor: colors.secondary,
                   width: "30%",
                   height: 40,
                   borderRadius: 10,
@@ -65,6 +70,7 @@ export default function ModalComponent({
                 onPress={() => {
                   setModal(false);
                   setDouble(false);
+                  navigation.navigate("Home");
                 }}
               >
                 <Text style={{ color: "white" }}>{text.non}</Text>
