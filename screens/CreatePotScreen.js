@@ -282,7 +282,7 @@ export default function CreatePotScreen({ navigation }) {
     <SafeAreaView
       style={{
         backgroundColor: colors.light,
-        opacity: `${modalVisible ? 0.3 : 1}`,
+        // opacity: `${modalVisible ? 0.3 : 1}`,
         flex: 1,
         justifyContent: "center",
         paddingTop: 10,
