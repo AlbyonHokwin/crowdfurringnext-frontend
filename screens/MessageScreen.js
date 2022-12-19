@@ -6,10 +6,9 @@ import LoginScreen from "./LoginScreen";
 
 export default function MessageScreen() {
     return (
-        // <View style={styles.container}>  
-        //     <Text>MESSAGE</Text>
-        // </View>
-        <LoginScreen />
+        <View style={styles.container}>  
+            <Text>MESSAGE</Text>
+        </View>
     )
 }
 
