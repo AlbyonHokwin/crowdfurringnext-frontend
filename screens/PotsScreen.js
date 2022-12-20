@@ -8,6 +8,7 @@ import {
   Animated,
   Image,
   ScrollView,
+  StatusBar,
 } from "react-native";
 import { useEffect, useState } from "react";
 import * as colors from "../styles/colors";
@@ -34,7 +35,7 @@ export default function PotsScreen({ navigation }) {
 
   let boolean = true;
 
-  const BACKEND_URL = "http://192.168.10.142:3000";
+  const BACKEND_URL = "http://192.168.10.143:3000";
 
   function handleSubmit(id) {
     fetch(`${BACKEND_URL}/pots/delete/${id}`, {
@@ -61,26 +62,34 @@ export default function PotsScreen({ navigation }) {
         navigation={navigation}
         id={id}
       />
-      <ScrollView style={{ width: "100%" }}>
-        <View
-          style={{
-            width: "100%",
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Text>Cagnottes</Text>
-          <Switch
-            trackColor={{ false: colors.shade, true: colors.secondary }}
-            thumbColor={isEnabled ? colors.background : colors.background}
-            ios_backgroundColor={colors.shade}
-            onValueChange={toggleSwitch}
-            value={isEnabled}
-            style={{ margin: 10 }}
-          />
-          <Text>Participations</Text>
-        </View>
+      <View
+        style={{
+          width: "100%",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Text>Cagnottes</Text>
+        <Switch
+          trackColor={{ false: colors.shade, true: colors.secondary }}
+          thumbColor={isEnabled ? colors.background : colors.background}
+          ios_backgroundColor={colors.shade}
+          onValueChange={toggleSwitch}
+          value={isEnabled}
+          style={{ margin: 10 }}
+        />
+        <Text>Participations</Text>
+      </View>
+
+      <ScrollView contentContainerStyle={{ width: "100%", alignItems: "center" }} showsVerticalScrollIndicator={false}>
+        {(isEnabled && !pots.contributor.length) && (
+          <View style={{ margin: 20 }}>
+            <Text style={{ fontSize: 18, fontWeight: "600" }}>
+              Vous n'avez pas encore participé à des cagnottes
+            </Text>
+          </View>
+        )}
         {isEnabled && (
           <View style={{ width: "100%", margin: 10 }}>
             {DisplayPots(
@@ -92,13 +101,12 @@ export default function PotsScreen({ navigation }) {
             )}
           </View>
         )}
+
         {!isEnabled && !draft.length && !validated.length && (
-          <View>
-            <View style={{ width: "100%", margin: 20 }}>
-              <Text style={{ fontSize: 18, fontWeight: "600" }}>
-                Vous n'avez pas encore de cagnottes
-              </Text>
-            </View>
+          <View style={{ margin: 20 }}>
+            <Text style={{ fontSize: 18, fontWeight: "600" }}>
+              Vous n'avez pas encore de cagnottes
+            </Text>
           </View>
         )}
         {!isEnabled && validated.length ? (
@@ -128,7 +136,7 @@ export default function PotsScreen({ navigation }) {
           </View>
         ) : null}
       </ScrollView>
-    </SafeAreaView>
+    </SafeAreaView >
   );
 }
 
@@ -138,5 +146,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     backgroundColor: colors.background,
+    paddingTop: StatusBar.currentHeight + 20,
   },
 });
