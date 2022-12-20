@@ -8,17 +8,22 @@ import {
   ScrollView,
   View,
   StatusBar,
-} from "react-native";
-import { login } from "../reducers/user";
-import { Picker } from "@react-native-picker/picker";
+} from 'react-native';
+import { login } from '../reducers/user';
+import ImageProfileSelector from '../components/ImageProfileSelector';
 
+<<<<<<< HEAD
 const EMAIL_REGEX =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const BACKEND_URL = "http://192.168.10.142:3000";
+=======
+
+const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const BACKEND_URL = 'http://192.168.10.143:3000';
+>>>>>>> 07dc7c23633be299c008004fb5e979ea05b323dd
 
 export default function SignUpScreen({ navigation }) {
   const dispatch = useDispatch();
-  const [membership, setMembership] = useState();
 
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState(false);
@@ -88,11 +93,6 @@ export default function SignUpScreen({ navigation }) {
               login({
                 token: data.token,
                 email,
-                lastname,
-                firstname,
-                street,
-                zipCode,
-                city,
               })
             );
             setEmail("");
@@ -182,18 +182,11 @@ export default function SignUpScreen({ navigation }) {
           />
           {cityError && <Text style={styles.error}>city empty</Text>}
         </View>
+        <View>
+          <ImageProfileSelector />
+        </View>
       </View>
-      <Text style={{ fontSize: 24, textAlign: "center" }}>
-        Faites-vous partie d'une association ?
-      </Text>
-      <Picker
-        style={{ width: 200 }}
-        selectedValue={membership}
-        onValueChange={(itemValue, itemIndex) => setMembership(itemValue)}
-      >
-        <Picker.Item label="Oui" value="Oui" />
-        <Picker.Item label="Non" value="Non" />
-      </Picker>
+
       <View style={styles.group}>
         <TouchableOpacity style={styles.button} activeOpacity={0.8}>
           <Text style={styles.text2}>retour</Text>
@@ -296,3 +289,4 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
 });
+

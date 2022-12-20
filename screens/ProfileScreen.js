@@ -30,7 +30,7 @@ export default function ProfileScreen({ navigation }) {
                     <TouchableOpacity style={styles.menu1} activeOpacity={0.8} title="Go to settings"
                         onPress={() => navigation.navigate('settings')}>
                         <Text style={styles.text3} >Réglages</Text></TouchableOpacity>
-                    <TouchableOpacity style={styles.menu1} activeOpacity={0.8} title="Go to settings"
+                    <TouchableOpacity style={styles.menu1} activeOpacity={0.8} title="Disconnected"
                         onPress={() => pressOnLogout()}>
                         <Text style={styles.text3} >Se déconnecter</Text></TouchableOpacity>
                 </View>
