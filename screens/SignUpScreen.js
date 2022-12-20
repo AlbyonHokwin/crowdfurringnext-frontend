@@ -182,7 +182,7 @@ export default function SignUpScreen({ navigation }) {
       </View>
 
       <View style={styles.group}>
-        <TouchableOpacity style={styles.button} activeOpacity={0.8}>
+        <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={() => navigation.goBack()}>
           <Text style={styles.text2}>retour</Text>
         </TouchableOpacity>
         <TouchableOpacity
