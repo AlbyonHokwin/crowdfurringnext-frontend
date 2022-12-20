@@ -4,11 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../reducers/user';
 
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const BACKEND_ADDRESS = 'http://192.168.10.131:3000';
+const BACKEND_ADDRESS = 'http://192.168.10.127:3000';
 
 
 export default function ModifyInfoScreen({ navigation }) {
     const token = useSelector((state) => state.user.value.token);
+    
     const dispatch = useDispatch();
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState(false);
@@ -35,8 +36,8 @@ export default function ModifyInfoScreen({ navigation }) {
                     setFirstname(data.user.firstname);
                     setStreet(data.user.street);
                     setAdditionnal(data.user.additionnal);
-                    setCity(data.user.city);
                     setZipCode(`${data.user.zipCode}`);
+                    setCity(data.user.city);
                 }
             });
     }, []);
@@ -76,8 +77,7 @@ export default function ModifyInfoScreen({ navigation }) {
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
-            <View style={styles.container}>
-                <Text style={styles.text}>Modifier vos Informations </Text>
+            <Text style={styles.text}>Modifier vos Informations </Text>
                 <View style={styles.inputContainer}>
                     <View style={styles.description1}>
                     <TextInput
@@ -115,7 +115,7 @@ export default function ModifyInfoScreen({ navigation }) {
                         value={additionnal}
                         placeholder="Complément d'adresse" />
                         </View>
-                    <View style={styles.city}>
+                    <View style={styles.row}>
                         <TextInput
                             textContentType="postalCode"
                             keyboardType="numeric"
@@ -130,14 +130,14 @@ export default function ModifyInfoScreen({ navigation }) {
                             value={city}
                             placeholder="Ville" />{cityError && <Text style={styles.error}>city empty</Text>}
                     </View>
-                        </View>
-                    <View style={styles.group}>
+                </View>
+                <View style={styles.row}>
                 <TouchableOpacity style={styles.button} activeOpacity={0.8} title="Go to Profile"
                     onPress={() => navigation.navigate('Profile')}>
                     <Text style={styles.text2} >retour</Text></TouchableOpacity>
                 <TouchableOpacity onPress={() => handleConfirm()} style={styles.button2} activeOpacity={0.8}>
-                    <Text style={styles.text2} >Valider</Text></TouchableOpacity>
-            </View>
+                    <Text style={styles.text2} >Valider</Text>
+                </TouchableOpacity>
             </View>
         </ScrollView>
 
@@ -156,14 +156,12 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         width: '100%',
-        backgroundColor: "#ffffff",
         borderRadius: 1,
-        alignItems: 'center',
-
+        alignItems:"stretch",
     },
     description1: {
-       width: '90%',
-       alignItems: 'center',
+       alignItems:"center",
+
     },
     input: {
         flexDirection: 'row',
@@ -174,14 +172,19 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginVertical: 5,
         borderRadius: 5,
-    },
+        },
     button: {
         padding: 8,
         width: '25%',
         backgroundColor: "#1F6F78",
-        borderRadius: 5,
         alignItems: 'center',
         justifyContent: 'center',
+        flexDirection: 'row',
+        padding: 10,
+        fontSize: 20,
+        borderRadius: 5,
+        flexGrow:1,
+        marginRight:10
     },
     button2: {
         padding: 8,
@@ -202,43 +205,37 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    group: {
+    row: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-end',
         width: '90%',
-        padding : 30,
+        marginVertical: 5,
+        marginRight:"auto",
+        marginLeft:"auto",
+
     },
     input1: {
         flexDirection: 'row',
-        width: '30%',
         padding: 10,
         borderWidth: 1,
         borderColor: 'black',
         fontSize: 20,
         borderRadius: 5,
+        flexGrow:1,
+        marginRight:10
     },
     input2: {
         flexDirection: 'row',
-        width: '68%',
         padding: 10,
         borderWidth: 1,
         borderColor: 'black',
         fontSize: 20,
         borderRadius: 5,
-    },
-    city: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        width: '90%',
-        marginVertical: 5,
-    },
+        flexGrow:2,
+    }, 
     asso: {
         flexDirection: 'row',
     },
-    text: {
-fontSize: 30,
-
+    text: { 
+        fontSize: 30,
     },
-
 })
