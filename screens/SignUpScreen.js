@@ -10,8 +10,7 @@ import {
   StatusBar,
 } from 'react-native';
 import { login } from '../reducers/user';
-import { Picker } from "@react-native-picker/picker";
-
+import ImageProfileSelector from '../components/ImageProfileSelector';
 
 
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -131,19 +130,11 @@ export default function SignUpScreen() {
             value={city}
             placeholder="Ville" />{cityError && <Text style={styles.error}>city empty</Text>}
         </View>
-
+        <View>
+          <ImageProfileSelector />
+        </View>
       </View>
-      <Text style={{ fontSize: 24, textAlign: "center" }}>
-        Faites-vous partie d'une association ?
-      </Text>
-      <Picker
-        style={{ width: 200 }}
-        selectedValue={membership}
-        onValueChange={(itemValue, itemIndex) => setMembership(itemValue)}
-      >
-        <Picker.Item label="Oui" value="Oui" />
-        <Picker.Item label="Non" value="Non" />
-      </Picker>
+
       <View style={styles.group}>
 
         <TouchableOpacity style={styles.button} activeOpacity={0.8}><Text style={styles.text2} >retour</Text></TouchableOpacity>
@@ -241,6 +232,5 @@ const styles = StyleSheet.create({
   asso: {
     flexDirection: 'row',
   },
-
 })
 

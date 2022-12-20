@@ -1,7 +1,6 @@
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, StatusBar } from "react-native";
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { withSafeAreaInsets } from "react-native-safe-area-context";
 import { login } from "../reducers/user";
 
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -17,7 +16,6 @@ export default function LoginScreen() {
 
     const { onPress } = '';
     const token = useSelector(state => state.user.value);
-    console.log(token);
 
     const handleConnection = () => {
         let signinOk = true;
@@ -34,7 +32,6 @@ export default function LoginScreen() {
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data);
                     if (data.result) {
                         dispatch(login({ token: data.token }));
                         setSignInEmail("");
