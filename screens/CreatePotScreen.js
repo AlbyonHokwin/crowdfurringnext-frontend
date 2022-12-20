@@ -6,8 +6,6 @@ import {
   StatusBar,
 } from "react-native";
 
-import { useSelector } from "react-redux";
-
 import * as colors from "../styles/colors";
 import { useState } from "react";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -28,12 +26,18 @@ import CameraPicker from "../components/CameraPicker";
 import Button from "../components/Button";
 import { convertData } from "../utils/convertData";
 
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { addPots } from "../reducers/pots";
+
 export default function CreatePotScreen({ navigation }) {
-  const user = useSelector(state => state.user.value);
+  const user = useSelector((state) => state.user.value);
   const [isOn, setIsOn] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [message, setMessage] = useState("");
   const [double, setDouble] = useState(false);
+
+  const dispatch = useDispatch();
 
   // ***************FORM STATE*******************//
 
@@ -103,8 +107,8 @@ export default function CreatePotScreen({ navigation }) {
     const url = `/pots/create/${boolean}`;
 
     const response = await fetcher(data, url, user.token);
-
     if (response.result) {
+      dispatch(addPots(response.pot));
       setStatus(false);
       if (page !== 6) {
         setPage(1);
@@ -272,8 +276,8 @@ export default function CreatePotScreen({ navigation }) {
   const takePicture = (picture) =>
     images.length >= 4
       ? alert(
-        "Le nombre maximum est fixé à 4. Merci de bien vouloir supprimer une photo avant d'en ajouter une nouvelle"
-      )
+          "Le nombre maximum est fixé à 4. Merci de bien vouloir supprimer une photo avant d'en ajouter une nouvelle"
+        )
       : setImages([...images, picture.uri]);
 
   const handleCamera = (isOn) => setIsOn(isOn);
@@ -298,14 +302,14 @@ export default function CreatePotScreen({ navigation }) {
           backgroundColor: colors.light,
           // opacity: `${modalVisible ? 0.3 : 1}`,
           flex: 1,
-          justifyContent: "space-between",
+          justifyContent: "space-around",
           // paddingTop: StatusBar.currentHeight,
         }}
       >
         <KeyboardAvoidingView
           style={{
             alignItems: "center",
-            // height: "100%",
+            height: "100%",
           }}
           behavior={Platform.OS === "ios" ? "padding" : "height"}
         >

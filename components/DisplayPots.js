@@ -8,8 +8,16 @@ import {
 } from "react-native";
 import * as colors from "../styles/colors";
 
-export default function DisplayPots(pots) {
+export default function DisplayPots(
+  pots,
+  navigation,
+  setModalVisible,
+  setId,
+  setDouble,
+  boolean
+) {
   return pots.map((pot, i) => {
+    const slug = pot.slug;
     return (
       <View
         key={i}
@@ -57,11 +65,12 @@ export default function DisplayPots(pots) {
               }
             />
           </View>
+
           <View
             style={{
               width: "100%",
               flexDirection: "row",
-              justifyContent: "space-between",
+              justifyContent: `${boolean ? "space-between" : "center"}`,
             }}
           >
             <TouchableOpacity
@@ -74,22 +83,30 @@ export default function DisplayPots(pots) {
                 justifyContent: "center",
                 margin: 20,
               }}
+              onPress={() => navigation.navigate("Pot", { slug })}
             >
               <Text style={{ color: "white" }}>Voir</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                backgroundColor: colors.secondary,
-                width: "30%",
-                height: 40,
-                borderRadius: 10,
-                alignItems: "center",
-                justifyContent: "center",
-                margin: 20,
-              }}
-            >
-              <Text style={{ color: "white" }}>Gérer</Text>
-            </TouchableOpacity>
+            {boolean && (
+              <TouchableOpacity
+                style={{
+                  backgroundColor: colors.secondary,
+                  width: "30%",
+                  height: 40,
+                  borderRadius: 10,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  margin: 20,
+                }}
+                onPress={() => {
+                  setId(pot._id);
+                  setModalVisible(true);
+                  setDouble(true);
+                }}
+              >
+                <Text style={{ color: "white" }}>Clôturer</Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
       </View>

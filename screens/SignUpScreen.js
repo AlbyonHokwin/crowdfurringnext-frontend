@@ -14,9 +14,9 @@ import { Picker } from "@react-native-picker/picker";
 
 const EMAIL_REGEX =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const BACKEND_URL = "http://192.168.10.140:3000";
+const BACKEND_URL = "http://192.168.10.142:3000";
 
-export default function SignUpScreen() {
+export default function SignUpScreen({ navigation }) {
   const dispatch = useDispatch();
   const [membership, setMembership] = useState();
 
@@ -36,7 +36,7 @@ export default function SignUpScreen() {
   const [cityError, setCityError] = useState(false);
   const [additionnal, setAdditionnal] = useState("");
 
-  const handleSubmit = ({ navigation }) => {
+  const handleSubmit = () => {
     let isOk = true;
     if (!EMAIL_REGEX.test(email)) {
       setEmailError(true);

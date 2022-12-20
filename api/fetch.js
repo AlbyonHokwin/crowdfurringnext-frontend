@@ -1,5 +1,5 @@
 export async function fetcher(data, url, token) {
-  const response = await fetch(`http://192.168.10.140:3000${url}`, {
+  const response = await fetch(`http://192.168.10.142:3000${url}`, {
     method: "POST",
     headers: {
       Authorization: "Bearer " + token,
