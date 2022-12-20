@@ -14,12 +14,13 @@ export default function ModalComponent({
   double ? (text = { oui: "Oui", non: "Non" }) : (text = { oui: "Compléter" });
 
   return (
-    <Modal visible={modalVisible} animationType="fade" transparent>
+    <Modal visible={modalVisible} animationType="fade" statusBarTranslucent={true}>
       <View
         style={{
           flex: 1,
           justifyContent: "center",
           alignItems: "center",
+          backgroundColor: colors.backgroundModal,
         }}
       >
         <View

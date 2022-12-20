@@ -8,59 +8,72 @@ import {
     Modal,
     TouchableOpacity,
     SafeAreaView,
+    ActivityIndicator,
+    RefreshControl,
 } from "react-native";
 import * as colors from '../styles/colors';
 import { useState, useEffect } from 'react';
 import * as Location from 'expo-location';
 import PotLayout from "../components/PotLayout";
 import SearchInput from "../components/SearchInput";
+import { CommonActions } from "@react-navigation/native";
 
-const BACKEND_URL = 'http://192.168.1.110:3000';
+const BACKEND_URL = 'http://192.168.10.140:3000';
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen({ route, navigation }) {
     const [pots, setPots] = useState([]);
     const [potLayouts, setPotLayouts] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [modalContent, setModalContent] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    if (route.params?.refresh && !isLoading) {
+        setIsLoading(true);
+        navigation.dispatch(CommonActions.setParams({ refresh: false }));
+    }
 
     useEffect(() => {
-        (async () => {
-            let latitude = '';
-            let longitude = '';
-            const { status } = await Location.requestForegroundPermissionsAsync();
+        if (isLoading) {
+            (async () => {
+                setIsLoading(true);
+                let latitude = '';
+                let longitude = '';
+                const { status } = await Location.requestForegroundPermissionsAsync();
 
-            if (status === 'granted') {
-                const location = await Location.getCurrentPositionAsync({});
-                latitude = `${location.coords.latitude}`;
-                longitude = `${location.coords.longitude}`;
-            }
-
-            const response = await fetch(`${BACKEND_URL}/pots/all?latitude=${latitude}&longitude=${longitude}`);
-            const data = await response.json();
-
-            if (data.result) {
-                const layout = [];
-                const copiedPots = [...data.pots];
-
-                let key = 0;
-                while (copiedPots[0]) {
-                    let randomDist = (4 + Math.floor((Math.random() * 3))) / 10;
-                    let randomHeight = (3 + Math.floor((Math.random() * 2))) / 10;
-
-                    if (copiedPots.length <= 4) {
-                        layout.push(<PotLayout key={key} pots={copiedPots.splice(0, copiedPots.length)} dist={randomDist} height={randomHeight} padding={10} displayModal={displayModal} />);
-                    } else {
-                        const randomLength = 1 + Math.floor((Math.random() * 4));
-                        (randomLength === 2) && (randomHeight = Math.max(randomHeight, 0.3));
-                        layout.push(<PotLayout key={key} pots={copiedPots.splice(0, randomLength)} dist={randomDist} height={randomHeight} padding={10} displayModal={displayModal} />);
-                    }
-                    key++;
+                if (status === 'granted') {
+                    const location = await Location.getCurrentPositionAsync({});
+                    latitude = `${location.coords.latitude}`;
+                    longitude = `${location.coords.longitude}`;
                 }
-                setPotLayouts(layout);
-                setPots(data.pots);
-            }
-        })();
-    }, []);
+
+                const response = await fetch(`${BACKEND_URL}/pots/all?latitude=${latitude}&longitude=${longitude}`);
+                const data = await response.json();
+
+                if (data.result) {
+                    const layout = [];
+                    const copiedPots = [...data.pots];
+
+                    let key = 0;
+                    while (copiedPots[0]) {
+                        let randomDist = (4 + Math.floor((Math.random() * 3))) / 10;
+                        let randomHeight = (3 + Math.floor((Math.random() * 2))) / 10;
+
+                        if (copiedPots.length <= 4) {
+                            layout.push(<PotLayout key={key} pots={copiedPots.splice(0, copiedPots.length)} dist={randomDist} height={randomHeight} padding={10} displayModal={displayModal} />);
+                        } else {
+                            const randomLength = 1 + Math.floor((Math.random() * 4));
+                            (randomLength === 2) && (randomHeight = Math.max(randomHeight, 0.3));
+                            layout.push(<PotLayout key={key} pots={copiedPots.splice(0, randomLength)} dist={randomDist} height={randomHeight} padding={10} displayModal={displayModal} />);
+                        }
+                        key++;
+                    }
+                    setPotLayouts(layout);
+                    setPots(data.pots);
+                }
+                setIsLoading(false);
+            })();
+        }
+    }, [isLoading]);
 
     if (!pots) return (<></>);
 
@@ -118,9 +131,26 @@ export default function HomeScreen({ navigation }) {
                 <Text style={styles.title}>Crowd-furring</Text>
             </View>
             <SearchInput />
-            <ScrollView contentContainerStyle={styles.potsContainer}>
-                {potLayouts}
-            </ScrollView>
+
+            {isLoading ?
+                <View style={{ flex: 1, justifyContent: "center" }}>
+                    <Text style={{ textAlign: "center" }} fontSize={24}>
+                        Récupération des cagnottes en cours
+                    </Text>
+                    <Text style={{ textAlign: "center", fontWeight: "600" }} fontSize={24}>
+                        Merci de bien vouloir patienter
+                    </Text>
+                    <ActivityIndicator
+                        style={{ margin: 10 }}
+                        size="large"
+                        color={colors.primary}
+                    />
+                </View> :
+                <ScrollView contentContainerStyle={styles.potsContainer}
+                    refreshControl={<RefreshControl onRefresh={() => setIsLoading(true)} refreshing={isLoading} />}
+                >
+                    {potLayouts}
+                </ScrollView>}
 
             <View style={styles.floatingButtonContainer}>
                 <TouchableOpacity onPress={() => navigation.navigate("CreatePot")} style={styles.floatingButton} activeOpacity={0.8}>

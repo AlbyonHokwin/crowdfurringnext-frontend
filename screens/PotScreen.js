@@ -15,7 +15,7 @@ import {
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import * as colors from '../styles/colors';
 
-const BACKEND_URL = 'http://192.168.1.110:3000';
+const BACKEND_URL = 'http://192.168.10.140:3000';
 
 const PotScreen = ({ route, navigation }) => {
     const [pot, setPot] = useState(null);
@@ -106,12 +106,12 @@ const PotScreen = ({ route, navigation }) => {
                     </ScrollView>
                 </View>
 
-                <View style={styles.compensations}>
+                {pot.compensations[0] && <View style={styles.compensations}>
                     <Text style={styles.compensationTitle}>Contre-parties :</Text>
                     <ScrollView style={styles.scrollCompensations} nestedScrollEnabled={true} >
                         {compensations}
                     </ScrollView>
-                </View>
+                </View>}
 
                 <View style={styles.voidContainer}></View>
             </ScrollView>

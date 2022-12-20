@@ -4,12 +4,13 @@ import { StyleSheet, Text, View } from "react-native";
 import { Provider, useSelector } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import user from "./reducers/user";
+import pots from './reducers/pots';
 
 import { NavigationContainer } from "@react-navigation/native";
 import TabNavigator from "./components/TabNavigator";
 
 const store = configureStore({
-  reducer: { user },
+  reducer: { user, pots },
 });
 
 export default function App() {

@@ -14,7 +14,7 @@ import { Picker } from "@react-native-picker/picker";
 
 const EMAIL_REGEX =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const BACKEND_ADDRESS = "http://192.168.10.150:3000";
+const BACKEND_URL = "http://192.168.10.140:3000";
 
 export default function SignUpScreen() {
   const dispatch = useDispatch();
@@ -36,7 +36,7 @@ export default function SignUpScreen() {
   const [cityError, setCityError] = useState(false);
   const [additionnal, setAdditionnal] = useState("");
 
-  const handleSubmit = () => {
+  const handleSubmit = ({ navigation }) => {
     let isOk = true;
     if (!EMAIL_REGEX.test(email)) {
       setEmailError(true);
@@ -68,7 +68,7 @@ export default function SignUpScreen() {
     }
 
     if (isOk) {
-      fetch(`${BACKEND_ADDRESS}/users/signup`, {
+      fetch(`${BACKEND_URL}/users/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -102,6 +102,7 @@ export default function SignUpScreen() {
             setStreet("");
             setZipCode("");
             setCity("");
+            navigation.goBack();
           }
         });
     }

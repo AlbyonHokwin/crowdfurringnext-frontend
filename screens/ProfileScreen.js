@@ -1,9 +1,15 @@
 import { View, Text, StyleSheet, TouchableOpacity, StatusBar } from "react-native";
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { login, logout } from "../reducers/user";
+import { logout } from "../reducers/user";
 
 export default function ProfileScreen({ navigation }) {
+    const dispatch = useDispatch();
+
+    const pressOnLogout = () => {
+        dispatch(logout());
+        navigation.navigate('Main', { screen: 'Home' });
+    };
 
     return (
         <View style={styles.container}>
@@ -25,12 +31,8 @@ export default function ProfileScreen({ navigation }) {
                         onPress={() => navigation.navigate('settings')}>
                         <Text style={styles.text3} >Réglages</Text></TouchableOpacity>
                     <TouchableOpacity style={styles.menu1} activeOpacity={0.8} title="Go to settings"
-                        onPress={() => navigation.navigate('')}>
+                        onPress={() => pressOnLogout()}>
                         <Text style={styles.text3} >Se déconnecter</Text></TouchableOpacity>
-                </View>
-                <View style={styles.endMenu}>
-                    <TouchableOpacity style={styles.button} activeOpacity={0.8}><Text style={styles.text2} >retour</Text></TouchableOpacity>
-                    <TouchableOpacity style={styles.button} activeOpacity={0.8}><Text style={styles.text2}>Valider</Text></TouchableOpacity>
                 </View>
             </View>
         </View>

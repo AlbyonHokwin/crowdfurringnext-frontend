@@ -11,7 +11,7 @@ import {
     ScrollView,
     TouchableOpacity,
     Dimensions,
-    Modal,
+    ActivityIndicator,
     SafeAreaView,
     KeyboardAvoidingView,
 } from 'react-native';
@@ -20,11 +20,13 @@ import CreditCard from '../components/CreditCard';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import * as colors from '../styles/colors';
 
-const BACKEND_URL = 'http://192.168.1.110:3000';
+const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+const BACKEND_URL = 'http://192.168.10.140:3000';
 
 const PaymentScreen = ({ route, navigation }) => {
-    // const user = useSelector(state => state.user.value);
-    const user = { token: 'fzealiujeqnejbnlz1367I4njliH' };
+    const user = useSelector(state => state.user.value);
+    // const user = { token: 'fzealiujeqnejbnlz1367I4njliH' };
 
     const pot = route.params.pot;
     const [currentAmount, setCurrentAmount] = useState(pot.currentAmount);
@@ -37,7 +39,10 @@ const PaymentScreen = ({ route, navigation }) => {
     const [paymentMethods, setPaymentMethods] = useState([]);
     const [selectedCard, setSelectedCard] = useState(null);
     const [amount, setAmount] = useState('');
+    const [email, setEmail] = useState('');
+    const [emailError, setEmailError] = useState(false);
     const [step, setStep] = useState(1);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         (async () => {
@@ -158,22 +163,31 @@ const PaymentScreen = ({ route, navigation }) => {
             if (!selectedCard || !+amount) return;
             setStep(step + 1);
         }
+
         if (step === 2) {
+            if (!EMAIL_REGEX.test(email) && email && !user.token) {
+                setEmailError(true);
+                return;
+            }
+
+            setEmailError(false);
+            setIsLoading(true);
             const response = await fetch(`${BACKEND_URL}/pots/pay/${pot.slug}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ amount, email: user.email }),
+                body: JSON.stringify({ amount, email: user.email||email }),
             });
             const data = await response.json();
             if (data.result) {
                 setCurrentAmount(data.newAmount);
                 setStep(step + 1);
             }
+            setIsLoading(false);
         }
     };
 
     let paymentStep = null;
-    let nextBtnText = '';
+    let bottomContainer = null;
     switch (step) {
         case 1:
             paymentStep = <>
@@ -183,37 +197,50 @@ const PaymentScreen = ({ route, navigation }) => {
                     </ScrollView>
                 </View>
 
-                <ScrollView style={styles.paymentMethodsContainer} nestedScrollEnabled={true}>
+                <View style={styles.paymentMethodsContainer}>
                     {creditCards}
-                    {addNewCard && <AddCard
-                        onPressFunction={addCard}
-                        onCloseFunction={closeAddCard}
-                        isConnected={!!user.token}
-                        paymentNameError={paymentNameError}
-                        cardNumberError={cardNumberError}
-                        securityCodeError={securityCodeError}
-                        ownerError={ownerError}
-                        dateError={dateError}
-                    />}
+                    <View style={styles.divider} />
+                    {addNewCard &&
+                        <AddCard
+                            onPressFunction={addCard}
+                            onCloseFunction={closeAddCard}
+                            isConnected={!!user.token}
+                            paymentNameError={paymentNameError}
+                            cardNumberError={cardNumberError}
+                            securityCodeError={securityCodeError}
+                            ownerError={ownerError}
+                            dateError={dateError}
+                        />}
                     {!addNewCard &&
                         <TouchableOpacity onPress={() => setAddNewCard(true)} style={styles.button} activeOpacity={0.8}>
                             <Text style={styles.textBackButton}>Rajouter une carte</Text>
                         </TouchableOpacity>
                     }
-                </ScrollView>
+                </View>
+                <View style={styles.voidContainer} />
+            </>;
 
+            bottomContainer = <>
                 <View style={styles.divider} />
-
-                <View>
+                <View style={styles.paymentAmountContainer}>
                     <Text style={styles.textAmount}>Combien souhaitez-vous donner ?</Text>
                     <View style={styles.amountContainer}>
                         <TextInput style={styles.amountInput} placeholder='---' keyboardType='numeric' onChangeText={value => setAmount(value)} value={amount.replace(',', '.')} />
                         <Text style={styles.textAmount}> €</Text>
                     </View>
                 </View>
-            </>;
-            nextBtnText = 'Vérification';
+
+                <View style={styles.buttonsContainer}>
+                    <TouchableOpacity onPress={() => pressBack()} style={styles.button} activeOpacity={0.8}>
+                        <Text style={styles.textBackButton}>Retour</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => pressNext()} style={styles.button} activeOpacity={0.8}>
+                        <Text style={styles.textGiveButton}>Vérification</Text>
+                    </TouchableOpacity>
+                </View>
+            </>
             break;
+
         case 2:
             paymentStep = <>
                 <View style={styles.amountToGiveContainer}>
@@ -230,15 +257,66 @@ const PaymentScreen = ({ route, navigation }) => {
                 {!user.token &&
                     <View style={[styles.loginContainer, { flexDirection: 'column' }]}>
                         <Text style={styles.textInformation}>En ayant un compte, vous pourrez suivre l'évolution de cette cagnotte.</Text>
-                        <TouchableOpacity onPress={() => pressBack()} style={[styles.button, { width: '100%' }]} activeOpacity={0.8}>
+                        <TouchableOpacity onPress={() => navigation.navigate('Login')} style={[styles.button, { width: '100%' }]} activeOpacity={0.8}>
                             <Text style={styles.textBackButton}>Se connecter ou créer un compte</Text>
                         </TouchableOpacity>
+                        <View style={styles.divider} />
+                        <Text style={styles.textInformation}>Sinon, vous pouvez renseigner votre e-mail ci-dessous pour recevoir les mises à jour importantes de la cagnotte.</Text>
+                        <TextInput
+                            placeholder='E-mail'
+                            autoCapitalize='none'
+                            textContentType='emailAddress'
+                            autoComplete='email'
+                            style={[styles.inputEmail, emailError && styles.error]}
+                            placeholderTextColor={emailError ? 'white' : undefined}
+                            onChangeText={value => setEmail(value)}
+                            value={email}
+                        />
                     </View>
                 }
+
+                {isLoading &&
+                    <View style={{ flex: 1, justifyContent: "center" }}>
+                        <Text style={{ textAlign: "center" }} fontSize={24}>
+                            Votre demande est en cours de traitement
+                        </Text>
+                        <Text style={{ textAlign: "center", fontWeight: "600" }} fontSize={24}>
+                            Merci de bien vouloir patienter
+                        </Text>
+                        <ActivityIndicator
+                            style={{ margin: 10 }}
+                            size="large"
+                            color={colors.primary}
+                        />
+                    </View>
+                }
+                <View style={styles.voidContainer} />
             </>;
-            nextBtnText = 'Payer';
+
+            bottomContainer =
+                <View style={styles.buttonsContainer}>
+                    <TouchableOpacity onPress={() => pressBack()} style={styles.button} activeOpacity={0.8}>
+                        <Text style={styles.textBackButton}>Retour</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => pressNext()} style={styles.button} activeOpacity={0.8}>
+                        <Text style={styles.textGiveButton}>Payer</Text>
+                    </TouchableOpacity>
+                </View>
             break;
+
         case 3:
+            paymentStep =
+                <View style={styles.thankTexts}>
+                    <Text style={styles.thankTextName}>{pot.animalName}</Text>
+                    <Text style={styles.thankText}>vous remercie de l'avoir aidé !</Text>
+                </View>
+
+            bottomContainer =
+                <View style={styles.buttonsContainer}>
+                    <TouchableOpacity onPress={() => navigation.navigate('Main', { screen: 'Home', params: { refresh: true} })} style={[styles.button, { width: '100%' }]} activeOpacity={0.8}>
+                        <Text style={styles.textGiveButton}>Revenir à l'accueil</Text>
+                    </TouchableOpacity>
+                </View>
             break;
     }
 
@@ -248,7 +326,6 @@ const PaymentScreen = ({ route, navigation }) => {
             behavior={Platform.OS === "ios" ? "padding" : undefined}
         >
             <SafeAreaView style={styles.container}>
-
                 <ScrollView contentContainerStyle={styles.content} >
                     <View style={styles.header}>
                         <Text style={styles.name}>{pot.animalName}</Text>
@@ -257,26 +334,10 @@ const PaymentScreen = ({ route, navigation }) => {
                     </View>
 
                     {paymentStep}
-                    
+
                 </ScrollView>
 
-                <View style={styles.buttonsContainer}>
-                    {step < 3 ?
-                        <>
-                            <TouchableOpacity onPress={() => pressBack()} style={styles.button} activeOpacity={0.8}>
-                                <Text style={styles.textBackButton}>Retour</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => pressNext()} style={styles.button} activeOpacity={0.8}>
-                                <Text style={styles.textGiveButton}>{nextBtnText}</Text>
-                            </TouchableOpacity>
-                        </> :
-                        <>
-                            <TouchableOpacity onPress={() => navigation.navigate('Main', { screen: 'Home' })} style={[styles.button, { width: '100%' }]} activeOpacity={0.8}>
-                                <Text style={styles.textGiveButton}>Revenir à l'accueil</Text>
-                            </TouchableOpacity>
-                        </>
-                    }
-                </View>
+                {bottomContainer}
 
             </SafeAreaView>
         </KeyboardAvoidingView>
@@ -289,12 +350,14 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: StatusBar.currentHeight + 5,
-        justifyContent: 'space-between',
+        alignItems: 'center',
         backgroundColor: colors.background,
     },
     content: {
+        flexGrow: 1,
         justifyContent: 'flex-end',
         alignItems: 'center',
+        width: '100%',
     },
     header: {
         width: '80%',
@@ -329,8 +392,11 @@ const styles = StyleSheet.create({
     },
     paymentMethodsContainer: {
         width: '80%',
-        marginVertical: 10,
-        maxHeight: Dimensions.get('screen').height / 2.5,
+        alignItems: 'center',
+        // maxHeight: Dimensions.get('screen').height / 2.5,
+    },
+    paymentAmountContainer: {
+        width: '80%',
     },
     textAmount: {
         fontSize: 20,
@@ -355,7 +421,6 @@ const styles = StyleSheet.create({
     },
     voidContainer: {
         flexGrow: 1,
-        backgroundColor: 'blue',
     },
     buttonsContainer: {
         // position: 'absolute',
@@ -394,15 +459,16 @@ const styles = StyleSheet.create({
         color: colors.light,
     },
     divider: {
-        width: '90%',
+        minWidth: '90%',
+        maxWidth: '90%',
         borderBottomWidth: 1,
         borderColor: colors.accent,
-        marginVertical: 5,
+        marginVertical: 10,
     },
     amountToGiveContainer: {
         justifyContent: 'flex-start',
         alignItems: 'center',
-        marginVertical: 30,
+        marginVertical: 20,
     },
     textAmountToGive: {
         fontSize: 30,
@@ -416,14 +482,45 @@ const styles = StyleSheet.create({
     },
     loginContainer: {
         flexGrow: 1,
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'center',
         marginVertical: 20,
         width: '80%',
     },
     textInformation: {
-        fontSize: 20,
+        fontSize: 16,
         textAlign: 'center',
         marginBottom: 10,
+    },
+    thankTexts: {
+        flexGrow: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    thankTextName: {
+        fontSize: 40,
+        fontWeight: 'bold',
+        color: colors.dark,
+    },
+    thankText: {
+        fontSize: 30,
+        color: colors.dark,
+    },
+    inputEmail: {
+        minWidth: '90%',
+        maxWidth: '90%',
+        backgroundColor: colors.light,
+        padding: 10,
+        borderRadius: 10,
+        fontSize: 20,
+        borderWidth: 1,
+        textAlign: 'center',
+        borderColor: colors.shade,
+        color: colors.dark,
+    },
+    error: {
+        color: 'white',
+        backgroundColor: colors.backgroundError,
+        borderColor: colors.borderError,
     },
 });
