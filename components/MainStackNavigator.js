@@ -22,7 +22,7 @@ const MainStackNavigator = () => {
       <MainStack.Screen name="Payment" component={PaymentScreen} />
       <MainStack.Screen
         name="CreatePot"
-        component={user.token ? CreatePotScreen : CreatePotScreen}
+        component={user.token ? CreatePotScreen : LoginScreen}
       />
       <MainStack.Screen name="Login" component={LoginScreen} />
       <MainStack.Screen name="SignUp" component={SignUpScreen} />
