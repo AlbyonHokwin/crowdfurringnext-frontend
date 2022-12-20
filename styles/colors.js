@@ -10,5 +10,5 @@ export const tertiary = "#C2F0BE";
 export const accent = "#A9F3A2";
 export const shade = "#F0F0F0";
 export const icon = "#696969";
-export const gradient = "#1F6F78";
+export const gradient = "linear-gradient(#1F6F78, #33BBAA)";
 export const danger = "#F08080";

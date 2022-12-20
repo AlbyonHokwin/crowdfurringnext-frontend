@@ -44,7 +44,7 @@ export default function ({
 
   return (
     <>
-      <View style={{ alignItems: "left", width: "80%", margin: 30 }}>
+      <View style={{ alignItems: "flex-start", width: "80%", margin: 30 }}>
         <Text style={{ fontSize: 18, fontWeight: "600", margin: 6 }}>
           Nom de l'animal : {animalName}
         </Text>

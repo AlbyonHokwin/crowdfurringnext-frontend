@@ -140,5 +140,69 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: "yellow",
+    },
+    gestion: {
+        backgroundColor: 'white',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        height: '106%',
+    },
+    menu: {
+        width: '100%',
+        backgroundColor: "#ffffff",
+        borderRadius: 1,
+        alignItems: 'center',
+        justifyContent: 'space-between',
+
+    },
+    title: {
+        height: '30%',
+        justifyContent: 'center',
+    },
+    endMenu: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-end',
+        width: '90%',
+    },
+    button: {
+        padding: 15,
+        width: '45%',
+        backgroundColor: "#1F6F78",
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        margin: 20,
+    },
+    menu1: {
+        flexDirection: 'row',
+        width: '90%',
+        padding: 10,
+        fontSize: 20,
+        marginVertical: 5,
+        borderRadius: 5,
+        backgroundColor: "#33BBAA",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    text2: {
+        color: 'white',
+        fontSize: 17,
+
+    },
+    text: {
+        fontSize: 30,
+        alignItems: "center",
+        justifyContent: "center",
+        fontWeight: "bold",
+        paddingTop: 60,
+    },
+    text3: {
+        width: '90%',
+        alignItems: "center",
+        justifyContent: "center",
+        textAlign: 'center',
+        fontWeight: "bold",
+        fontSize: 17,
     }
 })

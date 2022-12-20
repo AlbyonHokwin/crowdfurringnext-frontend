@@ -4,11 +4,11 @@ import { useDispatch } from 'react-redux';
 import { logout } from "../reducers/user";
 
 export default function ProfileScreen({ navigation }) {
-
     const dispatch = useDispatch();
 
-    const handleLogout = () => {
+    const pressOnLogout = () => {
         dispatch(logout());
+        navigation.navigate('Main', { screen: 'Home' });
     };
 
     return (
@@ -31,12 +31,8 @@ export default function ProfileScreen({ navigation }) {
                         onPress={() => navigation.navigate('settings')}>
                         <Text style={styles.text3} >Réglages</Text></TouchableOpacity>
                     <TouchableOpacity style={styles.menu1} activeOpacity={0.8} title="Disconnected"
-                        onPress={() => handleLogout()}>
+                        onPress={() => pressOnLogout()}>
                         <Text style={styles.text3} >Se déconnecter</Text></TouchableOpacity>
-                </View>
-                <View style={styles.endMenu}>
-                    <TouchableOpacity style={styles.button} activeOpacity={0.8}><Text style={styles.text2} >retour</Text></TouchableOpacity>
-                    <TouchableOpacity style={styles.button} activeOpacity={0.8}><Text style={styles.text2}>Valider</Text></TouchableOpacity>
                 </View>
             </View>
         </View>

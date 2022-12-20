@@ -33,13 +33,13 @@ const TabNavigator = () => {
             tabBarActiveTintColor: colors.accent,
             tabBarActiveBackgroundColor: colors.secondary,
             tabBarInactiveTintColor: colors.shade,
-            tabBarStyle: { backgroundColor: colors.primary, height: 70, borderTopWidth: 0 },
+            tabBarStyle: { backgroundColor: colors.primary, height: Platform.OS === "ios" ? 100 : 70, borderTopWidth: 0 },
             tabBarHideOnKeyboard: true,
             headerShown: false,
         })}>
             <Tab.Screen name="Main" component={MainStackNavigator} options={{ title: 'Home' }} />
-            <Tab.Screen name="Message" component={MessageScreen} />
-            <Tab.Screen name="Pots" component={PotsScreen} />
+            {/* <Tab.Screen name="Message" component={MessageScreen} /> */}
+            <Tab.Screen name="Pots" component={user.token ? PotsScreen : LoginScreen} />
             <Tab.Screen name="Profile" component={user.token ? ProfileScreen : LoginScreen} />
         </Tab.Navigator>
     );

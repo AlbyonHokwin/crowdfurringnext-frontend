@@ -10,7 +10,6 @@ export function checkFileds(
   files,
   description
 ) {
-  console.log(infos);
   if (page === 1) {
     if (
       validator.isEmpty(animalName) ||
