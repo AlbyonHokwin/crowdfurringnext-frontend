@@ -4,6 +4,7 @@ import * as colors from "../styles/colors";
 
 export default function ImageSelector({ pickImage, images, deleteImage }) {
   const image = images.map((image, i) => {
+    console.log(image);
     return (
       <View key={i}>
         <Image

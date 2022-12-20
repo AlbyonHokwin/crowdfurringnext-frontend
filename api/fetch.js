@@ -4,7 +4,7 @@ export async function fetcher(data, url, token) {
   const response = await fetch(`${BACKEND_URL}${url}`, {
     method: "POST",
     headers: {
-      'Authorization': 'Bearer ' + token,
+      Authorization: "Bearer " + token,
       "Content-Type": "multipart/form-data",
     },
     body: data,
