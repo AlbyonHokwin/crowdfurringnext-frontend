@@ -388,14 +388,6 @@ const styles = StyleSheet.create({
   modalImageContainer: {
     backgroundColor: "transparent",
     borderRadius: 10,
-    shadowColor: colors.dark,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 1,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   modalImage: {
     width: 100,
