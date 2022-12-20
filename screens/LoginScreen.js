@@ -6,7 +6,7 @@ import * as colors from '../styles/colors';
 
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-const BACKEND_URL = 'http://192.168.10.140:3000';
+const BACKEND_URL = 'http://192.168.10.143:3000';
 
 export default function LoginScreen({ navigation }) {
     const dispatch = useDispatch();

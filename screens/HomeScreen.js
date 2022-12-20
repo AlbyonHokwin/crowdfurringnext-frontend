@@ -18,7 +18,7 @@ import PotLayout from "../components/PotLayout";
 import SearchInput from "../components/SearchInput";
 import { CommonActions } from "@react-navigation/native";
 
-const BACKEND_URL = 'http://192.168.10.140:3000';
+const BACKEND_URL = 'http://192.168.10.143:3000';
 
 export default function HomeScreen({ route, navigation }) {
     const [pots, setPots] = useState([]);

@@ -15,7 +15,7 @@ import { Picker } from "@react-native-picker/picker";
 
 
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const BACKEND_URL = 'http://192.168.10.140:3000';
+const BACKEND_URL = 'http://192.168.10.143:3000';
 
 export default function SignUpScreen() {
   const dispatch = useDispatch();
