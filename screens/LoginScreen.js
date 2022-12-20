@@ -22,7 +22,7 @@ export default function LoginScreen({ navigation }) {
 
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState(false);
-  const [signInPassword, setSignInPassword] = useState("");
+  const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState(false);
 
   const handleConnection = () => {
@@ -32,7 +32,7 @@ export default function LoginScreen({ navigation }) {
       setEmailError(true);
       signinOk = false;
     }
-    if (!signInPassword.trim()) {
+    if (!password.trim()) {
       setPasswordError(true);
       signinOk = false;
     }
@@ -41,7 +41,7 @@ export default function LoginScreen({ navigation }) {
       fetch(`${BACKEND_URL}/users/signin`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password: signInPassword }),
+        body: JSON.stringify({ email, password: password }),
       })
         .then((response) => response.json())
         .then((data) => {
@@ -50,7 +50,7 @@ export default function LoginScreen({ navigation }) {
             dispatch(addPots(data.pots));
             dispatch(addContributors(data.contributor));
             setEmail("");
-            setSignInPassword("");
+            setPassword("");
             navigation.goBack();
           }
         });
@@ -78,6 +78,10 @@ export default function LoginScreen({ navigation }) {
           Vous avez déjà un compte ? Connectez-vous !
         </Text>
         <TextInput
+          autoCapitalize="none"
+          keyboardType="email-address"
+          textContentType="emailAddress"
+          autoComplete="email"
           style={[styles.input, emailError && styles.error]}
           placeholderTextColor={emailError ? colors.light : undefined}
           placeholder="Adresse E-mail"
@@ -89,8 +93,8 @@ export default function LoginScreen({ navigation }) {
           placeholderTextColor={passwordError ? colors.light : undefined}
           secureTextEntry={true}
           placeholder="Mot de passe"
-          onChangeText={(value) => setSignInPassword(value)}
-          value={signInPassword}
+          onChangeText={(value) => setPassword(value)}
+          value={password}
         />
         <TouchableOpacity
           style={styles.button}
