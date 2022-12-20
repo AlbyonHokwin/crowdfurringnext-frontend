@@ -77,8 +77,9 @@ export default function ModifyInfoScreen({ navigation }) {
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <View style={styles.container}>
-                <Text style={styles.text2}>Modify your Informations </Text>
+                <Text style={styles.text}>Modifier vos Informations </Text>
                 <View style={styles.inputContainer}>
+                    <View style={styles.description1}>
                     <TextInput
                         placeholder="Email"
                         keyboardType="email-address"
@@ -113,6 +114,7 @@ export default function ModifyInfoScreen({ navigation }) {
                         onChangeText={(value) => setAdditionnal(value)}
                         value={additionnal}
                         placeholder="Complément d'adresse" />
+                        </View>
                     <View style={styles.city}>
                         <TextInput
                             textContentType="postalCode"
@@ -128,13 +130,14 @@ export default function ModifyInfoScreen({ navigation }) {
                             value={city}
                             placeholder="Ville" />{cityError && <Text style={styles.error}>city empty</Text>}
                     </View>
-
-                </View>
+                        </View>
+                    <View style={styles.group}>
                 <TouchableOpacity style={styles.button} activeOpacity={0.8} title="Go to Profile"
                     onPress={() => navigation.navigate('Profile')}>
                     <Text style={styles.text2} >retour</Text></TouchableOpacity>
                 <TouchableOpacity onPress={() => handleConfirm()} style={styles.button2} activeOpacity={0.8}>
                     <Text style={styles.text2} >Valider</Text></TouchableOpacity>
+            </View>
             </View>
         </ScrollView>
 
@@ -142,16 +145,10 @@ export default function ModifyInfoScreen({ navigation }) {
 };
 
 const styles = StyleSheet.create({
-    // container: {
-    //     flex: 1,
-    //     alignItems: "center",
-    //     justifyContent: "center",
-    //     backgroundColor: "yellow",
-    // },
+   
     container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
         backgroundColor: 'white',
         justifyContent: 'space-between',
         paddingTop: StatusBar.currentHeight + 20,
@@ -163,6 +160,10 @@ const styles = StyleSheet.create({
         borderRadius: 1,
         alignItems: 'center',
 
+    },
+    description1: {
+       width: '90%',
+       alignItems: 'center',
     },
     input: {
         flexDirection: 'row',
@@ -206,6 +207,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'flex-end',
         width: '90%',
+        padding : 30,
     },
     input1: {
         flexDirection: 'row',
@@ -233,6 +235,10 @@ const styles = StyleSheet.create({
     },
     asso: {
         flexDirection: 'row',
+    },
+    text: {
+fontSize: 30,
+
     },
 
 })

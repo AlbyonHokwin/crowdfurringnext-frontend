@@ -1,12 +1,13 @@
 import { View, Text, StyleSheet } from "react-native";
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import ModifyInfoScreen from './ModifyInfoScreen';
+import ModifyInfoScreen from "./ModifyInfoScreen";
+
 
 
 export default function PotsScreen() {
     return (
-        <ModifyInfoScreen/>
+        < ModifyInfoScreen/>
           
         // <View style={styles.container}>  
         //     <Text>POTS</Text>
