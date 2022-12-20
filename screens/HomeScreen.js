@@ -10,9 +10,10 @@ import {
     SafeAreaView,
     ActivityIndicator,
     RefreshControl,
+    Animated,
 } from "react-native";
 import * as colors from '../styles/colors';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import * as Location from 'expo-location';
 import PotLayout from "../components/PotLayout";
 import SearchInput from "../components/SearchInput";
@@ -26,6 +27,7 @@ export default function HomeScreen({ route, navigation }) {
     const [modalVisible, setModalVisible] = useState(false);
     const [modalContent, setModalContent] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const scrollY = useRef(new Animated.Value(0)).current;
 
     if (route.params?.refresh && !isLoading) {
         setIsLoading(true);
@@ -126,31 +128,52 @@ export default function HomeScreen({ route, navigation }) {
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.header}>
-                <Image source={require('../assets/logo.jpg')} style={styles.logo} />
-                <Text style={styles.title}>Crowd-furring</Text>
-            </View>
-            <SearchInput />
-
-            {isLoading ?
-                <View style={{ flex: 1, justifyContent: "center" }}>
-                    <Text style={{ textAlign: "center" }} fontSize={24}>
-                        Récupération des cagnottes en cours
-                    </Text>
-                    <Text style={{ textAlign: "center", fontWeight: "600" }} fontSize={24}>
-                        Merci de bien vouloir patienter
-                    </Text>
-                    <ActivityIndicator
-                        style={{ margin: 10 }}
-                        size="large"
-                        color={colors.primary}
+            <Animated.ScrollView
+                contentContainerStyle={styles.scrollContainer}
+                showsVerticalScrollIndicator={false}
+                refreshControl={
+                    <RefreshControl
+                        onRefresh={() => setIsLoading(true)}
+                        refreshing={false}
                     />
-                </View> :
-                <ScrollView contentContainerStyle={styles.potsContainer}
-                    refreshControl={<RefreshControl onRefresh={() => setIsLoading(true)} refreshing={isLoading} />}
-                >
-                    {potLayouts}
-                </ScrollView>}
+                }
+                onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], { useNativeDriver: true })}
+                scrollEventThrottle={1}
+            >
+                <View style={styles.header}>
+                    <Image source={require('../assets/logo.jpg')} style={styles.logo} />
+                    <Text style={styles.title}>Crowd-furring</Text>
+                </View>
+                <Animated.View style={[styles.movingContainer, {
+                    transform: [{
+                        translateY: scrollY.interpolate({
+                            inputRange: [0, 50, 1000],
+                            outputRange: [0, 0, 950],
+                        })
+                    }]
+                }]}>
+                    <SearchInput />
+                </Animated.View>
+
+                {isLoading ?
+                    <View style={{ width: '100%', alignItems: 'center', marginTop: 100 }}>
+                        <Text style={{ fontSize: 24 }}>
+                            Récupération des cagnottes en cours
+                        </Text>
+                        <Text style={{ fontSize: 24, fontWeight: "bold" }}>
+                            Merci de bien vouloir patienter
+                        </Text>
+                        <ActivityIndicator
+                            style={{ margin: 10 }}
+                            size="large"
+                            color={colors.primary}
+                        />
+                    </View> :
+                    <View contentContainerStyle={styles.potsContainer}>
+                        {potLayouts}
+                    </View>}
+
+            </Animated.ScrollView>
 
             <View style={styles.floatingButtonContainer}>
                 <TouchableOpacity onPress={() => navigation.navigate("CreatePot")} style={styles.floatingButton} activeOpacity={0.8}>
@@ -184,10 +207,23 @@ const styles = StyleSheet.create({
         paddingTop: StatusBar.currentHeight + 5,
         backgroundColor: colors.background,
     },
+    scrollContainer: {
+        flexGrow: 1,
+        minWidth: '100%',
+        maxWidth: '100%',
+        alignItems: "center",
+        justifyContent: "flex-start",
+    },
     header: {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
+        height: 60,
+    },
+    movingContainer: {
+        position: 'relative',
+        // top: 10,
+        zIndex: 1000,
     },
     logo: {
         height: 60,
