@@ -60,7 +60,7 @@ export default function DisplayPots(
                 ([StyleSheet.absoluteFill],
                 {
                   backgroundColor: colors.secondary,
-                  width: `${(pot.currentAmount / pot.targetAmount) * 100}%`,
+                  width: `${Math.min(1, (pot.currentAmount / pot.targetAmount)) * 100}%`,
                 })
               }
             />
