@@ -6,9 +6,9 @@ import * as colors from "../styles/colors";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MainStackNavigator from "./MainStackNavigator";
+import ProfileStackNavigator from "./ProfileStackNavigator";
 import MessageScreen from "../screens/MessageScreen";
 import PotsScreen from "../screens/PotsScreen";
-import ProfileScreen from "../screens/ProfileScreen";
 import LoginScreen from "../screens/LoginScreen";
 
 const Tab = createBottomTabNavigator();
@@ -24,7 +24,7 @@ const TabNavigator = () => {
                 if (route.name === "Main") iconName = "paw";
                 if (route.name === "Message") iconName = "envelope";
                 if (route.name === "Pots") iconName = "cat";
-                if (route.name === "Profile") iconName = "user";
+                if (route.name === "ProfileStack") iconName = "user";
 
                 return <FontAwesome name={iconName} size={size} color={color} />
             },
@@ -37,10 +37,10 @@ const TabNavigator = () => {
             tabBarHideOnKeyboard: true,
             headerShown: false,
         })}>
-            <Tab.Screen name="Main" component={MainStackNavigator} options={{ title: 'Home' }} />
+            <Tab.Screen name="Main" component={MainStackNavigator} options={{ title: 'Accueil' }} />
             {/* <Tab.Screen name="Message" component={MessageScreen} /> */}
-            <Tab.Screen name="Pots" component={user.token ? PotsScreen : LoginScreen} />
-            <Tab.Screen name="Profile" component={user.token ? ProfileScreen : LoginScreen} />
+            <Tab.Screen name="Pots" component={user.token ? PotsScreen : LoginScreen} options={{ title: 'Cagnottes' }}/>
+            <Tab.Screen name="ProfileStack" component={user.token ? ProfileStackNavigator : LoginScreen} options={{ title: 'Profil' }} />
         </Tab.Navigator>
     );
 };
