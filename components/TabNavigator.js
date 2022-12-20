@@ -38,8 +38,8 @@ const TabNavigator = () => {
             headerShown: false,
         })}>
             <Tab.Screen name="Main" component={MainStackNavigator} options={{ title: 'Home' }} />
-            <Tab.Screen name="Message" component={MessageScreen} />
-            <Tab.Screen name="Pots" component={PotsScreen} />
+            {/* <Tab.Screen name="Message" component={MessageScreen} /> */}
+            <Tab.Screen name="Pots" component={user.token ? PotsScreen : LoginScreen} />
             <Tab.Screen name="Profile" component={user.token ? ProfileScreen : LoginScreen} />
         </Tab.Navigator>
     );
