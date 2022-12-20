@@ -79,6 +79,33 @@ export default function HomeScreen({ route, navigation }) {
 
     if (!pots) return (<></>);
 
+    const updateDisplayPots = pots => {
+        if (!pots[0]) {
+            setIsLoading(true);
+            return;
+        }
+
+        const layout = [];
+        const copiedPots = [...pots];
+
+        let key = 0;
+        while (copiedPots[0]) {
+            let randomDist = (4 + Math.floor((Math.random() * 3))) / 10;
+            let randomHeight = (3 + Math.floor((Math.random() * 2))) / 10;
+
+            if (copiedPots.length <= 4) {
+                layout.push(<PotLayout key={key} pots={copiedPots.splice(0, copiedPots.length)} dist={randomDist} height={randomHeight} padding={10} displayModal={displayModal} />);
+            } else {
+                const randomLength = 1 + Math.floor((Math.random() * 4));
+                (randomLength === 2) && (randomHeight = Math.max(randomHeight, 0.3));
+                layout.push(<PotLayout key={key} pots={copiedPots.splice(0, randomLength)} dist={randomDist} height={randomHeight} padding={10} displayModal={displayModal} />);
+            }
+            key++;
+        }
+        setPotLayouts(layout);
+        setPots(pots);
+    };
+
     const pressSeeMore = slug => {
         setModalVisible(false);
         navigation.navigate('Pot', { slug });
@@ -152,7 +179,7 @@ export default function HomeScreen({ route, navigation }) {
                         })
                     }]
                 }]}>
-                    <SearchInput />
+                    <SearchInput updateDisplayPots={updateDisplayPots} />
                 </Animated.View>
 
                 {isLoading ?
