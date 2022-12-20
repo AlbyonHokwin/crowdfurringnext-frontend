@@ -2,11 +2,13 @@ import { View, Text, StyleSheet, TouchableOpacity, StatusBar } from "react-nativ
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { logout } from "../reducers/user";
+import { removeAll } from "../reducers/pots";
 
 export default function ProfileScreen({ navigation }) {
     const dispatch = useDispatch();
 
     const pressOnLogout = () => {
+        dispatch(removeAll());
         dispatch(logout());
         navigation.navigate('Main', { screen: 'Home' });
     };
