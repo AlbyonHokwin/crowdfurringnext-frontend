@@ -1,4 +1,5 @@
-import { Image, View, TextInput } from "react-native";
+import { StyleSheet, Image, View, TextInput } from "react-native";
+import * as colors from "../styles/colors";
 
 export default function SocialMedia({
   name,
@@ -6,12 +7,7 @@ export default function SocialMedia({
   setSocialNetworks,
 }) {
   return (
-    <View
-      style={{
-        flexDirection: "row",
-        alignItems: "center",
-      }}
-    >
+    <View style={styles.container}>
       <Image
         style={{
           maxHeight: 40,
@@ -24,6 +20,7 @@ export default function SocialMedia({
         }
       />
       <TextInput
+        style={styles.input}
         placeholder={
           name === "instagram"
             ? "Compte instagram de l'animal"
@@ -43,3 +40,25 @@ export default function SocialMedia({
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    minWidth: '80%',
+    maxWidth: '80%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  input: {
+    flexGrow: 1,
+    marginLeft: 10,
+    backgroundColor: colors.light,
+    padding: 10,
+    borderRadius: 10,
+    fontSize: 16,
+    borderWidth: 1,
+    borderColor: colors.shade,
+    color: colors.dark,
+    marginVertical: 5,
+  },
+});

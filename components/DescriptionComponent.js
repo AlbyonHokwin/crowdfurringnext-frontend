@@ -1,4 +1,4 @@
-import { TextInput, Keyboard } from "react-native";
+import { StyleSheet, TextInput, Keyboard } from "react-native";
 import * as colors from "../styles/colors";
 
 export default function DescriptionComponent({
@@ -9,19 +9,7 @@ export default function DescriptionComponent({
 }) {
   return (
     <TextInput
-      style={{
-        flexDirection: "column",
-        width: "80%",
-        height: 150,
-        borderRadius: 8,
-        backgroundColor: colors.shade,
-        alignItems: "flex-start",
-        justifyContent: "flex-start",
-        backgroundColor: colors.shade,
-
-        padding: 10,
-        margin: 6,
-      }}
+      style={styles.input}
       multiline={true}
       placeholder={placeholder}
       blurOnSubmit={true}
@@ -30,3 +18,25 @@ export default function DescriptionComponent({
     />
   );
 }
+
+const styles = StyleSheet.create({
+  input: {
+    minWidth: "80%",
+    maxWidth: "80%",
+    minHeight: 100,
+    backgroundColor: colors.light,
+    padding: 10,
+    borderRadius: 10,
+    fontSize: 20,
+    borderWidth: 1,
+    borderColor: colors.shade,
+    color: colors.dark,
+    marginVertical: 5,
+    textAlignVertical: 'top',
+  },
+  error: {
+    color: colors.light,
+    backgroundColor: colors.backgroundError,
+    borderColor: colors.borderError,
+  },
+});
