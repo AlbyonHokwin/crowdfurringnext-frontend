@@ -1,5 +1,4 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { Platform, StyleSheet, Text, View } from "react-native";
 
 import { Provider, useSelector } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
@@ -9,11 +8,18 @@ import pots from './reducers/pots';
 import { NavigationContainer } from "@react-navigation/native";
 import TabNavigator from "./components/TabNavigator";
 
+import * as NavigationBar from 'expo-navigation-bar';
+import * as colors from "./styles/colors";
+
 const store = configureStore({
   reducer: { user, pots },
 });
 
+
+
 export default function App() {
+  if (Platform.OS === 'android') NavigationBar.setBackgroundColorAsync(colors.primary);
+
   return (
     <Provider store={store}>
       <NavigationContainer>
