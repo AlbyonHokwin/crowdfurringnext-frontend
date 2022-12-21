@@ -2,9 +2,10 @@ import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Status
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../reducers/user';
+import * as colors from "../styles/colors";
 
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const BACKEND_ADDRESS = 'http://192.168.10.127:3000';
+const BACKEND_URL = 'http://192.168.10.126:3000';
 
 
 export default function ModifyInfoScreen({ navigation }) {
@@ -24,8 +25,9 @@ export default function ModifyInfoScreen({ navigation }) {
     const [city, setCity] = useState('');
     const [cityError, setCityError] = useState(false);
     const [additionnal, setAdditionnal] = useState('');
+
     useEffect(() => {
-        fetch(`${BACKEND_ADDRESS}/users/information`, {
+        fetch(`${BACKEND_URL}/users/information`, {
             headers: { 'authorization': `Bearer ${token}` }
         })
             .then(response => response.json())
@@ -53,7 +55,7 @@ export default function ModifyInfoScreen({ navigation }) {
         if (!(city.trim().length !== 0)) { setCityError(true); isOk = false }
 
         if (isOk) {
-            fetch(`${BACKEND_ADDRESS}/users/modify`, {
+            fetch(`${BACKEND_URL}/users/modify`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json', 'authorization': `Bearer ${token}`, },
                 body: JSON.stringify({ email, lastname, firstname, street, additionnal, zipCode, city }),
@@ -61,14 +63,13 @@ export default function ModifyInfoScreen({ navigation }) {
                 .then(response => response.json())
                 .then(data => {
                     if (data.result) {
-                        dispatch(login({ email, lastname, firstname, street, additionnal, zipCode, city }));
+                        dispatch(login({ email, token }));
                         setEmail('');
                         setLastname('');
                         setFirstname('');
                         setStreet('');
                         setZipCode('');
                         setCity('');
-
                     }
                 });
         }
@@ -87,27 +88,31 @@ export default function ModifyInfoScreen({ navigation }) {
                         autoComplete="email"
                         onChangeText={(value) => setEmail(value)}
                         value={email}
-                        style={styles.input}
-                    />{emailError && <Text style={styles.error}>Invalid email address</Text>}
+                        style={[styles.input, emailError && styles.error]}
+                        placeholderTextColor={emailError ? colors.light : undefined}
+                    />
 
                     <TextInput
                         type="lastname"
-                        style={styles.input}
+                        style={[styles.input, lastnameError && styles.error]}
+                        placeholderTextColor={lastnameError ? colors.light : undefined}
                         onChangeText={(value) => setLastname(value)}
                         value={lastname}
-                        placeholder="Nom" />{lastnameError && <Text style={styles.error}>lastname empty</Text>}
+                        placeholder="Nom" />
                     <TextInput
                         type="firstname"
-                        style={styles.input}
+                        style={[styles.input, firstnameError && styles.error]}
+                        placeholderTextColor={firstnameError ? colors.light : undefined}
                         onChangeText={(value) => setFirstname(value)}
                         value={firstname}
-                        placeholder="Prénom" />{firstnameError && <Text style={styles.error}>firstname empty</Text>}
+                        placeholder="Prénom" />
                     <TextInput
                         textContentType="streetAddressLine1"
-                        style={styles.input}
+                        style={[styles.input, streetError && styles.error]}
+                        placeholderTextColor={streetError ? colors.light : undefined}
                         onChangeText={(value) => setStreet(value)}
                         value={street}
-                        placeholder="Adresse" />{streetError && <Text style={styles.error}>street empty</Text>}
+                        placeholder="Adresse" />
                     <TextInput
                         type="additionnal"
                         style={styles.input}
@@ -119,16 +124,18 @@ export default function ModifyInfoScreen({ navigation }) {
                         <TextInput
                             textContentType="postalCode"
                             keyboardType="numeric"
-                            style={styles.input1}
+                            style={[styles.input1, zipCodeError && styles.error]}
+                            placeholderTextColor={zipCodeError ? colors.light : undefined}
                             onChangeText={(value) => setZipCode(value)}
                             value={zipCode}
-                            placeholder="C.P" />{zipCodeError && <Text style={styles.error}>zipCode empty</Text>}
+                            placeholder="C.P" />
                         <TextInput
                             textContentType="addressCity"
-                            style={styles.input2}
+                            style={[styles.input2,  cityError && styles.error]}
+                            placeholderTextColor={cityError ? colors.light : undefined} 
                             onChangeText={(value) => setCity(value)}
                             value={city}
-                            placeholder="Ville" />{cityError && <Text style={styles.error}>city empty</Text>}
+                            placeholder="Ville" />
                     </View>
                 </View>
                 <View style={styles.row}>
@@ -168,7 +175,7 @@ const styles = StyleSheet.create({
         width: '90%',
         padding: 10,
         borderWidth: 1,
-        borderColor: 'black',
+        borderColor: colors.shade,
         fontSize: 20,
         marginVertical: 5,
         borderRadius: 5,
@@ -195,15 +202,17 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     error: {
-        marginTop: 10,
-        color: 'red',
+        color: colors.light,
+        backgroundColor: colors.backgroundError,
+        borderColor: colors.borderError,
     },
     text2: {
-        color: "white",
+        color: colors.light,
         alignContent: 'center',
-        fontSize: 18,
+        fontSize: 20,
         alignItems: 'center',
         justifyContent: 'center',
+        fontWeight: "bold",
     },
     row: {
         flexDirection: 'row',
@@ -217,7 +226,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         padding: 10,
         borderWidth: 1,
-        borderColor: 'black',
+        borderColor: colors.shade,
         fontSize: 20,
         borderRadius: 5,
         flexGrow:1,
@@ -227,7 +236,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         padding: 10,
         borderWidth: 1,
-        borderColor: 'black',
+        borderColor: colors.shade,
         fontSize: 20,
         borderRadius: 5,
         flexGrow:2,
@@ -236,6 +245,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     text: { 
-        fontSize: 30,
+        fontSize: 28,
+        fontWeight: "bold",
+        color: colors.dark,
     },
 })

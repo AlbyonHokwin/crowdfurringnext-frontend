@@ -29,13 +29,13 @@ export default function PotsScreen({ navigation }) {
 
   const user = useSelector((state) => state.user.value);
   const pots = useSelector((state) => state.pots.value);
-
+  
   const draft = pots.request.filter((pot) => pot.draft === true);
   const validated = pots.request.filter((pot) => pot.isValidate === true);
 
   let boolean = true;
 
-  const BACKEND_URL = "http://192.168.10.143:3000";
+  const BACKEND_URL = "http://192.168.10.126:3000";
 
   function handleSubmit(id) {
     fetch(`${BACKEND_URL}/pots/delete/${id}`, {
