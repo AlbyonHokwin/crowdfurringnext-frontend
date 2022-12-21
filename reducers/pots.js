@@ -12,10 +12,13 @@ export const potsSlice = createSlice({
   initialState,
   reducers: {
     addPots: (state, action) => {
-      state.value.request = action.payload;
+      state.value.request.push(...action.payload);
     },
     addContributors: (state, action) => {
-      state.value.contributor = action.payload;
+      state.value.contributor.push(...action.payload);
+    },
+    replacePots: (state, action) => {
+      state.value.request = action.payload;
     },
     removeAll: (state, action) => {
       state.value.request = [];
@@ -24,5 +27,5 @@ export const potsSlice = createSlice({
   },
 });
 
-export const { addPots, addContributors, removeAll } = potsSlice.actions;
+export const { addPots, addContributors, replacePots, removeAll } = potsSlice.actions;
 export default potsSlice.reducer;
