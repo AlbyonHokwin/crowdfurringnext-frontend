@@ -1,10 +1,10 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import * as colors from "../styles/colors";
 
-export default function InputComponent({ placeholder, name, input, value }) {
+export default function InputComponent({ placeholder, name, input, value, flexGrow }) {
   return (
     <TextInput
-      style={styles.input}
+      style={[styles.input, flexGrow ? { flexGrow: flexGrow } : { minWidth: "80%", maxWidth: "80%" }]}
       placeholder={placeholder}
       onChangeText={(value) => input(value, name)}
       value={value}
@@ -14,8 +14,6 @@ export default function InputComponent({ placeholder, name, input, value }) {
 
 const styles = StyleSheet.create({
   input: {
-    minWidth: "80%",
-    maxWidth: "80%",
     backgroundColor: colors.light,
     padding: 10,
     borderRadius: 10,
