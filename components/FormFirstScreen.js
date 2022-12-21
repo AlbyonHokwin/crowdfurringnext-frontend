@@ -5,6 +5,7 @@ import {
   Text,
   View,
   Platform,
+  ScrollView,
 } from "react-native";
 import SocialMedia from "./SocialMedia";
 import InputComponent from "./InputComponent";
@@ -21,7 +22,7 @@ export default function FirstScreen({
   setSocialNetworks,
 }) {
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <View>
         <InputComponent
           placeholder="Nom de l'animal"
@@ -75,16 +76,16 @@ export default function FirstScreen({
           setSocialNetworks={setSocialNetworks}
         />
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flexGrow: 1,
     minWidth: '100%',
     maxWidth: '100%',
     alignItems: 'center',
-    flexGrow: 1,
     justifyContent: 'space-between',
   },
   divider: {

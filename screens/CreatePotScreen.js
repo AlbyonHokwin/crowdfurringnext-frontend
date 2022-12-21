@@ -276,12 +276,7 @@ export default function CreatePotScreen({ navigation }) {
 
   // *************************************************** //
 
-  const takePicture = (picture) =>
-    images.length >= 4
-      ? alert(
-        "Le nombre maximum est fixé à 4. Merci de bien vouloir supprimer une photo avant d'en ajouter une nouvelle"
-      )
-      : setImages([...images, picture.uri]);
+  const takePicture = (picture) => setImages([...images, picture.uri]);
 
   const handleCamera = (isOn) => setIsOn(isOn);
 
@@ -362,9 +357,7 @@ export default function CreatePotScreen({ navigation }) {
             )
           )}
 
-          <ScrollView contentContainerStyle={styles.content}>
-            {conditionalComponent()}
-          </ScrollView>
+          {conditionalComponent()}
 
           <View
             style={[styles.buttonsContainer, {
@@ -394,12 +387,6 @@ const styles = StyleSheet.create({
     paddingTop: StatusBar.currentHeight + 5,
     alignItems: 'center',
     backgroundColor: colors.background,
-  },
-  content: {
-    flexGrow: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    width: '100%',
   },
   header: {
     flexDirection: "row",
