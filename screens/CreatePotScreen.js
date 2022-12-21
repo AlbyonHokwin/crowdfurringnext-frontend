@@ -112,7 +112,7 @@ export default function CreatePotScreen({ navigation }) {
 
     const response = await fetcher(data, url, user.token);
     if (response.result) {
-      dispatch(addPots(response.pot));
+      dispatch(addPots([response.pot]));
       setStatus(false);
       if (page !== 6) {
         setPage(1);
@@ -152,6 +152,7 @@ export default function CreatePotScreen({ navigation }) {
   };
 
   const addCompensation = () => {
+    if (!newCompensation) return;
     setCompensations([...compensations, newCompensation]);
     setNewCompensation('');
   };
@@ -299,15 +300,6 @@ export default function CreatePotScreen({ navigation }) {
     <CameraPicker active={true} takePicture={takePicture} isOn={handleCamera} />
   ) : (
     <>
-      <ModalComponent
-        modalVisible={modalVisible}
-        setModal={setModalVisible}
-        message={message}
-        double={double}
-        setDouble={setDouble}
-        fetcher={() => handleSubmit()}
-        navigation={navigation}
-      />
       {/* <SafeAreaView
         style={{
           backgroundColor: colors.light,
@@ -329,6 +321,16 @@ export default function CreatePotScreen({ navigation }) {
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
         <SafeAreaView style={styles.container}>
+
+          <ModalComponent
+            modalVisible={modalVisible}
+            setModal={setModalVisible}
+            message={message}
+            double={double}
+            setDouble={setDouble}
+            fetcher={bool => handleSubmit(bool)}
+            navigation={navigation}
+          />
 
           {page < 2 && page !== 7 ? (
             <View style={styles.header}>
@@ -398,6 +400,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: StatusBar.currentHeight + 5,
+    justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: colors.background,
   },

@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import * as colors from "../styles/colors";
 import DisplayPots from "../components/DisplayPots";
 import { useSelector, useDispatch } from "react-redux";
-import { addPots } from "../reducers/pots";
+import { addPots, replacePots } from "../reducers/pots";
 import ModalComponent from "../components/ModalComponent";
 
 export default function PotsScreen({ navigation }) {
@@ -30,8 +30,9 @@ export default function PotsScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
   const pots = useSelector((state) => state.pots.value);
 
-  const draft = pots.request.filter((pot) => pot.draft === true);
-  const validated = pots.request.filter((pot) => pot.isValidate === true);
+  const draft = pots.request.filter((pot) => pot.draft);
+  const validated = pots.request.filter((pot) => pot.isValidate);
+  const notValidated = pots.request.filter((pot) => !pot.isValidate && !pot.draft);
 
   let boolean = true;
 
@@ -46,7 +47,7 @@ export default function PotsScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        dispatch(addPots(data.data));
+        dispatch(replacePots(data.data));
       });
   }
 
@@ -109,11 +110,11 @@ export default function PotsScreen({ navigation }) {
             </Text>
           </View>
         )}
-        {!isEnabled && validated.length ? (
+        {!isEnabled && notValidated.length ? (
           <View style={{ width: "100%", margin: 10 }}>
-            <Text style={{ fontSize: 18, fontWeight: "600" }}>Validées</Text>
+            <Text style={{ fontSize: 18, fontWeight: "600" }}>En attente de validation</Text>
             {DisplayPots(
-              validated,
+              notValidated,
               navigation,
               setModalVisible,
               setId,
@@ -122,6 +123,7 @@ export default function PotsScreen({ navigation }) {
             )}
           </View>
         ) : null}
+
         {!isEnabled && draft.length ? (
           <View style={{ width: "100%", margin: 10 }}>
             <Text style={{ fontSize: 18, fontWeight: "600" }}>Brouillons</Text>
@@ -135,6 +137,21 @@ export default function PotsScreen({ navigation }) {
             )}
           </View>
         ) : null}
+
+        {!isEnabled && validated.length ? (
+          <View style={{ width: "100%", margin: 10 }}>
+            <Text style={{ fontSize: 18, fontWeight: "600" }}>Validées</Text>
+            {DisplayPots(
+              validated,
+              navigation,
+              setModalVisible,
+              setId,
+              setDouble,
+              boolean
+            )}
+          </View>
+        ) : null}
+
       </ScrollView>
     </SafeAreaView >
   );
