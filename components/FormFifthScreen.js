@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, ScrollView } from "react-native";
 
 import * as DocumentPicker from "expo-document-picker";
 import * as colors from "../styles/colors";
@@ -22,36 +22,60 @@ export default function FormFifthScreen({ files, setFiles }) {
     setFiles(arr);
   }
 
+  const displayedFiles = files.map((file, i) => {
+    return (
+      <FileSelector
+        key={i}
+        value={i + 1}
+        pickFile={pickFile}
+        file={file}
+        deleteFile={deleteFile}
+        name={file.name}
+      />
+    );
+  })
+
   return (
-    <>
+    <View style={styles.container}>
       <Text style={{ fontSize: 24 }}>Justificatifs</Text>
-      <Text style={{ fontSize: 16, margin: 10, color: colors.icon }}>
+      <Text style={{ fontSize: 16, marginVertical: 10, color: colors.icon }}>
         Ils vont nous aider à valider votre annonce (carnet de santé de
         l'animal, facture du vétérinaire, etc..)
       </Text>
-      <View
-        style={{
-          width: "100%",
-          justifyContent: "space-around",
-        }}
-      >
-        <FileSelector
-          value="1"
-          pickFile={pickFile}
-          file={files[0]}
-          deleteFile={deleteFile}
-          name={files[0]?.name}
-        />
-        {files.length ? (
+        <ScrollView contentContainerStyle={styles.selectFilesContainer} showsVerticalScrollIndicator={false}>
+          {displayedFiles}
           <FileSelector
-            value="2"
+            value="Nouveau"
             pickFile={pickFile}
-            file={files[1]}
-            deleteFile={deleteFile}
-            name={files[1]?.name}
           />
-        ) : null}
-      </View>
-    </>
+        </ScrollView>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  selectFilesContainer: {
+    minWidth: '100%',
+    maxWidth: '100%',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  text: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: colors.dark,
+  },
+  divider: {
+    minWidth: '90%',
+    maxWidth: '90%',
+    borderBottomWidth: 1,
+    borderColor: colors.accent,
+    marginVertical: 10,
+  },
+});

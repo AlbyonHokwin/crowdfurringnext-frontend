@@ -1,4 +1,4 @@
-import { Text, View, Image } from "react-native";
+import { Text, View, Image, ScrollView, StyleSheet } from "react-native";
 import * as colors from "../styles/colors";
 
 export default function ({
@@ -8,7 +8,7 @@ export default function ({
   files,
   infos,
   description,
-  compensation,
+  compensations,
   amount,
 }) {
   const pictures = images.map((image, i) => {
@@ -16,7 +16,7 @@ export default function ({
       <Image
         key={i}
         source={{ uri: image }}
-        style={{ width: 70, height: 70, margin: 10 }}
+        style={{ width: 70, height: 70, margin: 5, borderRadius: 10 }}
         resizeMode="stretch"
       />
     );
@@ -28,9 +28,9 @@ export default function ({
         key={i}
         style={{
           alignItems: "center",
-          width: "35%",
           height: 50,
-          borderRadius: 8,
+          paddingHorizontal: 10,
+          borderRadius: 10,
           margin: 5,
           backgroundColor: colors.shade,
           alignItems: "center",
@@ -42,20 +42,43 @@ export default function ({
     );
   });
 
+  const compensationsList = compensations.map((compensation, i) => {
+    return (
+      <View
+        key={i}
+        style={{
+          alignItems: "center",
+          height: 50,
+          paddingHorizontal: 10,
+          borderRadius: 10,
+          margin: 5,
+          backgroundColor: colors.shade,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Text style={{ textAlign: "center" }}>{compensation}</Text>
+      </View>
+    );
+  });
+
+
   return (
-    <>
-      <View style={{ alignItems: "flex-start", width: "80%", margin: 30 }}>
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={{ alignItems: "flex-start", width: "80%" }}>
         <Text style={{ fontSize: 18, fontWeight: "600", margin: 6 }}>
           Nom de l'animal : {animalName}
         </Text>
         <Text style={{ fontSize: 18, fontWeight: "600", margin: 6 }}>
           Photos de l'animal :{" "}
         </Text>
-        <View
-          style={{ flexDirection: "row", justifyContent: "center", margin: 6 }}
-        >
-          {pictures}
+
+        <View style={styles.horizontalScroll}>
+          <ScrollView horizontal={true}>
+            {pictures}
+          </ScrollView>
         </View>
+
         {infos.specie && (
           <Text style={{ fontSize: 18, fontWeight: "600", margin: 6 }}>
             Espèce : {infos.specie}
@@ -77,24 +100,49 @@ export default function ({
           </Text>
         )}
         <Text style={{ fontSize: 18, fontWeight: "600", margin: 6 }}>
-          Description : {description}
+          Description :
+        </Text>
+        <Text style={{ fontSize: 18 }}>
+          {description}
         </Text>
         <Text style={{ fontSize: 18, fontWeight: "600", margin: 6 }}>
           Cagnotte : {amount}€
         </Text>
         <Text style={{ fontSize: 18, fontWeight: "600", margin: 6 }}>
-          Contrepartie : {compensation}
+          Contrepartie :
+        </Text>
+        <View style={styles.horizontalScroll}>
+          <ScrollView horizontal={true}>
+            {compensationsList}
+          </ScrollView>
+        </View>
+        <Text style={{ fontSize: 18, fontWeight: "600", margin: 6 }}>
+          Urgent : {urgent ? 'Oui' : 'Non'}
         </Text>
         <Text style={{ fontSize: 18, fontWeight: "600", margin: 6 }}>
-          Urgent : {urgent}
+          Justificatif(s) :
         </Text>
-        <Text style={{ fontSize: 18, fontWeight: "600", margin: 6 }}>
-          Justificatif :
-        </Text>
-        <View style={{ flexDirection: "row", justifyContent: "center" }}>
-          {documents}
+        <View style={styles.horizontalScroll}>
+          <ScrollView horizontal={true}>
+            {documents}
+          </ScrollView>
         </View>
       </View>
-    </>
+    </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    minWidth: '80%',
+    maxWidth: '80%',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  horizontalScroll: {
+    width: '125%',
+    marginVertical: 0,
+    alignSelf: 'center',
+  },
+});
