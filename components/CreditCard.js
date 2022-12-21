@@ -34,7 +34,8 @@ export default CreditCard;
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
+        minWidth: '100%',
+        maxWidth: '100%',
         justifyContent: 'flex-start',
         alignItems: 'center',
         borderWidth: 1,

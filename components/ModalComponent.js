@@ -9,17 +9,23 @@ export default function ModalComponent({
   double,
   fetcher,
   navigation,
+  id,
 }) {
   let text;
   double ? (text = { oui: "Oui", non: "Non" }) : (text = { oui: "Compléter" });
 
   return (
-    <Modal visible={modalVisible} animationType="fade" transparent>
+    <Modal
+      visible={modalVisible}
+      animationType="fade"
+      statusBarTranslucent={true}
+    >
       <View
         style={{
           flex: 1,
           justifyContent: "center",
           alignItems: "center",
+          backgroundColor: colors.backgroundModal,
         }}
       >
         <View
@@ -51,7 +57,13 @@ export default function ModalComponent({
               onPress={() => {
                 setDouble(false);
                 setModal(false);
-                double ? fetcher(true) : null;
+                if (double) {
+                  if (id) {
+                    fetcher(id);
+                  } else {
+                    fetcher(true);
+                  }
+                }
               }}
             >
               <Text style={{ color: "white" }}>{text.oui}</Text>
@@ -70,7 +82,7 @@ export default function ModalComponent({
                 onPress={() => {
                   setModal(false);
                   setDouble(false);
-                  navigation.navigate("Home");
+                  navigation.navigate("Login");
                 }}
               >
                 <Text style={{ color: "white" }}>{text.non}</Text>

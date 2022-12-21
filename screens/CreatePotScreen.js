@@ -3,6 +3,7 @@ import {
   Text,
   ActivityIndicator,
   KeyboardAvoidingView,
+  StatusBar,
 } from "react-native";
 
 import * as colors from "../styles/colors";
@@ -25,11 +26,18 @@ import CameraPicker from "../components/CameraPicker";
 import Button from "../components/Button";
 import { convertData } from "../utils/convertData";
 
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { addPots } from "../reducers/pots";
+
 export default function CreatePotScreen({ navigation }) {
+  const user = useSelector((state) => state.user.value);
   const [isOn, setIsOn] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [message, setMessage] = useState("");
   const [double, setDouble] = useState(false);
+
+  const dispatch = useDispatch();
 
   // ***************FORM STATE*******************//
 
@@ -98,9 +106,9 @@ export default function CreatePotScreen({ navigation }) {
 
     const url = `/pots/create/${boolean}`;
 
-    const response = await fetcher(data, url);
-
+    const response = await fetcher(data, url, user.token);
     if (response.result) {
+      dispatch(addPots(response.pot));
       setStatus(false);
       if (page !== 6) {
         setPage(1);
@@ -108,19 +116,19 @@ export default function CreatePotScreen({ navigation }) {
       } else {
         setPage(page + 1);
       }
-      setAnimalName("");
-      setInfos({});
-      setDescription("");
-      setCompensation("");
-      setImages([]);
-      setFiles([]);
-      setAmount("");
-      setUrgent(false);
-      setExplanation("");
-      setSocialNetworks({
-        instagram: "",
-        twitter: "",
-      });
+      // setAnimalName("");
+      // setInfos({});
+      // setDescription("");
+      // setCompensation("");
+      // setImages([]);
+      // setFiles([]);
+      // setAmount("");
+      // setUrgent(false);
+      // setExplanation("");
+      // setSocialNetworks({
+      //   instagram: "",
+      //   twitter: "",
+      // });
     } else {
       setStatus("error");
     }
@@ -170,7 +178,7 @@ export default function CreatePotScreen({ navigation }) {
           Veuillez vérifier que vous êtes bien connecté à internet et cliqué de
           nouveau sur le bouton suivant
         </Text>
-        <Button onPress={() => handleSubmit} value="Envoyer" />
+        <Button onPress={() => handleSubmit()} value="Envoyer" />
       </View>
     );
   }
@@ -279,15 +287,7 @@ export default function CreatePotScreen({ navigation }) {
   return isOn ? (
     <CameraPicker active={true} takePicture={takePicture} isOn={handleCamera} />
   ) : (
-    <SafeAreaView
-      style={{
-        backgroundColor: colors.light,
-        opacity: `${modalVisible ? 0.3 : 1}`,
-        flex: 1,
-        justifyContent: "center",
-        paddingTop: 10,
-      }}
-    >
+    <>
       <ModalComponent
         modalVisible={modalVisible}
         setModal={setModalVisible}
@@ -297,44 +297,23 @@ export default function CreatePotScreen({ navigation }) {
         fetcher={() => handleSubmit()}
         navigation={navigation}
       />
-      <KeyboardAvoidingView
+      <SafeAreaView
         style={{
-          alignItems: "center",
-          height: "100%",
+          backgroundColor: colors.light,
+          // opacity: `${modalVisible ? 0.3 : 1}`,
+          flex: 1,
+          justifyContent: "space-around",
+          // paddingTop: StatusBar.currentHeight,
         }}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-        {page < 2 && page !== 7 ? (
-          <View
-            style={{
-              alignItems: "center",
-              justifyContent: "space-between",
-              flexDirection: "row",
-              width: "80%",
-              margin: 10,
-              backgroundColor: colors.light,
-              borderRadius: 8,
-              padding: 10,
-            }}
-          >
-            <Text style={{ fontSize: 32 }}>Cagnotte</Text>
-            <FontAwesome
-              name="close"
-              size={25}
-              style={{
-                color: colors.danger,
-                borderColor: colors.danger,
-                textAlign: "right",
-              }}
-              onPress={() => {
-                setMessage("Voulez-vous sauvegarder votre cagnotte ?");
-                setDouble(true);
-                setModalVisible(true);
-              }}
-            />
-          </View>
-        ) : (
-          page !== 7 && (
+        <KeyboardAvoidingView
+          style={{
+            alignItems: "center",
+            height: "100%",
+          }}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
+          {page < 2 && page !== 7 ? (
             <View
               style={{
                 alignItems: "center",
@@ -347,7 +326,7 @@ export default function CreatePotScreen({ navigation }) {
                 padding: 10,
               }}
             >
-              <Text style={{ fontSize: 32 }}>{animalName}</Text>
+              <Text style={{ fontSize: 32 }}>Cagnotte</Text>
               <FontAwesome
                 name="close"
                 size={25}
@@ -357,34 +336,65 @@ export default function CreatePotScreen({ navigation }) {
                   textAlign: "right",
                 }}
                 onPress={() => {
-                  setMessage("Voulez-vous saugegarder votre cagnotte ?");
+                  setMessage("Voulez-vous sauvegarder votre cagnotte ?");
                   setDouble(true);
                   setModalVisible(true);
                 }}
               />
             </View>
-          )
-        )}
+          ) : (
+            page !== 7 && (
+              <View
+                style={{
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  flexDirection: "row",
+                  width: "80%",
+                  margin: 10,
+                  backgroundColor: colors.light,
+                  borderRadius: 8,
+                  padding: 10,
+                }}
+              >
+                <Text style={{ fontSize: 32 }}>{animalName}</Text>
+                <FontAwesome
+                  name="close"
+                  size={25}
+                  style={{
+                    color: colors.danger,
+                    borderColor: colors.danger,
+                    textAlign: "right",
+                  }}
+                  onPress={() => {
+                    setMessage("Voulez-vous saugegarder votre cagnotte ?");
+                    setDouble(true);
+                    setModalVisible(true);
+                  }}
+                />
+              </View>
+            )
+          )}
 
-        {conditionalComponent()}
-      </KeyboardAvoidingView>
-      <View
-        style={{
-          alignItems: "flex-end",
-          flexDirection: `${page > 1 ? "row" : "column"}`,
-          justifyContent: `${page > 1 ? "space-between" : "center"}`,
-        }}
-      >
-        {page > 1 && page < 7 && (
-          <Button onPress={() => setPage(page - 1)} value="Retour" />
-        )}
+          {conditionalComponent()}
+        </KeyboardAvoidingView>
+        <View
+          style={{
+            alignItems: "flex-end",
+            flexDirection: `${page > 1 ? "row" : "column"}`,
+            justifyContent: `${page > 1 ? "space-between" : "center"}`,
+          }}
+        >
+          {page > 1 && page < 7 && (
+            <Button onPress={() => setPage(page - 1)} value="Retour" />
+          )}
 
-        {page < 6 ? (
-          <Button onPress={() => handleNext()} value="Suivant" />
-        ) : page < 7 ? (
-          <Button onPress={() => handleSubmit()} value="Valider" />
-        ) : null}
-      </View>
-    </SafeAreaView>
+          {page < 6 ? (
+            <Button onPress={() => handleNext()} value="Suivant" />
+          ) : page < 7 ? (
+            <Button onPress={() => handleSubmit()} value="Valider" />
+          ) : null}
+        </View>
+      </SafeAreaView>
+    </>
   );
 }
