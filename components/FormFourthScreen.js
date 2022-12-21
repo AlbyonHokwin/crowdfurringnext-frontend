@@ -1,4 +1,7 @@
-import { Text, View } from "react-native";
+import { Text, View, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Feather from "react-native-vector-icons/Feather";
+import * as colors from "../styles/colors";
 
 import { Picker } from "@react-native-picker/picker";
 import DescriptionComponent from "./DescriptionComponent";
@@ -10,43 +13,79 @@ export default function FormFourthScreen({
   explanation,
 }) {
   return (
-    <>
-      <View
-        style={{
-          alignItems: "center",
-          justifyContent: "center",
-          padding: 1,
-        }}
-      >
-        <Text style={{ fontSize: 24, textAlign: "center" }}>
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.content}>
+        <Text style={styles.text}>
           Votre cagnotte est-elle urgente ?
         </Text>
         <Picker
-          style={{ width: 200, height: 180 }}
+          style={styles.picker}
           selectedValue={urgent}
           onValueChange={(itemValue, itemIndex) => setUrgent(itemValue)}
         >
-          <Picker.Item label="Oui" value={true} />
-          <Picker.Item label="Non" value={false} />
+          <Picker.Item style={styles.label} label="Oui" value={true} />
+          <Picker.Item style={styles.label} label="Non" value={false} />
         </Picker>
       </View>
-      <View style={{ width: "100%", alignItems: "center" }}>
-        <Text>Dites nous pourquoi ?</Text>
+
+      <View style={styles.divider} />
+
+      <View style={styles.content}>
+        <Text style={styles.text}>Dites nous pourquoi ?</Text>
         <DescriptionComponent
-          placeholder={`Mon chat est entre la vie et la mort`}
+          placeholder={`Ex : Mon chat est entre la vie et la mort...`}
           name="explanation"
           input={input}
           value={explanation}
         />
       </View>
-      <View
-        style={{
-          width: "100%",
-          flexDirection: "row",
-          justifyContent: "space-around",
-          padding: 10,
-        }}
-      ></View>
-    </>
+    </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    minWidth: '100%',
+    maxWidth: '100%',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  content: {
+    minWidth: '100%',
+    maxWidth: '100%',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  text: {
+    fontSize: 24,
+    color: colors.dark,
+    marginBottom: 10,
+  },
+  picker: {
+    minWidth: '25%',
+    maxWidth: '25%',
+    height: 50,
+    backgroundColor: colors.light,
+    shadowColor: colors.accent,
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  label: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: colors.dark,
+  },
+  divider: {
+    minWidth: '90%',
+    maxWidth: '90%',
+    borderBottomWidth: 1,
+    borderColor: colors.accent,
+    marginVertical: 40,
+  },
+});
