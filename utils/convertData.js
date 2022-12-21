@@ -5,7 +5,7 @@ export function convertData({
   infos,
   socialNetworks,
   description,
-  compensation,
+  compensations,
   amount,
   urgent,
   explanation,
@@ -29,7 +29,7 @@ export function convertData({
   data.append("infos", JSON.stringify(infos));
   data.append("socialNetworks", JSON.stringify(socialNetworks));
   data.append("description", description);
-  data.append("compensation", compensation);
+  data.append("compensations", JSON.stringify(compensations));
   data.append("amount", amount);
   data.append("urgent", urgent);
   data.append("explanation", explanation);
