@@ -10,7 +10,8 @@ import {
   StatusBar,
 } from 'react-native';
 import { login } from '../reducers/user';
-import ImageProfileSelector from '../components/ImageProfileSelector';
+// import ImageProfileSelector from '../components/ImageProfileSelector';
+import * as colors from "../styles/colors";
 
 
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -104,6 +105,7 @@ export default function SignUpScreen({ navigation }) {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.text}>Créer votre profil </Text>
       <View style={styles.inputContainer}>
         <TextInput
           placeholder="Email"
@@ -112,44 +114,49 @@ export default function SignUpScreen({ navigation }) {
           autoComplete="email"
           onChangeText={(value) => setEmail(value)}
           value={email}
-          style={styles.input}
+          style={[styles.input, emailError && styles.error]}
+          placeholderTextColor={emailError ? colors.light : undefined}
         />
-        {emailError && <Text style={styles.error}>Invalid email address</Text>}
+      
         <TextInput
           keyboardType="default"
           placeholder={"Mot de passe"}
           autoCorrect={false}
           secureTextEntry={true}
           textContentType={"password"}
-          style={styles.input}
           onChangeText={(value) => setPassword(value)}
           value={password}
+          style={[styles.input, passwordError && styles.error]}
+          placeholderTextColor={passwordError ? colors.light : undefined}
         />
-        {passwordError && <Text style={styles.error}>password empty</Text>}
+        
         <TextInput
           type="lastname"
-          style={styles.input}
           onChangeText={(value) => setLastname(value)}
           value={lastname}
           placeholder="Nom"
+          style={[styles.input, lastnameError && styles.error]}
+          placeholderTextColor={lastnameError ? colors.light : undefined}
         />
-        {lastnameError && <Text style={styles.error}>lastname empty</Text>}
+        
         <TextInput
           type="firstname"
-          style={styles.input}
           onChangeText={(value) => setFirstname(value)}
           value={firstname}
           placeholder="Prénom"
+          style={[styles.input, firstnameError && styles.error]}
+          placeholderTextColor={firstnameError ? colors.light : undefined}
         />
-        {firstnameError && <Text style={styles.error}>firstname empty</Text>}
+        
         <TextInput
           textContentType="streetAddressLine1"
-          style={styles.input}
           onChangeText={(value) => setStreet(value)}
           value={street}
           placeholder="Adresse"
+          style={[styles.input, streetError && styles.error]}
+          placeholderTextColor={streetError ? colors.light : undefined}
         />
-        {streetError && <Text style={styles.error}>street empty</Text>}
+        
         <TextInput
           type="additionnal"
           style={styles.input}
@@ -161,24 +168,26 @@ export default function SignUpScreen({ navigation }) {
           <TextInput
             textContentType="postalCode"
             keyboardType="numeric"
-            style={styles.input1}
             onChangeText={(value) => setZipCode(value)}
             value={zipCode}
             placeholder="C.P"
+            style={[styles.input1, zipCodeError && styles.error]}
+            placeholderTextColor={zipCodeError ? colors.light : undefined}
           />
-          {zipCodeError && <Text style={styles.error}>zipCode empty</Text>}
+          
           <TextInput
             textContentType="addressCity"
-            style={styles.input2}
             onChangeText={(value) => setCity(value)}
             value={city}
             placeholder="Ville"
+            style={[styles.input2, cityError && styles.error]}
+            placeholderTextColor={cityError ? colors.light : undefined}
           />
-          {cityError && <Text style={styles.error}>city empty</Text>}
+          
         </View>
-        <View>
+        {/* <View>
           <ImageProfileSelector />
-        </View>
+        </View> */}
       </View>
 
       <View style={styles.group}>
@@ -200,7 +209,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
     backgroundColor: "white",
     justifyContent: "space-between",
     paddingTop: StatusBar.currentHeight + 20,
@@ -212,42 +220,67 @@ const styles = StyleSheet.create({
     borderRadius: 1,
     alignItems: "center",
   },
+  text: { 
+    fontSize: 28,
+    fontWeight: "bold",
+    color: colors.dark,
+},
   input: {
     flexDirection: "row",
     width: "90%",
     padding: 10,
     borderWidth: 1,
-    borderColor: "black",
+    borderColor: colors.shade,
+    color: colors.dark,
     fontSize: 20,
     marginVertical: 5,
     borderRadius: 5,
   },
   button: {
     padding: 8,
-    width: "25%",
-    backgroundColor: "#1F6F78",
-    borderRadius: 5,
-    alignItems: "center",
-    justifyContent: "center",
+        width: '25%',
+        backgroundColor: "#1F6F78",
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row',
+        padding: 10,
+        fontSize: 20,
+        borderRadius: 10,
+        flexGrow:1,
+        marginRight:10,
+        shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   button2: {
     padding: 8,
-    width: "57%",
-    backgroundColor: "#1F6F78",
-    borderRadius: 5,
-    alignItems: "center",
-    justifyContent: "center",
+        width: '57%',
+        backgroundColor: "#1F6F78",
+        borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  height: 47,
   },
   error: {
-    marginTop: 10,
-    color: "red",
+    color: colors.light,
+    backgroundColor: colors.backgroundError,
+    borderColor: colors.borderError,
   },
   text2: {
-    color: "white",
-    alignContent: "center",
-    fontSize: 18,
-    alignItems: "center",
-    justifyContent: "center",
+    fontSize: 20,
+    fontWeight: "bold",
+    color: colors.light,
   },
   group: {
     flexDirection: "row",
@@ -260,7 +293,8 @@ const styles = StyleSheet.create({
     width: "30%",
     padding: 10,
     borderWidth: 1,
-    borderColor: "black",
+    borderColor: colors.shade,
+    color: colors.dark,
     fontSize: 20,
     borderRadius: 5,
   },
@@ -269,7 +303,8 @@ const styles = StyleSheet.create({
     width: "68%",
     padding: 10,
     borderWidth: 1,
-    borderColor: "black",
+    borderColor: colors.shade,
+    color: colors.dark,
     fontSize: 20,
     borderRadius: 5,
   },

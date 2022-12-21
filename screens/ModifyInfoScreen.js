@@ -189,17 +189,31 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         padding: 10,
         fontSize: 20,
-        borderRadius: 5,
+        borderRadius: 10,
         flexGrow:1,
-        marginRight:10
+        marginRight:10,
+        shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
     },
     button2: {
         padding: 8,
         width: '57%',
         backgroundColor: "#1F6F78",
-        borderRadius: 5,
+        borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
     },
     error: {
         color: colors.light,
@@ -213,6 +227,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         fontWeight: "bold",
+    
     },
     row: {
         flexDirection: 'row',
