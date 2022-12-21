@@ -52,7 +52,8 @@ export default function CreatePotScreen({ navigation }) {
     sex: "",
   });
   const [description, setDescription] = useState("");
-  const [compensation, setCompensation] = useState("");
+  const [newCompensation, setNewCompensation] = useState('');
+  const [compensations, setCompensations] = useState([]);
   const [images, setImages] = useState([]);
   const [files, setFiles] = useState([]);
   const [page, setPage] = useState(1);
@@ -101,7 +102,7 @@ export default function CreatePotScreen({ navigation }) {
       infos,
       socialNetworks,
       description,
-      compensation,
+      compensations,
       amount,
       urgent,
       explanation,
@@ -122,7 +123,7 @@ export default function CreatePotScreen({ navigation }) {
       // setAnimalName("");
       // setInfos({});
       // setDescription("");
-      // setCompensation("");
+      // setCompensations([]);
       // setImages([]);
       // setFiles([]);
       // setAmount("");
@@ -145,10 +146,19 @@ export default function CreatePotScreen({ navigation }) {
     if (name === "age") return setInfos({ ...infos, age: value });
     if (name === "sex") return setInfos({ ...infos, sex: value });
     if (name === "description") return setDescription(value);
-    if (name === "compensation") return setCompensation(value);
+    if (name === "compensation") return setNewCompensation(value);
     if (name === "amount") return setAmount(value);
     if (name === "explanation") return setExplanation(value);
   };
+
+  const addCompensation = () => {
+    setCompensations([...compensations, newCompensation]);
+    setNewCompensation('');
+  };
+
+  const deleteCompensation = value => {
+    setCompensations(compensations.filter(compensation => compensation !== value));
+  }
 
   if (status === "isLoading") {
     return (
@@ -217,7 +227,10 @@ export default function CreatePotScreen({ navigation }) {
           <FormThirdScreen
             input={input}
             amount={amount}
-            compensation={compensation}
+            newCompensation={newCompensation}
+            compensations={compensations}
+            addCompensation={addCompensation}
+            deleteCompensation={deleteCompensation}
             handleError={handleError}
           />
         );
@@ -247,7 +260,7 @@ export default function CreatePotScreen({ navigation }) {
             files={files}
             infos={infos}
             description={description}
-            compensation={compensation}
+            compensations={compensations}
             amount={amount}
           />
         );
