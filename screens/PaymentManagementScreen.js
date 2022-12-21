@@ -17,7 +17,7 @@ import CreditCard from '../components/CreditCard';
 
 const BACKEND_URL = 'http://192.168.10.132:3000';
 
-const PaymentManagementScreen = () => {
+const PaymentManagementScreen = ({ navigation }) => {
     const user = useSelector(state => state.user.value);
     const [paymentNameError, setPaymentNameError] = useState(false);
     const [cardNumberError, setCardNumberError] = useState(false);
@@ -114,9 +114,39 @@ const PaymentManagementScreen = () => {
         setAddNewCard(false);
     };
 
+    const onPressCard = ({ key, card }) => {
+        if (!selectedCard) {
+            setSelectedCard({ key, card });
+            return;
+        }
+
+        if (selectedCard.key === key) setSelectedCard(null);
+        else setSelectedCard({ key, card });
+    }
+
+    const deleteCard = async paymentName => {
+        const response = await fetch(`${BACKEND_URL}/users/deletepayment/${paymentName}`, {
+            method: 'DELETE',
+            headers: {'authorization': 'Bearer ' + user.token}
+        });
+        const data = await response.json();
+
+        if (data.result) {
+            setPaymentMethods(paymentMethods.filter(paymentMethod => paymentMethod.paymentName !== data.paymentName));
+        }
+    };
+
     const creditCards = paymentMethods.map((card, i) => {
         return (
-            <CreditCard key={i} isSelected={selectedCard ? selectedCard.key === i : false} isConnected={true} onPress={() => setSelectedCard({ key: i, card })} {...card} />
+            <View key={i}>
+                <CreditCard isSelected={selectedCard ? selectedCard.key === i : false} isConnected={true} onPress={() => onPressCard({ key: i, card })} {...card} />
+                {selectedCard && selectedCard.key === i && <>
+                    <TouchableOpacity onPress={() => deleteCard(card.paymentName)} style={styles.button} activeOpacity={0.8}>
+                        <Text style={styles.textButton}>Supprimer</Text>
+                    </TouchableOpacity>
+                    <View style={styles.divider} />
+                </>}
+            </View>
         );
     });
 
@@ -148,7 +178,7 @@ const PaymentManagementScreen = () => {
                     }
                 </ScrollView>
                 <View style={styles.buttonsContainer}>
-                    <TouchableOpacity onPress={() => pressNext()} style={styles.button} activeOpacity={0.8}>
+                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.button} activeOpacity={0.8}>
                         <Text style={styles.textButton}>Retour</Text>
                     </TouchableOpacity>
                 </View>
@@ -179,9 +209,6 @@ const styles = StyleSheet.create({
         width: '80%',
     },
     buttonsContainer: {
-        // position: 'absolute',
-        // bottom: 0,
-        // zIndex: 999,
         width: '100%',
         alignItems: 'center',
         padding: 25,
@@ -206,5 +233,12 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         fontSize: 20,
         color: colors.light,
+    },
+    divider: {
+        minWidth: '100%',
+        maxWidth: '100%',
+        borderBottomWidth: 1,
+        borderColor: colors.accent,
+        marginVertical: 10,
     },
 });
