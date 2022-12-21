@@ -423,9 +423,6 @@ const styles = StyleSheet.create({
         flexGrow: 1,
     },
     buttonsContainer: {
-        // position: 'absolute',
-        // bottom: 0,
-        // zIndex: 999,
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -433,7 +430,6 @@ const styles = StyleSheet.create({
         padding: 25,
     },
     button: {
-        alignItems: 'center',
         backgroundColor: colors.secondary,
         borderRadius: 10,
         padding: 10,

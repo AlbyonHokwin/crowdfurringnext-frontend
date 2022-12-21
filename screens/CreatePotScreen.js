@@ -1,8 +1,11 @@
 import {
+  StyleSheet,
   View,
   Text,
   ActivityIndicator,
   KeyboardAvoidingView,
+  SafeAreaView,
+  ScrollView,
   StatusBar,
 } from "react-native";
 
@@ -17,7 +20,7 @@ import FormFourthScreen from "../components/FormFourthScreen";
 import FormFifthScreen from "../components/FormFifthScreen";
 import FormSixthScreen from "../components/FormSixthScreen";
 import FormSeventhScreen from "../components/FormSeventhScreen";
-import { SafeAreaView } from "react-native-safe-area-context";
+// import { SafeAreaView } from "react-native-safe-area-context";
 import ModalComponent from "../components/ModalComponent";
 
 import { checkFileds } from "../utils/checkFields";
@@ -276,8 +279,8 @@ export default function CreatePotScreen({ navigation }) {
   const takePicture = (picture) =>
     images.length >= 4
       ? alert(
-          "Le nombre maximum est fixé à 4. Merci de bien vouloir supprimer une photo avant d'en ajouter une nouvelle"
-        )
+        "Le nombre maximum est fixé à 4. Merci de bien vouloir supprimer une photo avant d'en ajouter une nouvelle"
+      )
       : setImages([...images, picture.uri]);
 
   const handleCamera = (isOn) => setIsOn(isOn);
@@ -297,7 +300,7 @@ export default function CreatePotScreen({ navigation }) {
         fetcher={() => handleSubmit()}
         navigation={navigation}
       />
-      <SafeAreaView
+      {/* <SafeAreaView
         style={{
           backgroundColor: colors.light,
           // opacity: `${modalVisible ? 0.3 : 1}`,
@@ -312,21 +315,16 @@ export default function CreatePotScreen({ navigation }) {
             height: "100%",
           }}
           behavior={Platform.OS === "ios" ? "padding" : "height"}
-        >
+        > */}
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+      >
+        <SafeAreaView style={styles.container}>
+
           {page < 2 && page !== 7 ? (
-            <View
-              style={{
-                alignItems: "center",
-                justifyContent: "space-between",
-                flexDirection: "row",
-                width: "80%",
-                margin: 10,
-                backgroundColor: colors.light,
-                borderRadius: 8,
-                padding: 10,
-              }}
-            >
-              <Text style={{ fontSize: 32 }}>Cagnotte</Text>
+            <View style={styles.header}>
+              <Text style={styles.headerText}>Création de cagnotte</Text>
               <FontAwesome
                 name="close"
                 size={25}
@@ -344,19 +342,8 @@ export default function CreatePotScreen({ navigation }) {
             </View>
           ) : (
             page !== 7 && (
-              <View
-                style={{
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  flexDirection: "row",
-                  width: "80%",
-                  margin: 10,
-                  backgroundColor: colors.light,
-                  borderRadius: 8,
-                  padding: 10,
-                }}
-              >
-                <Text style={{ fontSize: 32 }}>{animalName}</Text>
+              <View style={styles.header}>
+                <Text style={styles.headerText}>{animalName}</Text>
                 <FontAwesome
                   name="close"
                   size={25}
@@ -375,26 +362,81 @@ export default function CreatePotScreen({ navigation }) {
             )
           )}
 
-          {conditionalComponent()}
-        </KeyboardAvoidingView>
-        <View
-          style={{
-            alignItems: "flex-end",
-            flexDirection: `${page > 1 ? "row" : "column"}`,
-            justifyContent: `${page > 1 ? "space-between" : "center"}`,
-          }}
-        >
-          {page > 1 && page < 7 && (
-            <Button onPress={() => setPage(page - 1)} value="Retour" />
-          )}
+          <ScrollView contentContainerStyle={styles.content}>
+            {conditionalComponent()}
+          </ScrollView>
 
-          {page < 6 ? (
-            <Button onPress={() => handleNext()} value="Suivant" />
-          ) : page < 7 ? (
-            <Button onPress={() => handleSubmit()} value="Valider" />
-          ) : null}
-        </View>
-      </SafeAreaView>
+          <View
+            style={[styles.buttonsContainer, {
+              flexDirection: `${page > 1 ? "row" : "column"}`,
+              justifyContent: `${page > 1 ? "space-between" : "center"}`,
+            }]}
+          >
+            {page > 1 && page < 7 && (
+              <Button onPress={() => setPage(page - 1)} value="Retour" />
+            )}
+
+            {page < 6 ? (
+              <Button onPress={() => handleNext()} value="Suivant" />
+            ) : page < 7 ? (
+              <Button onPress={() => handleSubmit()} value="Valider" />
+            ) : null}
+          </View>
+        </SafeAreaView>
+      </KeyboardAvoidingView>
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: StatusBar.currentHeight + 5,
+    alignItems: 'center',
+    backgroundColor: colors.background,
+  },
+  content: {
+    flexGrow: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    width: '100%',
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "90%",
+    margin: 10,
+    backgroundColor: colors.primary,
+    borderRadius: 10,
+    padding: 10,
+  },
+  headerText: {
+    fontSize: 32,
+    color: colors.light,
+  },
+  buttonsContainer: {
+    width: '100%',
+    alignItems: 'center',
+  },
+  button: {
+    backgroundColor: colors.secondary,
+    borderRadius: 10,
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: colors.accent,
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  textButton: {
+    fontWeight: '600',
+    fontSize: 20,
+    color: colors.light,
+  },
+})
