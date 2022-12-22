@@ -12,8 +12,9 @@ import {
     Modal,
     SafeAreaView,
 } from 'react-native'
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import * as colors from '../styles/colors';
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Feather from "react-native-vector-icons/Feather";
+import * as colors from "../styles/colors";
 
 const BACKEND_URL = 'http://192.168.10.133:3000';
 
@@ -60,10 +61,12 @@ const PotScreen = ({ route, navigation }) => {
 
     const compensations = pot.compensations.map((compensation, i) => {
         return (
-            <Text key={i} style={styles.compensation}>{compensation}</Text>
+            <View key={i} style={styles.compensationContainer}>
+                <Feather name="check" size={20} color={colors.dark} />
+                <Text style={styles.compensationText}>{compensation}</Text>
+            </View>
         );
     });
-
 
     const pressOnPhoto = index => {
         setModalIndex(index);
@@ -187,30 +190,60 @@ const styles = StyleSheet.create({
     photos: {
         width: '100%',
         marginVertical: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     photo: {
         height: Dimensions.get('screen').width / 2.5,
         width: Dimensions.get('screen').width / 2.5,
         margin: 2,
+        borderRadius: 10,
     },
     info: {
-        width: '80%',
         flexDirection: 'row',
         flexWrap: 'wrap',
-        justifyContent: 'space-around',
-        alignItems: 'center',
+        minWidth: '80%',
+        maxWidth: '80%',
+        paddingVertical: 5,
+        paddingHorizontal: 15,
+        marginVertical: 5,
+        borderRadius: 10,
+        backgroundColor: colors.tertiary,
+        borderColor: colors.shade,
+        borderWidth: 1,
+        shadowColor: colors.accent,
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
     },
     infoText: {
-        width: '40%',
+        flexGrow: 1,
         fontSize: 20,
-        color: colors.tertiary,
+        color: colors.dark,
         textAlign: 'left',
-        marginVertical: 2,
+        marginHorizontal: 5,
     },
     descriptionContainer: {
         width: '80%',
         maxHeight: Dimensions.get('screen').height / 2.5,
         marginVertical: 20,
+        padding: 10,
+        borderRadius: 10,
+        backgroundColor: colors.light,
+        borderColor: colors.shade,
+        borderWidth: 1,
+        shadowColor: colors.accent,
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
     },
     scrollDescription: {},
     description: {
@@ -229,10 +262,23 @@ const styles = StyleSheet.create({
     scrollCompensations: {
         width: '100%',
     },
-    compensation: {
-        paddingLeft: 30,
+    compensationContainer: {
+        marginHorizontal: 20,
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 10,
+        backgroundColor: colors.tertiary,
+        borderColor: colors.shade,
+        borderWidth: 1,
+        borderRadius: 10,
+    },
+    compensationText: {
         fontSize: 20,
-        width: '100%',
+        fontWeight: 'bold',
+        color: colors.dark,
+        marginLeft: 10,
+        marginVertical: 10,
+        flexGrow: 1,
     },
     modalView: {
         flex: 1,
