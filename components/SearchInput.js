@@ -11,7 +11,7 @@ import * as colors from '../styles/colors';
 import React from 'react';
 import { useState } from 'react';
 
-const BACKEND_URL = 'http://192.168.10.132:3000';
+const BACKEND_URL = 'http://192.168.10.133:3000';
 
 const SearchInput = ({ updateDisplayPots }) => {
   const [search, setSearch] = useState('');
