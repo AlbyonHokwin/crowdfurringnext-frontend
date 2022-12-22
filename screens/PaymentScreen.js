@@ -15,6 +15,8 @@ import {
     SafeAreaView,
     KeyboardAvoidingView,
 } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { addContributors } from '../reducers/pots';
 import AddCard from '../components/AddCard';
 import CreditCard from '../components/CreditCard';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -25,8 +27,8 @@ const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"
 const BACKEND_URL = 'http://192.168.10.133:3000';
 
 const PaymentScreen = ({ route, navigation }) => {
+    const dispatch = useDispatch();
     const user = useSelector(state => state.user.value);
-    // const user = { token: 'fzealiujeqnejbnlz1367I4njliH' };
 
     const pot = route.params.pot;
     const [currentAmount, setCurrentAmount] = useState(pot.currentAmount);
@@ -179,8 +181,9 @@ const PaymentScreen = ({ route, navigation }) => {
             });
             const data = await response.json();
             if (data.result) {
-                setCurrentAmount(data.newAmount);
+                setCurrentAmount(data.pot.currentAmount);
                 setStep(step + 1);
+                user.token && dispatch(addContributors([data.pot]));
             }
             setIsLoading(false);
         }
