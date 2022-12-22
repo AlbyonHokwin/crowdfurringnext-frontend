@@ -1,8 +1,8 @@
-const BACKEND_URL = "http://192.168.10.132:3000";
+const BACKEND_URL = "http://192.168.10.133:3000";
 
-export async function fetcher(data, url, token) {
+export async function fetcher(data, url, method, token) {
   const response = await fetch(`${BACKEND_URL}${url}`, {
-    method: "POST",
+    method,
     headers: {
       Authorization: "Bearer " + token,
       "Content-Type": "multipart/form-data",
