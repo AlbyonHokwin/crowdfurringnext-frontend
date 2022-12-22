@@ -20,6 +20,14 @@ export const potsSlice = createSlice({
     replacePots: (state, action) => {
       state.value.request = action.payload;
     },
+    updatePot: (state, action) => {
+      const newPots = state.value.request.filter(pot => pot._id !== action.payload._id);
+      newPots.push(action.payload);
+      state.value.request = newPots;
+    },
+    removePot: (state, action) => {
+      state.value.request = state.value.request.filter(pot => pot._id !== action.payload);
+    },
     removeAll: (state, action) => {
       state.value.request = [];
       state.value.contributor = [];
@@ -27,5 +35,5 @@ export const potsSlice = createSlice({
   },
 });
 
-export const { addPots, addContributors, replacePots, removeAll } = potsSlice.actions;
+export const { addPots, addContributors, updatePot, replacePots, removePot, removeAll } = potsSlice.actions;
 export default potsSlice.reducer;
