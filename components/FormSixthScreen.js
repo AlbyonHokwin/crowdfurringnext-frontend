@@ -64,69 +64,77 @@ export default function ({
 
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={{ alignItems: "flex-start", width: "80%" }}>
-        <Text style={{ fontSize: 18, fontWeight: "600", margin: 6 }}>
-          Nom de l'animal : {animalName}
-        </Text>
-        <Text style={{ fontSize: 18, fontWeight: "600", margin: 6 }}>
-          Photos de l'animal :{" "}
-        </Text>
-
-        <View style={styles.horizontalScroll}>
-          <ScrollView horizontal={true}>
-            {pictures}
-          </ScrollView>
+    <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
+      <View style={{ alignItems: "flex-start", width: "100%" }}>
+        <View style={styles.displayInfo}>
+          <Text style={styles.infoName}>Nom de l'animal :</Text>
+          <Text style={styles.info}>{animalName}</Text>
         </View>
 
-        {infos.specie && (
-          <Text style={{ fontSize: 18, fontWeight: "600", margin: 6 }}>
-            Espèce : {infos.specie}
-          </Text>
-        )}
-        {infos.breed && (
-          <Text style={{ fontSize: 18, fontWeight: "600", margin: 6 }}>
-            Race : {infos.breed}
-          </Text>
-        )}
-        {infos.age && (
-          <Text style={{ fontSize: 18, fontWeight: "600", margin: 6 }}>
-            Age : {infos.age}
-          </Text>
-        )}
-        {infos.sex && (
-          <Text style={{ fontSize: 18, fontWeight: "600", margin: 6 }}>
-            Sexe : {infos.sex}
-          </Text>
-        )}
-        <Text style={{ fontSize: 18, fontWeight: "600", margin: 6 }}>
-          Description :
-        </Text>
-        <Text style={{ fontSize: 18 }}>
-          {description}
-        </Text>
-        <Text style={{ fontSize: 18, fontWeight: "600", margin: 6 }}>
-          Cagnotte : {amount}€
-        </Text>
-        <Text style={{ fontSize: 18, fontWeight: "600", margin: 6 }}>
-          Contrepartie :
-        </Text>
-        <View style={styles.horizontalScroll}>
-          <ScrollView horizontal={true}>
-            {compensationsList}
-          </ScrollView>
+        <View style={styles.displayInfo}>
+          <Text style={styles.infoName}>Photos de l'animal :</Text>
+          <View style={styles.horizontalScroll}>
+            <ScrollView horizontal={true}>
+              {pictures}
+            </ScrollView>
+          </View>
         </View>
-        <Text style={{ fontSize: 18, fontWeight: "600", margin: 6 }}>
-          Urgent : {urgent ? 'Oui' : 'Non'}
-        </Text>
-        <Text style={{ fontSize: 18, fontWeight: "600", margin: 6 }}>
-          Justificatif(s) :
-        </Text>
-        <View style={styles.horizontalScroll}>
-          <ScrollView horizontal={true}>
-            {documents}
-          </ScrollView>
+
+        <View style={styles.displayInfo}>
+          <Text style={styles.infoName}>Informations :</Text>
+          {infos.specie && (
+            <Text style={styles.info}>Espèce :{infos.specie}</Text>
+          )}
+          {infos.breed && (
+            <Text style={styles.info}>
+              Race : {infos.breed}
+            </Text>
+          )}
+          {infos.age && (
+            <Text style={styles.info}>
+              Age : {infos.age}
+            </Text>
+          )}
+          {infos.sex && (
+            <Text style={styles.info}>
+              Sexe : {infos.sex}
+            </Text>
+          )}
         </View>
+
+        <View style={styles.displayInfo}>
+          <Text style={styles.infoName}>Description :</Text>
+          <Text style={styles.description}>{description}</Text>
+        </View>
+
+        <View style={styles.displayInfo}>
+          <Text style={styles.infoName}>Montant demandé :</Text>
+          <Text style={styles.info}>{amount}€</Text>
+        </View>
+
+        <View style={styles.displayInfo}>
+          <Text style={styles.infoName}>Contrepartie :</Text>
+          <View style={styles.horizontalScroll}>
+            <ScrollView horizontal={true}>
+              {compensationsList}
+            </ScrollView>
+          </View>
+        </View>
+
+        <View style={styles.displayInfo}>
+          <Text style={styles.infoName}>Urgent :</Text>
+          <Text style={styles.info}>{urgent ? 'Oui' : 'Non'}</Text>
+        </View>
+
+        <View style={styles.displayInfo}>
+          <Text style={styles.infoName}>Justificatif(s) :</Text>
+          <View style={styles.horizontalScroll}>
+            <ScrollView horizontal={true}>
+              {documents}
+            </ScrollView>
+          </View>
+        </View>
+
       </View>
     </ScrollView>
   );
@@ -141,8 +149,45 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   horizontalScroll: {
-    width: '125%',
+    width: '100%',
     marginVertical: 0,
     alignSelf: 'center',
+  },
+  displayInfo: {
+    minWidth: '100%',
+    maxWidth: '100%',
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    marginVertical: 5,
+    borderRadius: 10,
+    backgroundColor: colors.light,
+    borderColor: colors.shade,
+    borderWidth: 1,
+    shadowColor: colors.accent,
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  infoName: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: colors.dark,
+    marginBottom: 5,
+  },
+  info: {
+    marginLeft: 20,
+    fontSize: 16,
+    color: colors.dark,
+    marginBottom: 2,
+  },
+  description: {
+    marginHorizontal: 20,
+    fontSize: 14,
+    color: colors.dark,
+    textAlign: 'justify',
   },
 });
