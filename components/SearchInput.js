@@ -9,7 +9,8 @@ import {
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import * as colors from '../styles/colors';
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useIsFocused } from '@react-navigation/native';
 
 const BACKEND_URL = 'http://192.168.10.133:3000';
 
@@ -17,6 +18,11 @@ const SearchInput = ({ updateDisplayPots }) => {
   const [search, setSearch] = useState('');
   const [searchInfoVisible, setSearchInfoVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    setSearch('');
+  }, [isFocused])
 
   const doSearch = async value => {
     if (!value) {
@@ -130,5 +136,5 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: colors.accent,
     marginVertical: 10,
-},
+  },
 });
