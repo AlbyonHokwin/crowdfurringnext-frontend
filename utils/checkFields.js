@@ -1,6 +1,6 @@
 import validator from "validator";
 
-export function checkFileds(
+export function checkFields(
   page,
   animalName,
   infos,
