@@ -23,7 +23,7 @@ import FormSeventhScreen from "../components/FormSeventhScreen";
 // import { SafeAreaView } from "react-native-safe-area-context";
 import ModalComponent from "../components/ModalComponent";
 
-import { checkFileds } from "../utils/checkFields";
+import { checkFields } from "../utils/checkFields";
 import { fetcher } from "../api/fetch";
 import CameraPicker from "../components/CameraPicker";
 import Button from "../components/Button";
@@ -31,10 +31,13 @@ import { convertData } from "../utils/convertData";
 
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { addPots } from "../reducers/pots";
+import { addPots, updatePot } from "../reducers/pots";
 
-export default function CreatePotScreen({ navigation }) {
+export default function CreatePotScreen({ navigation, route }) {
   const user = useSelector((state) => state.user.value);
+  const pots = useSelector((state) => state.pots.value);
+  const potId = route.params ? route.params.id : null;
+  const pot = pots.request.find(pot => pot._id === potId);
   const [isOn, setIsOn] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [message, setMessage] = useState("");
@@ -44,23 +47,24 @@ export default function CreatePotScreen({ navigation }) {
 
   // ***************FORM STATE*******************//
 
-  const [animalName, setAnimalName] = useState("");
+  const [animalName, setAnimalName] = useState(pot ? pot.animalName : "");
+  const [finalAnimalName, setFinalAnimalName] = useState('');
   const [infos, setInfos] = useState({
-    specie: "",
-    breed: "",
-    age: "",
-    sex: "",
+    specie: pot ? pot.info.specie : "",
+    breed: pot ? pot.info.race : "",
+    age: pot ? pot.info.age.toString() : "",
+    sex: pot ? pot.info.sex : "",
   });
-  const [description, setDescription] = useState("");
+  const [description, setDescription] = useState(pot ? pot.description : "");
   const [newCompensation, setNewCompensation] = useState('');
-  const [compensations, setCompensations] = useState([]);
-  const [images, setImages] = useState([]);
-  const [files, setFiles] = useState([]);
+  const [compensations, setCompensations] = useState(pot ? pot.compensations : []);
+  const [images, setImages] = useState(pot ? pot.pictures : []);
+  const [files, setFiles] = useState(pot ? pot.documents : []);
   const [page, setPage] = useState(1);
-  const [amount, setAmount] = useState("");
-  const [urgent, setUrgent] = useState(false);
-  const [explanation, setExplanation] = useState("");
-  const [socialNetworks, setSocialNetworks] = useState({
+  const [amount, setAmount] = useState(pot ? pot.targetAmount.toString() : "");
+  const [urgent, setUrgent] = useState(pot ? pot.urgent : false);
+  const [explanation, setExplanation] = useState(pot ? pot.urgenceDescription : "");
+  const [socialNetworks, setSocialNetworks] = useState(pot ? pot.socialNetwork : {
     instagram: "",
     twitter: "",
   });
@@ -76,7 +80,7 @@ export default function CreatePotScreen({ navigation }) {
   };
 
   function handleNext() {
-    const { result, message } = checkFileds(
+    const { result, message } = checkFields(
       page,
       animalName,
       infos,
@@ -108,11 +112,14 @@ export default function CreatePotScreen({ navigation }) {
       explanation,
     });
 
-    const url = `/pots/create/${boolean}`;
+    const response = pot ?
+      await fetcher(data, `/pots/update/${pot._id}/${boolean}`, 'PUT', user.token) :
+      await fetcher(data, `/pots/create/${boolean}`, 'POST', user.token);
 
-    const response = await fetcher(data, url, user.token);
     if (response.result) {
-      dispatch(addPots([response.pot]));
+      if (pot) {
+        dispatch(updatePot(response.pot));
+      } else dispatch(addPots([response.pot]));
       setStatus(false);
       if (page !== 6) {
         setPage(1);
@@ -120,19 +127,20 @@ export default function CreatePotScreen({ navigation }) {
       } else {
         setPage(page + 1);
       }
-      // setAnimalName("");
-      // setInfos({});
-      // setDescription("");
-      // setCompensations([]);
-      // setImages([]);
-      // setFiles([]);
-      // setAmount("");
-      // setUrgent(false);
-      // setExplanation("");
-      // setSocialNetworks({
-      //   instagram: "",
-      //   twitter: "",
-      // });
+      setFinalAnimalName(animalName);
+      setAnimalName("");
+      setInfos({});
+      setDescription("");
+      setCompensations([]);
+      setImages([]);
+      setFiles([]);
+      setAmount("");
+      setUrgent(false);
+      setExplanation("");
+      setSocialNetworks({
+        instagram: "",
+        twitter: "",
+      });
     } else {
       setStatus("error");
     }
@@ -268,7 +276,7 @@ export default function CreatePotScreen({ navigation }) {
       case 7:
         return (
           <FormSeventhScreen
-            animalName={animalName}
+            animalName={finalAnimalName}
             navigation={navigation}
             setPage={setPage}
           />
@@ -300,22 +308,6 @@ export default function CreatePotScreen({ navigation }) {
     <CameraPicker active={true} takePicture={takePicture} isOn={handleCamera} />
   ) : (
     <>
-      {/* <SafeAreaView
-        style={{
-          backgroundColor: colors.light,
-          // opacity: `${modalVisible ? 0.3 : 1}`,
-          flex: 1,
-          justifyContent: "space-around",
-          // paddingTop: StatusBar.currentHeight,
-        }}
-      >
-        <KeyboardAvoidingView
-          style={{
-            alignItems: "center",
-            height: "100%",
-          }}
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-        > */}
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -332,9 +324,14 @@ export default function CreatePotScreen({ navigation }) {
             navigation={navigation}
           />
 
-          {page < 2 && page !== 7 ? (
-            <View style={styles.header}>
-              <Text style={styles.headerText}>Création de cagnotte</Text>
+          <View style={styles.header}>
+            {page === 1 ?
+              <Text style={styles.headerText}>Création de cagnotte {page}/5</Text> :
+              page < 6 ? <Text style={styles.headerText}>{animalName} {page}/5</Text> :
+                page === 6 ? <Text style={styles.headerText}>Récapitulatif</Text> :
+                  page === 7 && <Text style={[styles.headerText, {width: '100%', textAlign: 'center'}]}>Félicitation !</Text>
+            }
+            {page < 7 &&
               <FontAwesome
                 name="close"
                 size={25}
@@ -348,29 +345,8 @@ export default function CreatePotScreen({ navigation }) {
                   setDouble(true);
                   setModalVisible(true);
                 }}
-              />
-            </View>
-          ) : (
-            page !== 7 && (
-              <View style={styles.header}>
-                <Text style={styles.headerText}>{animalName}</Text>
-                <FontAwesome
-                  name="close"
-                  size={25}
-                  style={{
-                    color: colors.danger,
-                    borderColor: colors.danger,
-                    textAlign: "right",
-                  }}
-                  onPress={() => {
-                    setMessage("Voulez-vous saugegarder votre cagnotte ?");
-                    setDouble(true);
-                    setModalVisible(true);
-                  }}
-                />
-              </View>
-            )
-          )}
+              />}
+          </View>
 
           {conditionalComponent()}
 

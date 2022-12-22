@@ -120,9 +120,15 @@ const PotScreen = ({ route, navigation }) => {
                 <TouchableOpacity onPress={() => navigation.goBack()} style={styles.button} activeOpacity={0.8}>
                     <Text style={styles.textBackButton}>Retour</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.navigate('Payment', { pot })} style={styles.button} activeOpacity={0.8}>
-                    <Text style={styles.textGiveButton}>Donner</Text>
-                </TouchableOpacity>
+                {pot.isValidate ?
+                    <TouchableOpacity onPress={() => navigation.navigate('Payment', { pot })} style={styles.button} activeOpacity={0.8}>
+                        <Text style={styles.textGiveButton}>Donner</Text>
+                    </TouchableOpacity> :
+                    pot.draft &&
+                    <TouchableOpacity onPress={() => navigation.navigate('CreatePot', { id: pot._id })} style={styles.button} activeOpacity={0.8}>
+                        <Text style={styles.textGiveButton}>Modifier</Text>
+                    </TouchableOpacity>
+                }
             </View>
 
             <Modal
