@@ -17,7 +17,7 @@ import { useState, useEffect, useRef } from "react";
 import * as Location from "expo-location";
 import PotLayout from "../components/PotLayout";
 import SearchInput from "../components/SearchInput";
-import { CommonActions } from "@react-navigation/native";
+import { CommonActions, useIsFocused } from "@react-navigation/native";
 
 const BACKEND_URL = "http://192.168.10.133:3000";
 
@@ -28,8 +28,9 @@ export default function HomeScreen({ route, navigation }) {
   const [modalContent, setModalContent] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const scrollY = useRef(new Animated.Value(0)).current;
+  const isFocused = useIsFocused();
 
-  if (route.params?.refresh && !isLoading) {
+  if (isFocused && route.params?.refresh && !isLoading) {
     setIsLoading(true);
     navigation.dispatch(CommonActions.setParams({ refresh: false }));
   }
@@ -96,7 +97,7 @@ export default function HomeScreen({ route, navigation }) {
         setIsLoading(false);
       })();
     }
-  }, [isLoading]);
+  }, [isLoading, route.params?.refresh]);
 
   if (!pots) return <></>;
 
