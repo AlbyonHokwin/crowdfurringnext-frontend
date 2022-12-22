@@ -5,7 +5,7 @@ import { login } from '../reducers/user';
 import * as colors from "../styles/colors";
 
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const BACKEND_ADDRESS = 'http://192.168.10.132:3000';
+const BACKEND_URL = 'http://192.168.10.132:3000';
 
 export default function ModifyInfoScreen({ navigation }) {
     const token = useSelector((state) => state.user.value.token);
