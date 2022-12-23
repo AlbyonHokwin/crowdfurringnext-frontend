@@ -11,6 +11,11 @@ import TabNavigator from "./components/TabNavigator";
 import * as NavigationBar from 'expo-navigation-bar';
 import * as colors from "./styles/colors";
 
+import {LogBox} from 'react-native';
+
+// Ignore all log notifications:
+LogBox.ignoreAllLogs();
+
 const store = configureStore({
   reducer: { user, pots },
 });
