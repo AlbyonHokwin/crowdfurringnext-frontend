@@ -1,4 +1,4 @@
-const BACKEND_URL = 'http://192.168.10.122:3000';
+const BACKEND_URL = 'http://192.168.158.89:3000';
 
 export async function fetcher(data, url, method, token) {
   const response = await fetch(`${BACKEND_URL}${url}`, {
