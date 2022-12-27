@@ -1,14 +1,18 @@
-export const background = "white";
-export const backgroundModal = "rgba(100, 100, 100, 0.7)";
-export const backgroundError = "rgba(255, 0, 0, 0.6)";
-export const borderError = "red";
-export const light = "white";
-export const dark = "#434449";
-export const primary = "#1F6F78";
-export const secondary = "#33BBAA";
-export const tertiary = "#C2F0BE";
-export const accent = "#A9F3A2";
-export const shade = "#F0F0F0";
-export const icon = "#696969";
-export const gradient = "linear-gradient(#1F6F78, #33BBAA)";
-export const danger = "#F08080";
+const colors = {};
+
+colors.background = "white";
+colors.backgroundModal = "rgba(100, 100, 100, 0.7)";
+colors.backgroundError = "rgba(255, 0, 0, 0.6)";
+colors.borderError = "red";
+colors.light = "white";
+colors.dark = "#434449";
+colors.primary = "#1F6F78";
+colors.secondary = "#33BBAA";
+colors.tertiary = "#C2F0BE";
+colors.accent = "#A9F3A2";
+colors.shade = "#F0F0F0";
+colors.icon = "#696969";
+colors.gradient = "linear-gradient(#1F6F78, #33BBAA)";
+colors.danger = "#F08080";
+
+export { colors };
