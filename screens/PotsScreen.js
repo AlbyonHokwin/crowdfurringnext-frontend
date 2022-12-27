@@ -36,7 +36,7 @@ export default function PotsScreen({ navigation }) {
 
   let boolean = true;
 
-  const BACKEND_URL = 'http://192.168.158.89:3000';
+  const BACKEND_URL = 'http://192.168.1.110:3000';
 
   function handleSubmit(id) {
     fetch(`${BACKEND_URL}/pots/delete/${id}`, {

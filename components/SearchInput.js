@@ -12,7 +12,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 
-const BACKEND_URL = 'http://192.168.158.89:3000';
+const BACKEND_URL = 'http://192.168.1.110:3000';
 
 const SearchInput = ({ updateDisplayPots }) => {
   const [search, setSearch] = useState('');
