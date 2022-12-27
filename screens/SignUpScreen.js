@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { login } from '../reducers/user';
 // import ImageProfileSelector from '../components/ImageProfileSelector';
-import * as colors from "../styles/colors";
+import { colors } from "../styles/colors";
 
 import { BACKEND_URL } from "../global";
 

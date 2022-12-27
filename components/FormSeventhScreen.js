@@ -10,7 +10,7 @@ import {
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Button from "./Button";
-import * as colors from "../styles/colors";
+import { colors } from "../styles/colors";
 
 export default function FormSeventhScreen({ animalName, setPage, navigation }) {
   function backHome() {

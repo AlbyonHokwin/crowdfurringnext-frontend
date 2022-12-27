@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { logout } from "../reducers/user";
 import { removeAll } from "../reducers/pots";
-import * as colors from "../styles/colors";
+import { colors } from "../styles/colors";
 
 export default function ProfileScreen({ navigation }) {
     const dispatch = useDispatch();

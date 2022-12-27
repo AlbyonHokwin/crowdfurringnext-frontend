@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Status
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../reducers/user';
-import * as colors from "../styles/colors";
+import { colors } from "../styles/colors";
 
 import { BACKEND_URL } from "../global";
 

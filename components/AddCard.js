@@ -7,7 +7,7 @@ import {
     TextInput,
     TouchableOpacity,
 } from 'react-native';
-import * as colors from '../styles/colors';
+import { colors } from '../styles/colors';
 
 const AddCard = ({ onPressFunction, onCloseFunction, paymentNameError, cardNumberError, securityCodeError, ownerError, dateError, isConnected }) => {
     const [paymentName, setPaymentName] = useState('');

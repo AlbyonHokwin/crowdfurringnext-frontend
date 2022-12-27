@@ -1,7 +1,7 @@
 import { Text, View, StyleSheet, ScrollView } from "react-native";
 
 import * as DocumentPicker from "expo-document-picker";
-import * as colors from "../styles/colors";
+import { colors } from "../styles/colors";
 import FileSelector from "./FileSelector";
 
 export default function FormFifthScreen({ files, setFiles }) {

@@ -11,7 +11,7 @@ import {
 import InputComponent from "./InputComponent";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Feather from "react-native-vector-icons/Feather";
-import * as colors from "../styles/colors";
+import { colors } from "../styles/colors";
 
 export default function FormThirdScreen({ input, amount, newCompensation, compensations, addCompensation, deleteCompensation }) {
   const displayCompensations = compensations.map((compensation, i) => {

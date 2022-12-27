@@ -5,7 +5,7 @@ import {
     Dimensions,
 } from 'react-native';
 import React from 'react';
-import * as colors from '../styles/colors';
+import { colors } from '../styles/colors';
 import Pot from './Pot';
 
 import { useWindowDimensions } from "react-native";

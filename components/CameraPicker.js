@@ -2,7 +2,7 @@ import { Camera, CameraType, FlashMode } from "expo-camera";
 import { useRef, useState } from "react";
 import { Text, TouchableOpacity, ActivityIndicator, StyleSheet } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import * as colors from "../styles/colors";
+import { colors } from "../styles/colors";
 
 export default function CameraPicker({ isOn, active, takePicture }) {
   const [hasPermission, setHasPermission] = useState(active);

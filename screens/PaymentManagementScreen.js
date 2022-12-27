@@ -11,7 +11,7 @@ import {
     SafeAreaView,
     TouchableOpacity,
 } from 'react-native';
-import * as colors from "../styles/colors";
+import { colors } from "../styles/colors";
 import AddCard from '../components/AddCard';
 import CreditCard from '../components/CreditCard';
 

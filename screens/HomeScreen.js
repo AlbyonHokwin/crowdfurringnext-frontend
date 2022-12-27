@@ -12,7 +12,7 @@ import {
   RefreshControl,
   Animated,
 } from "react-native";
-import * as colors from "../styles/colors";
+import { colors } from "../styles/colors";
 import { useState, useEffect, useRef } from "react";
 import * as Location from "expo-location";
 import PotLayout from "../components/PotLayout";

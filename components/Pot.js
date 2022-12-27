@@ -7,7 +7,7 @@ import {
     ProgressBarAndroidComponent,
 } from 'react-native';
 import React from 'react';
-import * as colors from '../styles/colors';
+import { colors } from '../styles/colors';
 
 const Pot = (props) => {
     const { picture, slug, width, height, displayModal, pot } = props;

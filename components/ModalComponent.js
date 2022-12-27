@@ -1,5 +1,5 @@
 import { Modal, Text, TouchableOpacity, View } from "react-native";
-import * as colors from "../styles/colors";
+import { colors } from "../styles/colors";
 
 export default function ModalComponent({
   modalVisible,

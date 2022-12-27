@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { useSelector } from "react-redux";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
-import * as colors from "../styles/colors";
+import { colors } from "../styles/colors";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MainStackNavigator from "./MainStackNavigator";

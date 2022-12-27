@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
-import * as colors from "../styles/colors";
+import { colors } from "../styles/colors";
 
 export default function InputComponent({ placeholder, name, input, value, flexGrow }) {
   return (

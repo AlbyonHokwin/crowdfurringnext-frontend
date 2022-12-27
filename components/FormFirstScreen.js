@@ -10,7 +10,7 @@ import {
 import SocialMedia from "./SocialMedia";
 import InputComponent from "./InputComponent";
 import DescriptionComponent from "./DescriptionComponent";
-import * as colors from "../styles/colors";
+import { colors } from "../styles/colors";
 
 
 export default function FirstScreen({

@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../reducers/user";
 import { addPots, addContributors } from "../reducers/pots";
-import * as colors from "../styles/colors";
+import { colors } from "../styles/colors";
 
 import { BACKEND_URL } from "../global";
 

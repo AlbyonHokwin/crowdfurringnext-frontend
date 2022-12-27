@@ -11,7 +11,7 @@ import {
   StatusBar,
 } from "react-native";
 import { useEffect, useState } from "react";
-import * as colors from "../styles/colors";
+import { colors } from "../styles/colors";
 import DisplayPots from "../components/DisplayPots";
 import { useSelector, useDispatch } from "react-redux";
 import { addPots, replacePots } from "../reducers/pots";

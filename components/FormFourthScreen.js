@@ -1,7 +1,7 @@
 import { Text, View, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Feather from "react-native-vector-icons/Feather";
-import * as colors from "../styles/colors";
+import { colors } from "../styles/colors";
 
 import { Picker } from "@react-native-picker/picker";
 import DescriptionComponent from "./DescriptionComponent";

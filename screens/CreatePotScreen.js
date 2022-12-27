@@ -9,7 +9,7 @@ import {
   StatusBar,
 } from "react-native";
 
-import * as colors from "../styles/colors";
+import { colors } from "../styles/colors";
 import { useState } from "react";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 

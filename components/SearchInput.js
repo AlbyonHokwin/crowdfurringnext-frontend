@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import * as colors from '../styles/colors';
+import { colors } from '../styles/colors';
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/native';

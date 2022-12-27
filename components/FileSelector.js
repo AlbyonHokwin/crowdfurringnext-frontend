@@ -1,6 +1,6 @@
 import { Image, Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import * as colors from "../styles/colors";
+import { colors } from "../styles/colors";
 
 export default function FileSelector({
   value,

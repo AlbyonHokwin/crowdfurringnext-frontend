@@ -20,7 +20,7 @@ import { addContributors } from '../reducers/pots';
 import AddCard from '../components/AddCard';
 import CreditCard from '../components/CreditCard';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import * as colors from '../styles/colors';
+import { colors } from '../styles/colors';
 
 import { BACKEND_URL } from "../global";
 

@@ -5,7 +5,7 @@ import {
     View,
     TouchableOpacity,
 } from 'react-native';
-import * as colors from '../styles/colors';
+import { colors } from '../styles/colors';
 
 const CreditCard = ({ isConnected, isSelected, onPress, ...card }) => {
     const expirationDate = new Date(card.expirationDate);

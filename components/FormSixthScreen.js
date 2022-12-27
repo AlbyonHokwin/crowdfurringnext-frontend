@@ -1,5 +1,5 @@
 import { Text, View, Image, ScrollView, StyleSheet } from "react-native";
-import * as colors from "../styles/colors";
+import { colors } from "../styles/colors";
 
 export default function ({
   animalName,

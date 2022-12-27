@@ -1,7 +1,7 @@
 import * as ImagePicker from "expo-image-picker";
 import CameraPicker from "./CameraPicker";
 import { StyleSheet, Text, View, ScrollView } from "react-native";
-import * as colors from "../styles/colors";
+import { colors } from "../styles/colors";
 
 import ImageSelector from "./ImageSelector";
 
