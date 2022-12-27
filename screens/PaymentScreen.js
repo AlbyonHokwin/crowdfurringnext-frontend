@@ -22,9 +22,10 @@ import CreditCard from '../components/CreditCard';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import * as colors from '../styles/colors';
 
+import { BACKEND_URL } from "./global";
+
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-const BACKEND_URL = 'http://192.168.1.110:3000';
 
 const PaymentScreen = ({ route, navigation }) => {
     const dispatch = useDispatch();

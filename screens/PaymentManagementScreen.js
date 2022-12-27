@@ -15,7 +15,7 @@ import * as colors from "../styles/colors";
 import AddCard from '../components/AddCard';
 import CreditCard from '../components/CreditCard';
 
-const BACKEND_URL = 'http://192.168.1.110:3000';
+import { BACKEND_URL } from "./global";
 
 const PaymentManagementScreen = ({ navigation }) => {
     const user = useSelector(state => state.user.value);

@@ -17,6 +17,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { addPots, replacePots } from "../reducers/pots";
 import ModalComponent from "../components/ModalComponent";
 
+import { BACKEND_URL } from "./global";
+
 export default function PotsScreen({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [id, setId] = useState("");
@@ -35,8 +37,6 @@ export default function PotsScreen({ navigation }) {
   const notValidated = pots.request.filter((pot) => !pot.isValidate && !pot.draft);
 
   let boolean = true;
-
-  const BACKEND_URL = 'http://192.168.1.110:3000';
 
   function handleSubmit(id) {
     fetch(`${BACKEND_URL}/pots/delete/${id}`, {
