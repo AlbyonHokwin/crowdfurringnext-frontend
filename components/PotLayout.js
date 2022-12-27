@@ -8,7 +8,10 @@ import React from 'react';
 import * as colors from '../styles/colors';
 import Pot from './Pot';
 
+import { useWindowDimensions } from "react-native";
+
 const PotLayout = (props) => {
+    const { height: windowHeight, width: windowWidth } = useWindowDimensions();
     const { pots, dist, height, padding, displayModal } = props;
 
     const containerStyle = [styles.container, { marginBottom: padding }];
@@ -23,8 +26,8 @@ const PotLayout = (props) => {
                         name={pots[0].animalName}
                         slug={pots[0].slug}
                         pot={pots[0]}
-                        width={Dimensions.get('screen').width - 2 * padding}
-                        height={Dimensions.get('screen').height * height}
+                        width={windowWidth - 2 * padding}
+                        height={windowHeight * height}
                         displayModal={displayModal}
                     />
                 </View>
@@ -40,8 +43,8 @@ const PotLayout = (props) => {
                             name={pots[0].animalName}
                             slug={pots[0].slug}
                             pot={pots[0]}
-                            width={Dimensions.get('screen').width * dist - 1.5 * padding}
-                            height={Dimensions.get('screen').height * height}
+                            width={windowWidth * dist - 1.5 * padding}
+                            height={windowHeight * height}
                             displayModal={displayModal}
                         />
                         <Pot
@@ -49,8 +52,8 @@ const PotLayout = (props) => {
                             name={pots[1].animalName}
                             slug={pots[1].slug}
                             pot={pots[1]}
-                            width={Dimensions.get('screen').width * (1 - dist) - 1.5 * padding}
-                            height={Dimensions.get('screen').height * height}
+                            width={windowWidth * (1 - dist) - 1.5 * padding}
+                            height={windowHeight * height}
                             displayModal={displayModal}
                         />
                     </View>
@@ -62,14 +65,14 @@ const PotLayout = (props) => {
             return (
                 <View style={containerStyle}>
                     <View style={styles.rowView}>
-                        <View style={[styles.columnView, { height: Dimensions.get('screen').height * height }]}>
+                        <View style={[styles.columnView, { height: windowHeight * height }]}>
                             <Pot
                                 picture={pots[0].pictures[0]}
                                 name={pots[0].animalName}
                                 slug={pots[0].slug}
                                 pot={pots[0]}
-                                width={Dimensions.get('screen').width * dist - 1.5 * padding}
-                                height={Dimensions.get('screen').height * height / 2 - 0.5 * padding}
+                                width={windowWidth * dist - 1.5 * padding}
+                                height={windowHeight * height / 2 - 0.5 * padding}
                                 displayModal={displayModal}
                             />
                             <Pot
@@ -77,8 +80,8 @@ const PotLayout = (props) => {
                                 name={pots[1].animalName}
                                 slug={pots[1].slug}
                                 pot={pots[1]}
-                                width={Dimensions.get('screen').width * dist - 1.5 * padding}
-                                height={Dimensions.get('screen').height * height / 2 - 0.5 * padding}
+                                width={windowWidth * dist - 1.5 * padding}
+                                height={windowHeight * height / 2 - 0.5 * padding}
                                 displayModal={displayModal}
                             />
                         </View>
@@ -87,8 +90,8 @@ const PotLayout = (props) => {
                             name={pots[2].animalName}
                             slug={pots[2].slug}
                             pot={pots[2]}
-                            width={Dimensions.get('screen').width * (1 - dist) - 1.5 * padding}
-                            height={Dimensions.get('screen').height * height}
+                            width={windowWidth * (1 - dist) - 1.5 * padding}
+                            height={windowHeight * height}
                             displayModal={displayModal}
                         />
                     </View>
@@ -99,15 +102,15 @@ const PotLayout = (props) => {
         case 4:
             return (
                 <View style={containerStyle}>
-                    <View style={[styles.columnView, { height: Dimensions.get('screen').height * height }]}>
+                    <View style={[styles.columnView, { height: windowHeight * height }]}>
                         <View style={styles.rowView}>
                             <Pot
                                 picture={pots[0].pictures[0]}
                                 name={pots[0].animalName}
                                 slug={pots[0].slug}
                                 pot={pots[0]}
-                                width={Dimensions.get('screen').width * dist - 1.5 * padding}
-                                height={Dimensions.get('screen').height * height * dist - 0.5 * padding}
+                                width={windowWidth * dist - 1.5 * padding}
+                                height={windowHeight * height * dist - 0.5 * padding}
                                 displayModal={displayModal}
                             />
                             <Pot
@@ -115,8 +118,8 @@ const PotLayout = (props) => {
                                 name={pots[1].animalName}
                                 slug={pots[1].slug}
                                 pot={pots[1]}
-                                width={Dimensions.get('screen').width * (1 - dist) - 1.5 * padding}
-                                height={Dimensions.get('screen').height * height * dist - 0.5 * padding}
+                                width={windowWidth * (1 - dist) - 1.5 * padding}
+                                height={windowHeight * height * dist - 0.5 * padding}
                                 displayModal={displayModal}
                             />
                         </View>
@@ -126,8 +129,8 @@ const PotLayout = (props) => {
                                 name={pots[2].animalName}
                                 slug={pots[2].slug}
                                 pot={pots[2]}
-                                width={Dimensions.get('screen').width * dist - 1.5 * padding}
-                                height={Dimensions.get('screen').height * height * (1 - dist) - 0.5 * padding}
+                                width={windowWidth * dist - 1.5 * padding}
+                                height={windowHeight * height * (1 - dist) - 0.5 * padding}
                                 displayModal={displayModal}
                             />
                             <Pot
@@ -135,8 +138,8 @@ const PotLayout = (props) => {
                                 name={pots[3].animalName}
                                 slug={pots[3].slug}
                                 pot={pots[3]}
-                                width={Dimensions.get('screen').width * (1 - dist) - 1.5 * padding}
-                                height={Dimensions.get('screen').height * height * (1 - dist) - 0.5 * padding}
+                                width={windowWidth * (1 - dist) - 1.5 * padding}
+                                height={windowHeight * height * (1 - dist) - 0.5 * padding}
                                 displayModal={displayModal}
                             />
                         </View>
