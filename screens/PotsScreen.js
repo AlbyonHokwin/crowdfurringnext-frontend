@@ -17,7 +17,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { addPots, replacePots } from "../reducers/pots";
 import ModalComponent from "../components/ModalComponent";
 
-import { BACKEND_URL } from "./global";
+import { BACKEND_URL } from "../global";
 
 export default function PotsScreen({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);

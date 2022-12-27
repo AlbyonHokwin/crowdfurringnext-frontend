@@ -19,7 +19,7 @@ import PotLayout from "../components/PotLayout";
 import SearchInput from "../components/SearchInput";
 import { CommonActions, useIsFocused } from "@react-navigation/native";
 
-import { BACKEND_URL } from "./global";
+import { BACKEND_URL } from "../global";
 
 export default function HomeScreen({ route, navigation }) {
   const [pots, setPots] = useState([]);

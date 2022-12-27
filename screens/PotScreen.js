@@ -16,7 +16,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Feather from "react-native-vector-icons/Feather";
 import * as colors from "../styles/colors";
 
-import { BACKEND_URL } from "./global";
+import { BACKEND_URL } from "../global";
 
 const PotScreen = ({ route, navigation }) => {
     const [pot, setPot] = useState(null);

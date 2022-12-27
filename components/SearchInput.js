@@ -12,7 +12,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 
-import { BACKEND_URL } from "./global";
+import { BACKEND_URL } from "../global";
 
 const SearchInput = ({ updateDisplayPots }) => {
   const [search, setSearch] = useState('');

@@ -1,4 +1,4 @@
-import { BACKEND_URL } from "./global";
+import { BACKEND_URL } from "../global";
 
 export async function fetcher(data, url, method, token) {
   const response = await fetch(`${BACKEND_URL}${url}`, {

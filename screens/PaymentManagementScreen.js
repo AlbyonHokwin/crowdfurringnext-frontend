@@ -15,7 +15,7 @@ import * as colors from "../styles/colors";
 import AddCard from '../components/AddCard';
 import CreditCard from '../components/CreditCard';
 
-import { BACKEND_URL } from "./global";
+import { BACKEND_URL } from "../global";
 
 const PaymentManagementScreen = ({ navigation }) => {
     const user = useSelector(state => state.user.value);

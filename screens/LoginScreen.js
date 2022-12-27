@@ -12,7 +12,7 @@ import { login } from "../reducers/user";
 import { addPots, addContributors } from "../reducers/pots";
 import * as colors from "../styles/colors";
 
-import { BACKEND_URL } from "./global";
+import { BACKEND_URL } from "../global";
 
 const EMAIL_REGEX =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
