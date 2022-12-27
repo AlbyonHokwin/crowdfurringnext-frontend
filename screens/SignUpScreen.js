@@ -12,6 +12,7 @@ import {
 import { login } from '../reducers/user';
 // import ImageProfileSelector from '../components/ImageProfileSelector';
 import { colors } from "../styles/colors";
+import { fonts } from "../styles/fonts";
 
 import { BACKEND_URL } from "../global";
 
@@ -117,7 +118,7 @@ export default function SignUpScreen({ navigation }) {
           style={[styles.input, emailError && styles.error]}
           placeholderTextColor={emailError ? colors.light : undefined}
         />
-      
+
         <TextInput
           keyboardType="default"
           placeholder={"Mot de passe"}
@@ -129,7 +130,7 @@ export default function SignUpScreen({ navigation }) {
           style={[styles.input, passwordError && styles.error]}
           placeholderTextColor={passwordError ? colors.light : undefined}
         />
-        
+
         <TextInput
           type="lastname"
           onChangeText={(value) => setLastname(value)}
@@ -138,7 +139,7 @@ export default function SignUpScreen({ navigation }) {
           style={[styles.input, lastnameError && styles.error]}
           placeholderTextColor={lastnameError ? colors.light : undefined}
         />
-        
+
         <TextInput
           type="firstname"
           onChangeText={(value) => setFirstname(value)}
@@ -147,7 +148,7 @@ export default function SignUpScreen({ navigation }) {
           style={[styles.input, firstnameError && styles.error]}
           placeholderTextColor={firstnameError ? colors.light : undefined}
         />
-        
+
         <TextInput
           textContentType="streetAddressLine1"
           onChangeText={(value) => setStreet(value)}
@@ -156,7 +157,7 @@ export default function SignUpScreen({ navigation }) {
           style={[styles.input, streetError && styles.error]}
           placeholderTextColor={streetError ? colors.light : undefined}
         />
-        
+
         <TextInput
           type="additionnal"
           style={styles.input}
@@ -174,7 +175,7 @@ export default function SignUpScreen({ navigation }) {
             style={[styles.input1, zipCodeError && styles.error]}
             placeholderTextColor={zipCodeError ? colors.light : undefined}
           />
-          
+
           <TextInput
             textContentType="addressCity"
             onChangeText={(value) => setCity(value)}
@@ -183,7 +184,7 @@ export default function SignUpScreen({ navigation }) {
             style={[styles.input2, cityError && styles.error]}
             placeholderTextColor={cityError ? colors.light : undefined}
           />
-          
+
         </View>
         {/* <View>
           <ImageProfileSelector />
@@ -196,7 +197,7 @@ export default function SignUpScreen({ navigation }) {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => handleSubmit()}
-          style={styles.button2}
+          style={styles.button}
           activeOpacity={0.8}
         >
           <Text style={styles.text2}>créer un compte</Text>
@@ -220,57 +221,35 @@ const styles = StyleSheet.create({
     borderRadius: 1,
     alignItems: "center",
   },
-  text: { 
-    fontSize: 28,
-    fontWeight: "bold",
+  text: {
+    ...fonts.baseBig.bold,
     color: colors.dark,
-},
+  },
   input: {
     flexDirection: "row",
     width: "90%",
     padding: 10,
     borderWidth: 1,
     borderColor: colors.shade,
+    ...fonts.base.normal,
     color: colors.dark,
-    fontSize: 20,
     marginVertical: 5,
     borderRadius: 5,
   },
   button: {
-    padding: 8,
-        width: '25%',
-        backgroundColor: "#1F6F78",
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'row',
-        padding: 10,
-        fontSize: 20,
-        borderRadius: 10,
-        flexGrow:1,
-        marginRight:10,
-        shadowOffset: {
-            width: 0,
-            height: 2,
-          },
-          shadowOpacity: 0.25,
+    backgroundColor: colors.primary,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10,
+    borderRadius: 10,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-  },
-  button2: {
-    padding: 8,
-        width: '57%',
-        backgroundColor: "#1F6F78",
-        borderRadius: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-          },
-          shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  height: 47,
   },
   error: {
     color: colors.light,
@@ -278,14 +257,13 @@ const styles = StyleSheet.create({
     borderColor: colors.borderError,
   },
   text2: {
-    fontSize: 20,
-    fontWeight: "bold",
+    ...fonts.baseBig.bold,
     color: colors.light,
   },
   group: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "flex-end",
+    alignItems: "center",
     width: "90%",
   },
   input1: {
@@ -294,8 +272,8 @@ const styles = StyleSheet.create({
     padding: 10,
     borderWidth: 1,
     borderColor: colors.shade,
+    ...fonts.base.normal,
     color: colors.dark,
-    fontSize: 20,
     borderRadius: 5,
   },
   input2: {
@@ -304,8 +282,8 @@ const styles = StyleSheet.create({
     padding: 10,
     borderWidth: 1,
     borderColor: colors.shade,
+    ...fonts.base.normal,
     color: colors.dark,
-    fontSize: 20,
     borderRadius: 5,
   },
   city: {

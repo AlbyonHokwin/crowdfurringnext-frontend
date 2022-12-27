@@ -5,13 +5,13 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   SafeAreaView,
-  ScrollView,
   StatusBar,
 } from "react-native";
 
-import { colors } from "../styles/colors";
 import { useState } from "react";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { colors } from "../styles/colors";
+import { fonts } from "../styles/fonts";
 
 import FormFirstScreen from "../components/FormFirstScreen";
 import FormSecondScreen from "../components/FormSecondScreen";
@@ -20,14 +20,13 @@ import FormFourthScreen from "../components/FormFourthScreen";
 import FormFifthScreen from "../components/FormFifthScreen";
 import FormSixthScreen from "../components/FormSixthScreen";
 import FormSeventhScreen from "../components/FormSeventhScreen";
-// import { SafeAreaView } from "react-native-safe-area-context";
 import ModalComponent from "../components/ModalComponent";
 
 import { checkFields } from "../modules/checkFields";
+import { convertData } from "../modules/convertData";
 import { fetcher } from "../modules/fetch";
 import CameraPicker from "../components/CameraPicker";
 import Button from "../components/Button";
-import { convertData } from "../modules/convertData";
 
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
@@ -171,11 +170,11 @@ export default function CreatePotScreen({ navigation, route }) {
 
   if (status === "isLoading") {
     return (
-      <View style={{ flex: 1, justifyContent: "center" }}>
-        <Text style={{ textAlign: "center" }} fontSize={24}>
+      <View style={styles.loadingContainer}>
+        <Text style={styles.loadingText}>
           Votre demande est en cours de traitement
         </Text>
-        <Text style={{ textAlign: "center", fontWeight: "600" }} fontSize={24}>
+        <Text style={styles.loadingText}>
           Merci de bien vouloir patienter
         </Text>
         <ActivityIndicator
@@ -189,14 +188,14 @@ export default function CreatePotScreen({ navigation, route }) {
 
   if (status === "error") {
     return (
-      <View>
-        <Text style={{ textAlign: "center" }} fontSize={18}>
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>
           Votre demande n'a pas pu être prise en compte
         </Text>
-        <Text style={{ textAlign: "center" }} fontSize={18}>
+        <Text style={styles.errorText}>
           Nous sommes désolé pour ce désagrément.
         </Text>
-        <Text style={{ textAlign: "center" }} fontSize={18}>
+        <Text style={styles.errorText}>
           Veuillez vérifier que vous êtes bien connecté à internet et cliqué de
           nouveau sur le bouton suivant
         </Text>
@@ -329,7 +328,7 @@ export default function CreatePotScreen({ navigation, route }) {
               <Text style={styles.headerText}>Création de cagnotte {page}/5</Text> :
               page < 6 ? <Text style={styles.headerText}>{animalName} {page}/5</Text> :
                 page === 6 ? <Text style={styles.headerText}>Récapitulatif</Text> :
-                  page === 7 && <Text style={[styles.headerText, {width: '100%', textAlign: 'center'}]}>Félicitation !</Text>
+                  page === 7 && <Text style={[styles.headerText, { width: '100%', textAlign: 'center' }]}>Félicitation !</Text>
             }
             {page < 7 &&
               <FontAwesome
@@ -391,7 +390,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   headerText: {
-    fontSize: 32,
+    ...fonts.baseBig.normal,
     color: colors.light,
   },
   buttonsContainer: {
@@ -414,8 +413,25 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   textButton: {
-    fontWeight: '600',
-    fontSize: 20,
+    ...fonts.base.bold,
     color: colors.light,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    ...fonts.baseBig.bold,
+    marginBottom: 30,
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  errorText: {
+    ...fonts.base.bold,
+    marginBottom: 30,
   },
 })

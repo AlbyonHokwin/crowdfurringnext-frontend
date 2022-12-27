@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { logout } from "../reducers/user";
 import { removeAll } from "../reducers/pots";
 import { colors } from "../styles/colors";
+import { fonts } from "../styles/fonts";
 
 export default function ProfileScreen({ navigation }) {
     const dispatch = useDispatch();
@@ -52,8 +53,7 @@ const styles = StyleSheet.create({
         paddingTop: StatusBar.currentHeight + 20,
     },
     title: {
-        fontSize: 30,
-        fontWeight: "bold",
+        ...fonts.title.bold,
         color: colors.dark,
         marginVertical: 30,
     },
@@ -80,8 +80,7 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     textButton: {
-        fontSize: 20,
-        fontWeight: 'bold',
+        ...fonts.base.bold,
         color: colors.light,
     },
 });

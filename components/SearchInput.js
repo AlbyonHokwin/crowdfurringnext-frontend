@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
   input: {
     marginLeft: 10,
     flexGrow: 1,
-    fontSize: 20,
+    ...fonts.base.normal,
     color: colors.dark,
   },
   searchInfoContainer: {
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     zIndex: 1000,
   },
   searchInfo: {
-    fontSize: 20,
+    ...fonts.base.normal,
     color: 'red',
   },
   divider: {

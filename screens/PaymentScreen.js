@@ -19,8 +19,8 @@ import { useDispatch } from 'react-redux';
 import { addContributors } from '../reducers/pots';
 import AddCard from '../components/AddCard';
 import CreditCard from '../components/CreditCard';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { colors } from '../styles/colors';
+import { fonts } from '../styles/fonts';
 
 import { BACKEND_URL } from "../global";
 
@@ -178,7 +178,7 @@ const PaymentScreen = ({ route, navigation }) => {
             const response = await fetch(`${BACKEND_URL}/pots/pay/${pot.slug}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ amount, email: user.email||email }),
+                body: JSON.stringify({ amount, email: user.email || email }),
             });
             const data = await response.json();
             if (data.result) {
@@ -280,11 +280,11 @@ const PaymentScreen = ({ route, navigation }) => {
                 }
 
                 {isLoading &&
-                    <View style={{ flex: 1, justifyContent: "center" }}>
-                        <Text style={{ textAlign: "center" }} fontSize={24}>
+                    <View style={styles.loadingContainer}>
+                        <Text style={styles.loadingText}>
                             Votre demande est en cours de traitement
                         </Text>
-                        <Text style={{ textAlign: "center", fontWeight: "600" }} fontSize={24}>
+                        <Text style={styles.loadingText}>
                             Merci de bien vouloir patienter
                         </Text>
                         <ActivityIndicator
@@ -317,7 +317,7 @@ const PaymentScreen = ({ route, navigation }) => {
 
             bottomContainer =
                 <View style={styles.buttonsContainer}>
-                    <TouchableOpacity onPress={() => navigation.navigate('Main', { screen: 'Home', params: { refresh: true} })} style={[styles.button, { width: '100%' }]} activeOpacity={0.8}>
+                    <TouchableOpacity onPress={() => navigation.navigate('Main', { screen: 'Home', params: { refresh: true } })} style={[styles.button, { width: '100%' }]} activeOpacity={0.8}>
                         <Text style={styles.textGiveButton}>Revenir à l'accueil</Text>
                     </TouchableOpacity>
                 </View>
@@ -369,16 +369,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     name: {
-        fontSize: 30,
-        fontWeight: 'bold',
+        ...fonts.title.bold,
         color: colors.dark,
     },
     city: {
-        fontSize: 20,
+        ...fonts.base.normal,
         color: colors.dark,
     },
     amounts: {
-        fontSize: 30,
+        ...fonts.title.normal,
         marginVertical: 5,
         padding: 10,
         borderRadius: 20,
@@ -403,8 +402,7 @@ const styles = StyleSheet.create({
         width: '80%',
     },
     textAmount: {
-        fontSize: 20,
-        fontWeight: 'bold',
+        ...fonts.base.bold,
         color: colors.dark,
     },
     amountContainer: {
@@ -418,8 +416,7 @@ const styles = StyleSheet.create({
     },
     amountInput: {
         flexGrow: 1,
-        fontSize: 20,
-        fontWeight: 'bold',
+        ...fonts.base.bold,
         textAlign: 'center',
         color: colors.dark,
     },
@@ -449,13 +446,11 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     textBackButton: {
-        fontWeight: '600',
-        fontSize: 20,
+        ...fonts.base.bold,
         color: colors.light,
     },
     textGiveButton: {
-        fontWeight: '600',
-        fontSize: 30,
+        ...fonts.title.bold,
         color: colors.light,
     },
     divider: {
@@ -471,13 +466,11 @@ const styles = StyleSheet.create({
         marginVertical: 20,
     },
     textAmountToGive: {
-        fontSize: 30,
-        fontWeight: 'bold',
+        ...fonts.title.bold,
         color: colors.dark,
     },
     amountToGive: {
-        fontSize: 40,
-        fontWeight: 'bold',
+        ...fonts.titleBig.bold,
         color: colors.dark,
     },
     loginContainer: {
@@ -488,7 +481,7 @@ const styles = StyleSheet.create({
         width: '80%',
     },
     textInformation: {
-        fontSize: 16,
+        ...fonts.baseSmall.normal,
         textAlign: 'center',
         marginBottom: 10,
     },
@@ -498,12 +491,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     thankTextName: {
-        fontSize: 40,
-        fontWeight: 'bold',
+        ...fonts.titleBig.bold,
         color: colors.dark,
     },
     thankText: {
-        fontSize: 30,
+        ...fonts.title.normal,
         color: colors.dark,
     },
     inputEmail: {
@@ -512,15 +504,24 @@ const styles = StyleSheet.create({
         backgroundColor: colors.light,
         padding: 10,
         borderRadius: 10,
-        fontSize: 20,
         borderWidth: 1,
         textAlign: 'center',
         borderColor: colors.shade,
+        ...fonts.base.normal,
         color: colors.dark,
     },
     error: {
         color: 'white',
         backgroundColor: colors.backgroundError,
         borderColor: colors.borderError,
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    loadingText: {
+        ...fonts.baseBig.bold,
+        marginBottom: 30,
     },
 });

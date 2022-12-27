@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { useEffect, useState } from "react";
 import { colors } from "../styles/colors";
+import { fonts } from "../styles/fonts";
 import DisplayPots from "../components/DisplayPots";
 import { useSelector, useDispatch } from "react-redux";
 import { addPots, replacePots } from "../reducers/pots";
@@ -63,36 +64,29 @@ export default function PotsScreen({ navigation }) {
         navigation={navigation}
         id={id}
       />
-      <View
-        style={{
-          width: "100%",
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Text>Cagnottes</Text>
+      <View style={styles.switchContainer}>
+        <Text style={isEnabled ? styles.switchName : styles.switchNameAccent}>Cagnottes</Text>
         <Switch
           trackColor={{ false: colors.shade, true: colors.secondary }}
           thumbColor={isEnabled ? colors.background : colors.background}
           ios_backgroundColor={colors.shade}
           onValueChange={toggleSwitch}
           value={isEnabled}
-          style={{ margin: 10 }}
+          style={styles.switch}
         />
-        <Text>Participations</Text>
+        <Text style={isEnabled ? styles.switchNameAccent : styles.switchName}>Participations</Text>
       </View>
 
-      <ScrollView contentContainerStyle={{ width: "100%", alignItems: "center" }} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
         {(isEnabled && !pots.contributor.length) && (
-          <View style={{ margin: 20 }}>
-            <Text style={{ fontSize: 18, fontWeight: "600" }}>
+          <View>
+            <Text style={styles.categoryName}>
               Vous n'avez pas encore participé à des cagnottes
             </Text>
           </View>
         )}
         {isEnabled && (
-          <View style={{ width: "100%", margin: 10 }}>
+          <View style={styles.potsContainer}>
             {DisplayPots(
               pots.contributor,
               navigation,
@@ -104,15 +98,15 @@ export default function PotsScreen({ navigation }) {
         )}
 
         {!isEnabled && !draft.length && !validated.length && (
-          <View style={{ margin: 20 }}>
-            <Text style={{ fontSize: 18, fontWeight: "600" }}>
+          <View>
+            <Text style={styles.categoryName}>
               Vous n'avez pas encore de cagnottes
             </Text>
           </View>
         )}
         {!isEnabled && notValidated.length ? (
-          <View style={{ width: "100%", margin: 10 }}>
-            <Text style={{ fontSize: 18, fontWeight: "600" }}>En attente de validation</Text>
+          <View style={styles.potsContainer}>
+            <Text style={styles.categoryName}>En attente de validation</Text>
             {DisplayPots(
               notValidated,
               navigation,
@@ -125,8 +119,8 @@ export default function PotsScreen({ navigation }) {
         ) : null}
 
         {!isEnabled && draft.length ? (
-          <View style={{ width: "100%", margin: 10 }}>
-            <Text style={{ fontSize: 18, fontWeight: "600" }}>Brouillons</Text>
+          <View style={styles.potsContainer}>
+            <Text style={styles.categoryName}>Brouillons</Text>
             {DisplayPots(
               draft,
               navigation,
@@ -139,8 +133,8 @@ export default function PotsScreen({ navigation }) {
         ) : null}
 
         {!isEnabled && validated.length ? (
-          <View style={{ width: "100%", margin: 10 }}>
-            <Text style={{ fontSize: 18, fontWeight: "600" }}>Validées</Text>
+          <View style={styles.potsContainer}>
+            <Text style={styles.categoryName}>Validées</Text>
             {DisplayPots(
               validated,
               navigation,
@@ -164,5 +158,46 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     backgroundColor: colors.background,
     paddingTop: StatusBar.currentHeight + 20,
+  },
+  switchContainer: {
+    flexDirection: "row",
+    paddingHorizontal: 20,
+    backgroundColor: colors.light,
+    borderRadius: 10,
+    borderColor: colors.shade,
+    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: colors.accent,
+    shadowOffset: {
+        width: 0,
+        height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  switchName: {
+    ...fonts.baseSmall.bold,
+    color: `${colors.dark}55`,
+},
+  switchNameAccent: {
+    ...fonts.baseSmall.bold,
+    color: colors.accent,
+  },
+  switch: {
+    marginHorizontal: 10,
+  },
+  scrollContainer: {
+    width: "100%",
+    alignItems: "center",
+  },
+  categoryName: {
+    ...fonts.base.bold,
+    color: colors.dark,
+  },
+  potsContainer: {
+    width: '100%',
+    marginVertical: 10,
   },
 });

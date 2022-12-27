@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../reducers/user';
 import { colors } from "../styles/colors";
+import { fonts } from "../styles/fonts";
 
 import { BACKEND_URL } from "../global";
 
@@ -10,7 +11,7 @@ const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"
 
 export default function ModifyInfoScreen({ navigation }) {
     const token = useSelector((state) => state.user.value.token);
-    
+
     const dispatch = useDispatch();
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState(false);
@@ -79,70 +80,68 @@ export default function ModifyInfoScreen({ navigation }) {
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.text}>Modifier vos Informations </Text>
-                <View style={styles.inputContainer}>
-                    <View style={styles.description1}>
-                    <TextInput
-                        placeholder="Email"
-                        keyboardType="email-address"
-                        textContentType="emailAddress"
-                        autoComplete="email"
-                        onChangeText={(value) => setEmail(value)}
-                        value={email}
-                        style={[styles.input, emailError && styles.error]}
-                        placeholderTextColor={emailError ? colors.light : undefined}
-                    />
+            <View style={styles.inputContainer}>
+                <TextInput
+                    placeholder="Email"
+                    keyboardType="email-address"
+                    textContentType="emailAddress"
+                    autoComplete="email"
+                    onChangeText={(value) => setEmail(value)}
+                    value={email}
+                    style={[styles.input, emailError && styles.error]}
+                    placeholderTextColor={emailError ? colors.light : undefined}
+                />
 
-                    <TextInput
-                        type="lastname"
-                        style={[styles.input, lastnameError && styles.error]}
-                        placeholderTextColor={lastnameError ? colors.light : undefined}
-                        onChangeText={(value) => setLastname(value)}
-                        value={lastname}
-                        placeholder="Nom" />
-                    <TextInput
-                        type="firstname"
-                        style={[styles.input, firstnameError && styles.error]}
-                        placeholderTextColor={firstnameError ? colors.light : undefined}
-                        onChangeText={(value) => setFirstname(value)}
-                        value={firstname}
-                        placeholder="Prénom" />
-                    <TextInput
-                        textContentType="streetAddressLine1"
-                        style={[styles.input, streetError && styles.error]}
-                        placeholderTextColor={streetError ? colors.light : undefined}
-                        onChangeText={(value) => setStreet(value)}
-                        value={street}
-                        placeholder="Adresse" />
-                    <TextInput
-                        type="additionnal"
-                        style={styles.input}
-                        onChangeText={(value) => setAdditionnal(value)}
-                        value={additionnal}
-                        placeholder="Complément d'adresse" />
-                        </View>
-                    <View style={styles.row}>
-                        <TextInput
-                            textContentType="postalCode"
-                            keyboardType="numeric"
-                            style={[styles.input1, zipCodeError && styles.error]}
-                            placeholderTextColor={zipCodeError ? colors.light : undefined}
-                            onChangeText={(value) => setZipCode(value)}
-                            value={zipCode}
-                            placeholder="C.P" />
-                        <TextInput
-                            textContentType="addressCity"
-                            style={[styles.input2,  cityError && styles.error]}
-                            placeholderTextColor={cityError ? colors.light : undefined} 
-                            onChangeText={(value) => setCity(value)}
-                            value={city}
-                            placeholder="Ville" />
-                    </View>
-                </View>
+                <TextInput
+                    type="lastname"
+                    style={[styles.input, lastnameError && styles.error]}
+                    placeholderTextColor={lastnameError ? colors.light : undefined}
+                    onChangeText={(value) => setLastname(value)}
+                    value={lastname}
+                    placeholder="Nom" />
+                <TextInput
+                    type="firstname"
+                    style={[styles.input, firstnameError && styles.error]}
+                    placeholderTextColor={firstnameError ? colors.light : undefined}
+                    onChangeText={(value) => setFirstname(value)}
+                    value={firstname}
+                    placeholder="Prénom" />
+                <TextInput
+                    textContentType="streetAddressLine1"
+                    style={[styles.input, streetError && styles.error]}
+                    placeholderTextColor={streetError ? colors.light : undefined}
+                    onChangeText={(value) => setStreet(value)}
+                    value={street}
+                    placeholder="Adresse" />
+                <TextInput
+                    type="additionnal"
+                    style={styles.input}
+                    onChangeText={(value) => setAdditionnal(value)}
+                    value={additionnal}
+                    placeholder="Complément d'adresse" />
                 <View style={styles.row}>
+                    <TextInput
+                        textContentType="postalCode"
+                        keyboardType="numeric"
+                        style={[styles.input1, zipCodeError && styles.error]}
+                        placeholderTextColor={zipCodeError ? colors.light : undefined}
+                        onChangeText={(value) => setZipCode(value)}
+                        value={zipCode}
+                        placeholder="C.P" />
+                    <TextInput
+                        textContentType="addressCity"
+                        style={[styles.input2, cityError && styles.error]}
+                        placeholderTextColor={cityError ? colors.light : undefined}
+                        onChangeText={(value) => setCity(value)}
+                        value={city}
+                        placeholder="Ville" />
+                </View>
+            </View>
+            <View style={styles.row}>
                 <TouchableOpacity style={styles.button} activeOpacity={0.8} title="Go to Profile"
                     onPress={() => navigation.navigate('Profile')}>
                     <Text style={styles.text2} >retour</Text></TouchableOpacity>
-                <TouchableOpacity onPress={() => handleConfirm()} style={styles.button2} activeOpacity={0.8}>
+                <TouchableOpacity onPress={() => handleConfirm()} style={styles.button} activeOpacity={0.8}>
                     <Text style={styles.text2} >Valider</Text>
                 </TouchableOpacity>
             </View>
@@ -152,7 +151,7 @@ export default function ModifyInfoScreen({ navigation }) {
 };
 
 const styles = StyleSheet.create({
-   
+
     container: {
         flex: 1,
         alignItems: 'center',
@@ -164,11 +163,7 @@ const styles = StyleSheet.create({
     inputContainer: {
         width: '100%',
         borderRadius: 1,
-        alignItems:"stretch",
-    },
-    description1: {
-       alignItems:"center",
-
+        alignItems: "center",
     },
     input: {
         flexDirection: 'row',
@@ -176,44 +171,25 @@ const styles = StyleSheet.create({
         padding: 10,
         borderWidth: 1,
         borderColor: colors.shade,
-        fontSize: 20,
         marginVertical: 5,
         borderRadius: 5,
-        },
-    button: {
-        padding: 8,
-        width: '25%',
-        backgroundColor: "#1F6F78",
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'row',
-        padding: 10,
-        fontSize: 20,
-        borderRadius: 10,
-        flexGrow:1,
-        marginRight:10,
-        shadowOffset: {
-            width: 0,
-            height: 2,
-          },
-          shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
+        ...fonts.base.normal,
     },
-    button2: {
-        padding: 8,
-        width: '57%',
-        backgroundColor: "#1F6F78",
-        borderRadius: 10,
+    button: {
+        backgroundColor: colors.primary,
+        flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
+        padding: 10,
+        borderRadius: 10,
+        marginRight: 10,
         shadowOffset: {
             width: 0,
             height: 2,
-          },
-          shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
     },
     error: {
         color: colors.light,
@@ -222,46 +198,39 @@ const styles = StyleSheet.create({
     },
     text2: {
         color: colors.light,
-        alignContent: 'center',
-        fontSize: 20,
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontWeight: "bold",
-    
+        ...fonts.baseBig.bold,
     },
     row: {
         flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         width: '90%',
         marginVertical: 5,
-        marginRight:"auto",
-        marginLeft:"auto",
-
     },
     input1: {
         flexDirection: 'row',
         padding: 10,
         borderWidth: 1,
         borderColor: colors.shade,
-        fontSize: 20,
         borderRadius: 5,
-        flexGrow:1,
-        marginRight:10
+        flexGrow: 1,
+        marginRight: 10,
+        ...fonts.base.normal,
     },
     input2: {
         flexDirection: 'row',
         padding: 10,
         borderWidth: 1,
         borderColor: colors.shade,
-        fontSize: 20,
         borderRadius: 5,
-        flexGrow:2,
-    }, 
+        flexGrow: 2,
+        ...fonts.base.normal,
+    },
     asso: {
         flexDirection: 'row',
     },
-    text: { 
-        fontSize: 28,
-        fontWeight: "bold",
+    text: {
+        ...fonts.baseBig.bold,
         color: colors.dark,
     },
 })

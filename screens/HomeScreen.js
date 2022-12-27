@@ -13,6 +13,7 @@ import {
   Animated,
 } from "react-native";
 import { colors } from "../styles/colors";
+import { fonts } from "../styles/fonts";
 import { useState, useEffect, useRef } from "react";
 import * as Location from "expo-location";
 import PotLayout from "../components/PotLayout";
@@ -239,11 +240,11 @@ export default function HomeScreen({ route, navigation }) {
         </Animated.View>
 
         {isLoading ? (
-          <View style={{ width: "100%", alignItems: "center", marginTop: 100 }}>
-            <Text style={{ fontSize: 24 }}>
+          <View style={styles.loadingContainer}>
+            <Text style={styles.loadingText}>
               Récupération des cagnottes en cours
             </Text>
-            <Text style={{ fontSize: 24, fontWeight: "bold" }}>
+            <Text style={styles.loadingText}>
               Merci de bien vouloir patienter
             </Text>
             <ActivityIndicator
@@ -320,10 +321,9 @@ const styles = StyleSheet.create({
     borderRadius: 1000,
   },
   title: {
-    fontSize: 40,
-    fontWeight: "bold",
-    marginLeft: 20,
+    ...fonts.titleBig.bold,
     color: colors.dark,
+    marginLeft: 20,
   },
   potsContainer: {
     width: "100%",
@@ -339,7 +339,6 @@ const styles = StyleSheet.create({
     padding: 25,
   },
   floatingButton: {
-    alignItems: "center",
     backgroundColor: colors.secondary,
     borderRadius: 10,
     padding: 10,
@@ -355,8 +354,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   floatingButtonText: {
-    fontWeight: "600",
-    fontSize: 40,
+    ...fonts.titleBig.bold,
     color: colors.light,
   },
   modalView: {
@@ -410,20 +408,19 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   modalTitle: {
+    ...fonts.base.normal,
     color: colors.dark,
-    fontSize: 20,
   },
   modalAmount: {
+    ...fonts.baseSmall.bold,
     color: colors.light,
-    fontSize: 16,
-    fontWeight: "bold",
     backgroundColor: colors.primary,
     borderRadius: 5,
     padding: 5,
   },
   modalText: {
+    ...fonts.baseSmall,
     color: colors.dark,
-    fontSize: 12,
   },
   modalButtons: {
     width: "100%",
@@ -439,7 +436,16 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
   },
   modalButtonText: {
+    ...fonts.baseSmall.normal,
     color: colors.light,
-    fontSize: 20,
+  },
+  loadingContainer: {
+    width: '100%',
+    alignItems: 'center',
+    marginTop: '20%',
+  },
+  loadingText: {
+    ...fonts.baseBig.bold,
+    marginBottom: 30,
   },
 });

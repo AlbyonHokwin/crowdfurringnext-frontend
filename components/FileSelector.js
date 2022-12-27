@@ -15,7 +15,7 @@ export default function FileSelector({
   };
   return (
     <View style={styles.container}>
-      <Text style={{ fontSize: 18 }}>Justificatif : {value}</Text>
+      <Text style={styles.fileName}>Justificatif : {value}</Text>
       <TouchableOpacity style={styles.fileContainer} onPress={!file ? () => handleNewFile() : undefined} activeOpacity={!file ? 0.8 : 1}>
         {file !== undefined ? (
           <>

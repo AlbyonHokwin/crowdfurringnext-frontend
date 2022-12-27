@@ -13,6 +13,7 @@ import { addPots, addContributors } from "../reducers/pots";
 import { colors } from "../styles/colors";
 
 import { BACKEND_URL } from "../global";
+import { fonts } from "../styles/fonts";
 
 const EMAIL_REGEX =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -136,11 +137,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.light,
     padding: 10,
     borderRadius: 10,
-    fontSize: 20,
     borderWidth: 1,
     borderColor: colors.shade,
-    color: colors.dark,
     marginVertical: 5,
+    ...fonts.base.normal,
+    color: colors.dark,
   },
   error: {
     color: colors.light,
@@ -172,34 +173,12 @@ const styles = StyleSheet.create({
     width: "70%",
   },
   textButton: {
-    fontSize: 20,
-    fontWeight: "bold",
+    ...fonts.base.bold,
     color: colors.light,
   },
   text: {
-    fontSize: 16,
-    fontWeight: "bold",
+    ...fonts.baseSmall.bold,
     color: colors.dark,
-  },
-  lineContainer: {
-    width: "100%",
-    marginTop: 50,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  line: {
-    borderBottomColor: "black",
-    borderBottomWidth: 1,
-    width: "90%",
-  },
-  textLine: {
-    backgroundColor: "orange",
-    textAlign: "center",
-    fontSize: 26,
-    lineHeight: 21,
-    fontWeight: "bold",
-    letterSpacing: 0.5,
-    position: "relative",
-    bottom: 6,
+    textAlign: 'center',
   },
 });

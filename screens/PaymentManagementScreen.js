@@ -12,6 +12,7 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import { colors } from "../styles/colors";
+import { fonts } from '../styles/fonts';
 import AddCard from '../components/AddCard';
 import CreditCard from '../components/CreditCard';
 
@@ -198,8 +199,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.background,
     },
     title: {
-        fontSize: 30,
-        fontWeight: "bold",
+        ...fonts.title.bold,
         color: colors.dark,
         marginVertical: 30,
     },
@@ -230,8 +230,7 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     textButton: {
-        fontWeight: '600',
-        fontSize: 20,
+        ...fonts.base.bold,
         color: colors.light,
     },
     divider: {

@@ -38,8 +38,8 @@ export default function FormFifthScreen({ files, setFiles }) {
 
   return (
     <View style={styles.container}>
-      <Text style={{ fontSize: 24 }}>Justificatifs</Text>
-      <Text style={{ fontSize: 16, marginVertical: 10, color: colors.icon }}>
+      <Text style={{ ...fonts.baseBig.normal }}>Justificatifs</Text>
+      <Text style={{ ...fonts.baseSmall.normal, marginVertical: 10, color: colors.icon }}>
         Ils vont nous aider à valider votre annonce (carnet de santé de
         l'animal, facture du vétérinaire, etc..)
       </Text>

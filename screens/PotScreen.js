@@ -15,6 +15,7 @@ import {
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Feather from "react-native-vector-icons/Feather";
 import { colors } from "../styles/colors";
+import { fonts } from '../styles/fonts';
 
 import { BACKEND_URL } from "../global";
 
@@ -171,21 +172,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     name: {
-        fontSize: 30,
-        fontWeight: 'bold',
+        ...fonts.title.bold,
         color: colors.dark,
     },
     city: {
-        fontSize: 20,
+        ...fonts.base.normal,
         color: colors.dark,
     },
     amounts: {
-        fontSize: 30,
+        ...fonts.title.normal,
+        color: colors.light,
         marginVertical: 5,
         padding: 10,
         borderRadius: 20,
         backgroundColor: colors.secondary,
-        color: colors.light,
     },
     photos: {
         width: '100%',
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
     },
     infoText: {
         flexGrow: 1,
-        fontSize: 20,
+        ...fonts.base.normal,
         color: colors.dark,
         textAlign: 'left',
         marginHorizontal: 5,
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     },
     scrollDescription: {},
     description: {
-        fontSize: 16,
+        ...fonts.baseSmall.normal,
         textAlign: 'justify',
     },
     compensations: {
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
     },
     compensationTitle: {
-        fontSize: 30,
+        ...fonts.title.normal,
         width: '100%',
     },
     scrollCompensations: {
@@ -273,8 +273,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     compensationText: {
-        fontSize: 20,
-        fontWeight: 'bold',
+        ...fonts.base.bold,
         color: colors.dark,
         marginLeft: 10,
         marginVertical: 10,
@@ -317,7 +316,6 @@ const styles = StyleSheet.create({
         padding: 25,
     },
     button: {
-        alignItems: 'center',
         backgroundColor: colors.secondary,
         borderRadius: 10,
         padding: 10,
@@ -333,13 +331,11 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     textBackButton: {
-        fontWeight: '600',
-        fontSize: 20,
+        ...fonts.base.bold,
         color: colors.light,
     },
     textGiveButton: {
-        fontWeight: '600',
-        fontSize: 30,
+        ...fonts.title.bold,
         color: colors.light,
     },
 });
