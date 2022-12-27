@@ -9,7 +9,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import TabNavigator from './components/TabNavigator';
 
 import * as NavigationBar from 'expo-navigation-bar';
-import * as colors from './styles/colors';
+import { colors } from './styles/colors';
+import { fonts } from './styles/fonts';
+
+console.log(fonts);
 
 // import {LogBox} from 'react-native';
 
