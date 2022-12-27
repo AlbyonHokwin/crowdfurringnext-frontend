@@ -1,5 +1,6 @@
 import { Text, TouchableOpacity, StyleSheet } from "react-native";
 import { colors } from "../styles/colors";
+import { fonts } from "../styles/fonts";
 
 export default function Button({ value, onPress }) {
   return (
@@ -29,8 +30,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   textButton: {
-    fontSize: 20,
-    fontWeight: "bold",
+    ...fonts.base.bold,
     color: colors.light,
   },
 });

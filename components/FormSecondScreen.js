@@ -1,7 +1,8 @@
 import * as ImagePicker from "expo-image-picker";
 import CameraPicker from "./CameraPicker";
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { colors } from "../styles/colors";
+import { fonts } from "../styles/fonts";
 
 import ImageSelector from "./ImageSelector";
 
@@ -65,8 +66,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    fontSize: 16,
-    fontWeight: 'bold',
+    ...fonts.baseSmall.bold,
     color: colors.dark,
   },
   divider: {

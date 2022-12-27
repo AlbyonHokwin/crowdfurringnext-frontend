@@ -1,5 +1,6 @@
 import { Text, View, Image, ScrollView, StyleSheet } from "react-native";
 import { colors } from "../styles/colors";
+import { fonts } from "../styles/fonts";
 
 export default function ({
   animalName,
@@ -173,20 +174,19 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   infoName: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    ...fonts.base.bold,
     color: colors.dark,
     marginBottom: 5,
   },
   info: {
     marginLeft: 20,
-    fontSize: 16,
-    color: colors.dark,
     marginBottom: 2,
+    ...fonts.baseSmall.normal,
+    color: colors.dark,
   },
   description: {
     marginHorizontal: 20,
-    fontSize: 14,
+    ...fonts.baseSmall.normal,
     color: colors.dark,
     textAlign: 'justify',
   },

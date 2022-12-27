@@ -3,6 +3,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
 import { colors } from "../styles/colors";
+import { fonts } from "../styles/fonts";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MainStackNavigator from "./MainStackNavigator";
@@ -28,7 +29,7 @@ const TabNavigator = () => {
 
                 return <FontAwesome name={iconName} size={size} color={color} />
             },
-            tabBarLabelStyle: { fontSize: 16, fontWeight: 'bold' },
+            tabBarLabelStyle: { ...fonts.baseSmall.normal },
             tabBarItemStyle: { marginVertical: 10, marginHorizontal: 10, borderRadius: 10 },
             tabBarActiveTintColor: colors.accent,
             tabBarActiveBackgroundColor: colors.secondary,

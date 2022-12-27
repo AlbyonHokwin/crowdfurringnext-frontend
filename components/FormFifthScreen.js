@@ -2,6 +2,7 @@ import { Text, View, StyleSheet, ScrollView } from "react-native";
 
 import * as DocumentPicker from "expo-document-picker";
 import { colors } from "../styles/colors";
+import { fonts } from "../styles/fonts";
 import FileSelector from "./FileSelector";
 
 export default function FormFifthScreen({ files, setFiles }) {
@@ -67,8 +68,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    fontSize: 16,
-    fontWeight: 'bold',
+    ...fonts.baseSmall.bold,
     color: colors.dark,
   },
   divider: {

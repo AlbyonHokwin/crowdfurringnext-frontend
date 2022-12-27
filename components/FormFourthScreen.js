@@ -1,7 +1,6 @@
-import { Text, View, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import Feather from "react-native-vector-icons/Feather";
+import { Text, View, StyleSheet, ScrollView } from "react-native";
 import { colors } from "../styles/colors";
+import { fonts } from "../styles/fonts";
 
 import { Picker } from "@react-native-picker/picker";
 import DescriptionComponent from "./DescriptionComponent";
@@ -58,7 +57,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    fontSize: 24,
+    ...fonts.baseBig.normal,
     color: colors.dark,
     marginBottom: 10,
   },
@@ -77,8 +76,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   label: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    ...fonts.base.bold,
     color: colors.dark,
   },
   divider: {

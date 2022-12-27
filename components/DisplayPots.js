@@ -7,6 +7,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { colors } from "../styles/colors";
+import { fonts } from "../styles/fonts";
 
 export default function DisplayPots(
   pots,
@@ -111,12 +112,11 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   animalName: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    ...fonts.base.bold,
     color: colors.dark,
   },
   amount: {
-    fontSize: 16,
+    ...fonts.baseSmall.normal,
     color: colors.dark,
   },
   button: {
@@ -137,8 +137,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   textButton: {
-    fontSize: 16,
-    fontWeight: "bold",
+    ...fonts.baseSmall.bold,
     color: colors.light,
   },
 });

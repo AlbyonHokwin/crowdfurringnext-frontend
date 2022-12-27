@@ -1,5 +1,6 @@
 import { StyleSheet, Image, View, TextInput } from "react-native";
 import { colors } from "../styles/colors";
+import { fonts } from "../styles/fonts";
 
 export default function SocialMedia({
   name,
@@ -55,9 +56,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.light,
     padding: 10,
     borderRadius: 10,
-    fontSize: 16,
     borderWidth: 1,
     borderColor: colors.shade,
+    ...fonts.baseSmall.normal,
     color: colors.dark,
     marginVertical: 5,
   },

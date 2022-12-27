@@ -12,6 +12,7 @@ import InputComponent from "./InputComponent";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Feather from "react-native-vector-icons/Feather";
 import { colors } from "../styles/colors";
+import { fonts } from "../styles/fonts";
 
 export default function FormThirdScreen({ input, amount, newCompensation, compensations, addCompensation, deleteCompensation }) {
   const displayCompensations = compensations.map((compensation, i) => {
@@ -71,8 +72,7 @@ const styles = StyleSheet.create({
     maxWidth: '80%',
   },
   text: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    ...fonts.base.bold,
     color: colors.dark,
     marginBottom: 10,
   },
@@ -101,8 +101,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   compensationText: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    ...fonts.base.bold,
     color: colors.dark,
     marginLeft: 10,
     marginVertical: 10,

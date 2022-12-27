@@ -6,6 +6,7 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import { colors } from '../styles/colors';
+import { fonts } from '../styles/fonts';
 
 const CreditCard = ({ isConnected, isSelected, onPress, ...card }) => {
     const expirationDate = new Date(card.expirationDate);
@@ -46,9 +47,8 @@ const styles = StyleSheet.create({
     },
     title: {
         width: '90%',
-        fontSize: 20,
+        ...fonts.base.bold,
         color: colors.dark,
-        fontWeight: 'bold',
         marginVertical: 5,
     },
     textsContainer: {
@@ -64,11 +64,10 @@ const styles = StyleSheet.create({
         paddingVertical: 2,
         paddingHorizontal: 10,
         borderRadius: 5,
-        fontSize: 16,
-        fontWeight: 'bold',
         letterSpacing: 2,
         borderWidth: 1,
         borderColor: colors.shade,
+        ...fonts.baseSmall.bold,
         color: colors.dark,
     },
     paymentName: {

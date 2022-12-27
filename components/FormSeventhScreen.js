@@ -1,16 +1,13 @@
 import {
-  KeyboardAvoidingView,
-  SafeAreaView,
   Text,
   View,
-  Platform,
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import Button from "./Button";
 import { colors } from "../styles/colors";
+import { fonts } from "../styles/fonts";
 
 export default function FormSeventhScreen({ animalName, setPage, navigation }) {
   function backHome() {
@@ -82,8 +79,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerText: {
-    fontSize: 24,
-    fontWeight: "bold",
+    ...fonts.baseBig.bold,
     textAlign: 'center',
     marginVertical: 3,
     color: colors.dark,
@@ -96,8 +92,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   text: {
-    fontSize: 16,
-    fontWeight: 'bold',
+    ...fonts.baseSmall.bold,
     color: colors.dark,
     marginVertical: 5,
   },
@@ -122,8 +117,7 @@ const styles = StyleSheet.create({
     width: "70%",
   },
   textButton: {
-    fontSize: 24,
-    fontWeight: "bold",
+    ...fonts.baseBig.bold,
     color: colors.light,
   },
 });

@@ -1,5 +1,6 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import { colors } from "../styles/colors";
+import { fonts } from "../styles/fonts";
 
 export default function InputComponent({ placeholder, name, input, value, flexGrow }) {
   return (
@@ -17,9 +18,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.light,
     padding: 10,
     borderRadius: 10,
-    fontSize: 20,
     borderWidth: 1,
     borderColor: colors.shade,
+    ...fonts.base.normal,
     color: colors.dark,
     marginVertical: 5,
   },

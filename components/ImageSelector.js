@@ -1,6 +1,7 @@
 import { Image, Text, TouchableOpacity, View, ScrollView, StyleSheet } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { colors } from "../styles/colors";
+import { fonts } from "../styles/fonts";
 
 export default function ImageSelector({ pickImage, images, deleteImage }) {
   const displayedImages = images.map((image, i) => {
@@ -95,8 +96,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   textButton: {
-    fontSize: 40,
-    fontWeight: 'bold',
+    ...fonts.titleBig.bold,
     color: colors.light,
   },
   buttonAdd: {

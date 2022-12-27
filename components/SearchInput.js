@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { colors } from '../styles/colors';
+import { fonts } from '../styles/fonts';
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/native';
@@ -77,10 +78,10 @@ const SearchInput = ({ updateDisplayPots }) => {
 
       {isLoading &&
         <View style={styles.searchInfoContainer}>
-          <Text style={{ fontSize: 20 }}>
+          <Text style={{ ...fonts.base.normal }}>
             Recherche en cours
           </Text>
-          <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+          <Text style={{ ...fonts.base.bold }}>
             Merci de bien vouloir patienter
           </Text>
           <ActivityIndicator

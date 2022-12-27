@@ -8,6 +8,7 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import { colors } from '../styles/colors';
+import { fonts } from '../styles/fonts';
 
 const AddCard = ({ onPressFunction, onCloseFunction, paymentNameError, cardNumberError, securityCodeError, ownerError, dateError, isConnected }) => {
     const [paymentName, setPaymentName] = useState('');
@@ -112,9 +113,8 @@ const styles = StyleSheet.create({
         marginVertical: 5,
     },
     title: {
-        fontSize: 20,
+        ...fonts.base.bold,
         color: colors.dark,
-        fontWeight: 'bold',
     },
     inputsContainer: {
         width: '90%',
@@ -124,13 +124,13 @@ const styles = StyleSheet.create({
         marginVertical: 5,
     },
     input: {
+        ...fonts.base.normal,
+        color: colors.dark,
         backgroundColor: colors.light,
         padding: 10,
         borderRadius: 10,
-        fontSize: 20,
         borderWidth: 1,
         borderColor: colors.shade,
-        color: colors.dark,
     },
     error: {
         color: colors.light,
@@ -181,8 +181,7 @@ const styles = StyleSheet.create({
         marginVertical: 5,
     },
     textButton: {
-        fontSize: 20,
-        fontWeight: 'bold',
+        ...fonts.base.bold,
         color: colors.dark,
     },
 });

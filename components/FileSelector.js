@@ -1,6 +1,7 @@
-import { Image, Text, TouchableOpacity, View, StyleSheet } from "react-native";
+import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { colors } from "../styles/colors";
+import { fonts } from "../styles/fonts";
 
 export default function FileSelector({
   value,
@@ -62,11 +63,11 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   fileName: {
-    fontSize: 16,
+    ...fonts.baseSmall.normal,
     color: colors.dark
   },
   parcourir: {
-    fontSize: 20,
+    ...fonts.base.normal,
     color: colors.dark,
     flexGrow: 1,
     textAlign: 'center',
