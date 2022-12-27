@@ -23,11 +23,11 @@ import FormSeventhScreen from "../components/FormSeventhScreen";
 // import { SafeAreaView } from "react-native-safe-area-context";
 import ModalComponent from "../components/ModalComponent";
 
-import { checkFields } from "../utils/checkFields";
-import { fetcher } from "../api/fetch";
+import { checkFields } from "../modules/checkFields";
+import { fetcher } from "../modules/fetch";
 import CameraPicker from "../components/CameraPicker";
 import Button from "../components/Button";
-import { convertData } from "../utils/convertData";
+import { convertData } from "../modules/convertData";
 
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
