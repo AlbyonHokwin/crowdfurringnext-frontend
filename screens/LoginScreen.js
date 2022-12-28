@@ -43,7 +43,7 @@ export default function LoginScreen({ navigation }) {
       fetch(`${BACKEND_URL}/users/signin`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password: password }),
+        body: JSON.stringify({ email: email.trim(), password: password.trim() }),
       })
         .then((response) => response.json())
         .then((data) => {
