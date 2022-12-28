@@ -11,9 +11,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { login } from "../reducers/user";
 import { addPots, addContributors } from "../reducers/pots";
 import { colors } from "../styles/colors";
+import { fonts } from "../styles/fonts";
+import CustomTextInput from "../components/CustomTextInput";
 
 import { BACKEND_URL } from "../global";
-import { fonts } from "../styles/fonts";
 
 const EMAIL_REGEX =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -87,6 +88,18 @@ export default function LoginScreen({ navigation }) {
           style={[styles.input, emailError && styles.error]}
           placeholderTextColor={emailError ? colors.light : undefined}
           placeholder="Adresse E-mail"
+          onChangeText={(value) => setEmail(value)}
+          value={email}
+        />
+        <CustomTextInput
+          label='E-mail'
+          width='90%'
+          isError={false}
+          placeholder="Adresse E-mail"
+          autoCapitalize="none"
+          keyboardType="email-address"
+          textContentType="emailAddress"
+          autoComplete="email"
           onChangeText={(value) => setEmail(value)}
           value={email}
         />
