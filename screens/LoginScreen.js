@@ -116,10 +116,10 @@ export default function LoginScreen({ navigation }) {
               width='90%'
               isError={emailError}
               placeholder="Adresse E-mail"
-              autoCapitalize="none"
               keyboardType="email-address"
               textContentType="emailAddress"
               autoComplete="email"
+              autoCapitalize="none"
               onChangeText={(value) => setEmail(value)}
               value={email}
               blurOnSubmit={false}
@@ -138,6 +138,9 @@ export default function LoginScreen({ navigation }) {
               width='90%'
               isError={passwordError}
               placeholder="Mot de passe"
+              keyboardType="default"
+              textContentType="password"
+              autoCorrect={false}
               secureTextEntry={true}
               onChangeText={(value) => setPassword(value)}
               value={password}
@@ -217,22 +220,6 @@ const styles = StyleSheet.create({
     width: "70%",
     justifyContent: "space-between",
     alignItems: "center",
-  },
-  input: {
-    width: "90%",
-    backgroundColor: colors.light,
-    padding: 10,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: colors.shade,
-    marginVertical: 5,
-    ...fonts.base.normal,
-    color: colors.dark,
-  },
-  error: {
-    color: colors.light,
-    backgroundColor: colors.backgroundError,
-    borderColor: colors.borderError,
   },
   divider: {
     width: "80%",

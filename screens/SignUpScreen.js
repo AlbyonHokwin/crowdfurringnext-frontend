@@ -3,7 +3,6 @@ import { useState } from "react";
 import {
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   ScrollView,
   View,
@@ -11,6 +10,7 @@ import {
   Modal,
   KeyboardAvoidingView,
   SafeAreaView,
+  ActivityIndicator,
 } from 'react-native';
 import CustomTextInput from "../components/CustomTextInput";
 import { login } from '../reducers/user';
@@ -26,7 +26,7 @@ export default function SignUpScreen({ navigation }) {
   const dispatch = useDispatch();
 
   const [formStep, setFormStep] = useState(0);
-  const maxStep = 2;
+  const maxStep = 8;
 
   const [modalVisible, setModalVisible] = useState(false);
   const [errorText, setErrorText] = useState('');
@@ -58,7 +58,7 @@ export default function SignUpScreen({ navigation }) {
     if (!(password.trim().length !== 0)) {
       setPasswordError(true);
       isOk = false;
-    } else setPassword(false);
+    } else setPasswordError(false);
 
     if (!(lastname.trim().length !== 0)) {
       setLastnameError(true);
@@ -78,7 +78,7 @@ export default function SignUpScreen({ navigation }) {
     if (!(zipCode.trim().length !== 0) || !+zipCode) {
       setZipCodeError(true);
       isOk = false;
-    } else setZipCode(false);
+    } else setZipCodeError(false);
 
     if (!(city.trim().length !== 0)) {
       setCityError(true);
@@ -141,81 +141,169 @@ export default function SignUpScreen({ navigation }) {
           <Text style={styles.text}>Créer votre profil </Text>
           {/* <View style={{ height: 200 }}></View> */}
           <View style={styles.inputContainer}>
-            <TextInput
-              placeholder="Email"
+            <CustomTextInput
+              step={1}
+              currentStep={formStep}
+              maxStep={maxStep}
+              label='E-mail'
+              width='90%'
+              isError={emailError}
+              placeholder="Adresse e-mail"
               keyboardType="email-address"
               textContentType="emailAddress"
               autoComplete="email"
+              autoCapitalize="none"
               onChangeText={(value) => setEmail(value)}
               value={email}
-              style={[styles.input, emailError && styles.error]}
-              placeholderTextColor={emailError ? colors.light : undefined}
+              blurOnSubmit={false}
+              onBlur={() => setFormStep(0)}
+              onFocus={() => setFormStep(1)}
+              onSubmitEditing={() => {
+                setEmail(email.trim());
+                setFormStep(2)
+              }}
             />
 
-            <TextInput
-              keyboardType="default"
+            <CustomTextInput
+              step={2}
+              currentStep={formStep}
+              maxStep={maxStep}
+              label='Mot de passe'
+              width='90%'
+              isError={passwordError}
               placeholder={"Mot de passe"}
+              keyboardType="default"
+              textContentType="password"
               autoCorrect={false}
               secureTextEntry={true}
-              textContentType={"password"}
               onChangeText={(value) => setPassword(value)}
               value={password}
-              style={[styles.input, passwordError && styles.error]}
-              placeholderTextColor={passwordError ? colors.light : undefined}
+              blurOnSubmit={false}
+              onBlur={() => setFormStep(0)}
+              onFocus={() => setFormStep(2)}
+              onSubmitEditing={() => setFormStep(3)}
             />
 
-            <TextInput
-              type="lastname"
+            <CustomTextInput
+              step={3}
+              currentStep={formStep}
+              maxStep={maxStep}
+              label='Nom de famille'
+              width='90%'
+              isError={lastnameError}
+              placeholder="Nom"
+              autoComplete='name'
+              textContentType='name'
               onChangeText={(value) => setLastname(value)}
               value={lastname}
-              placeholder="Nom"
-              style={[styles.input, lastnameError && styles.error]}
-              placeholderTextColor={lastnameError ? colors.light : undefined}
+              blurOnSubmit={false}
+              onBlur={() => setFormStep(0)}
+              onFocus={() => setFormStep(3)}
+              onSubmitEditing={() => {
+                setLastname(lastname.trim());
+                setFormStep(4)
+              }}
             />
 
-            <TextInput
-              type="firstname"
+            <CustomTextInput
+              step={4}
+              currentStep={formStep}
+              maxStep={maxStep}
+              label='Prénom'
+              width='90%'
+              isError={firstnameError}
+              placeholder="Prénom"
+              autoComplete='name'
+              textContentType='name'
               onChangeText={(value) => setFirstname(value)}
               value={firstname}
-              placeholder="Prénom"
-              style={[styles.input, firstnameError && styles.error]}
-              placeholderTextColor={firstnameError ? colors.light : undefined}
+              blurOnSubmit={false}
+              onBlur={() => setFormStep(0)}
+              onFocus={() => setFormStep(4)}
+              onSubmitEditing={() => {
+                setFirstname(firstname.trim());
+                setFormStep(5)
+              }}
             />
 
-            <TextInput
-              textContentType="streetAddressLine1"
+            <CustomTextInput
+              step={5}
+              currentStep={formStep}
+              maxStep={maxStep}
+              label='Adresse'
+              width='90%'
+              isError={streetError}
+              placeholder="Adresse"
+              autoComplete='postal-address'
+              textContentType='fullStreetAddress'
               onChangeText={(value) => setStreet(value)}
               value={street}
-              placeholder="Adresse"
-              style={[styles.input, streetError && styles.error]}
-              placeholderTextColor={streetError ? colors.light : undefined}
+              blurOnSubmit={false}
+              onBlur={() => setFormStep(0)}
+              onFocus={() => setFormStep(5)}
+              onSubmitEditing={() => {
+                setStreet(street.trim());
+                setFormStep(6)
+              }}
             />
 
-            <TextInput
-              type="additionnal"
-              style={styles.input}
+            <CustomTextInput
+              step={6}
+              currentStep={formStep}
+              maxStep={maxStep}
+              label="Complément d'adresse"
+              width='90%'
+              isError={false}
+              placeholder="Complément d'adresse"
               onChangeText={(value) => setAdditionnal(value)}
               value={additionnal}
-              placeholder="Complément d'adresse"
+              blurOnSubmit={false}
+              onBlur={() => setFormStep(0)}
+              onFocus={() => setFormStep(6)}
+              onSubmitEditing={() => {
+                setAdditionnal(additionnal.trim());
+                setFormStep(7)
+              }}
             />
+
             <View style={styles.city}>
-              <TextInput
-                textContentType="postalCode"
+              <CustomTextInput
+                step={7}
+                currentStep={formStep}
+                maxStep={maxStep}
+                label="Code postal"
+                width='30%'
+                isError={zipCodeError}
+                placeholder="C. P."
                 keyboardType="numeric"
+                textContentType="postalCode"
                 onChangeText={(value) => setZipCode(value)}
                 value={zipCode}
-                placeholder="C.P"
-                style={[styles.input1, zipCodeError && styles.error]}
-                placeholderTextColor={zipCodeError ? colors.light : undefined}
+                blurOnSubmit={false}
+                onBlur={() => setFormStep(0)}
+                onFocus={() => setFormStep(7)}
+                onSubmitEditing={() => setFormStep(8)}
               />
 
-              <TextInput
+              <CustomTextInput
+                step={8}
+                currentStep={formStep}
+                maxStep={maxStep}
+                label="Ville"
+                width='68%'
+                isError={cityError}
+                placeholder="Ville"
                 textContentType="addressCity"
                 onChangeText={(value) => setCity(value)}
                 value={city}
-                placeholder="Ville"
-                style={[styles.input2, cityError && styles.error]}
-                placeholderTextColor={cityError ? colors.light : undefined}
+                blurOnSubmit={false}
+                onBlur={() => setFormStep(0)}
+                onFocus={() => setFormStep(8)}
+                onSubmitEditing={() => {
+                  setCity(city.trim());
+                  setFormStep(0);
+                  handleSubmit();
+                }}
               />
             </View>
 
@@ -239,6 +327,44 @@ export default function SignUpScreen({ navigation }) {
             </TouchableOpacity>
           </View>
         </ScrollView>
+
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}
+          statusBarTranslucent={true}
+        >
+          {isLoading &&
+            <View style={styles.modalView}>
+              <View style={styles.modalContent}>
+                <ActivityIndicator
+                  style={{ margin: 10 }}
+                  size="large"
+                  color={colors.primary}
+                />
+              </View>
+            </View>}
+          {errorText &&
+            <TouchableOpacity
+              style={styles.modalView}
+              onPress={() => setModalVisible(!modalVisible)}
+              activeOpacity={1}
+            >
+              <View style={styles.modalContent}>
+                <Text style={styles.modalText}>{errorText}</Text>
+                <TouchableOpacity
+                  style={styles.modalButton}
+                  onPress={() => setModalVisible(false)}
+                >
+                  <Text style={styles.modalButtonText}>Fermer</Text>
+                </TouchableOpacity>
+              </View>
+            </TouchableOpacity>}
+        </Modal>
+
       </SafeAreaView>
     </KeyboardAvoidingView>
   );
@@ -306,34 +432,48 @@ const styles = StyleSheet.create({
     width: "90%",
     marginVertical: 20,
   },
-  input1: {
-    flexDirection: "row",
-    width: "30%",
-    padding: 10,
-    borderWidth: 1,
-    borderColor: colors.shade,
-    ...fonts.base.normal,
-    color: colors.dark,
-    borderRadius: 5,
-  },
-  input2: {
-    flexDirection: "row",
-    width: "68%",
-    padding: 10,
-    borderWidth: 1,
-    borderColor: colors.shade,
-    ...fonts.base.normal,
-    color: colors.dark,
-    borderRadius: 5,
-  },
   city: {
     flexDirection: "row",
     justifyContent: "space-between",
     width: "90%",
     marginVertical: 5,
   },
-  asso: {
-    flexDirection: "row",
+  modalView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: colors.backgroundModal,
+  },
+  modalContent: {
+    maxWidth: "70%",
+    backgroundColor: colors.background,
+    borderRadius: 10,
+    padding: 10,
+    alignItems: "center",
+    shadowColor: colors.dark,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalText: {
+    ...fonts.base.normal,
+    color: colors.dark,
+    textAlign: 'center',
+  },
+  modalButton: {
+    borderRadius: 10,
+    padding: 10,
+    elevation: 2,
+    backgroundColor: colors.primary,
+    marginVertical: 10,
+  },
+  modalButtonText: {
+    ...fonts.baseSmall.normal,
+    color: colors.light,
   },
 });
 
