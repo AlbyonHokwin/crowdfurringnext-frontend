@@ -159,8 +159,8 @@ export default function CreatePotScreen({ navigation, route }) {
   };
 
   const addCompensation = () => {
-    if (!newCompensation) return;
-    setCompensations([...compensations, newCompensation]);
+    if (!newCompensation.trim()) return;
+    setCompensations([...compensations, newCompensation.trim()]);
     setNewCompensation('');
   };
 

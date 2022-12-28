@@ -40,14 +40,22 @@ export function convertData({
 
   data.append("uploadedDocuments", JSON.stringify(uploadedDocuments));
   data.append("uploadedImages", JSON.stringify(uploadedImages));
-  data.append("animalName", animalName);
-  data.append("infos", JSON.stringify(infos));
-  data.append("socialNetworks", JSON.stringify(socialNetworks));
-  data.append("description", description);
+  data.append("animalName", animalName.trim());
+  data.append("infos", JSON.stringify({
+    specie: infos.specie.trim(),
+    breed: infos.breed.trim(),
+    age: infos.age.trim(),
+    sex: infos.sex.trim(),
+  }));
+  data.append("socialNetworks", JSON.stringify({
+    instagram: socialNetworks.instagram.trim(),
+    twitter: socialNetworks.twitter.trim(),
+  }));
+  data.append("description", description.trim());
   data.append("compensations", JSON.stringify(compensations));
-  data.append("amount", amount);
-  data.append("urgent", urgent);
-  data.append("explanation", explanation);
+  data.append("amount", amount.trim());
+  data.append("urgent", urgent.trim());
+  data.append("explanation", explanation.trim());
 
   return data;
 }
