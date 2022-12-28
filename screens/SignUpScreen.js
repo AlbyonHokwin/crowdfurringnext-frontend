@@ -8,7 +8,11 @@ import {
   ScrollView,
   View,
   StatusBar,
+  Modal,
+  KeyboardAvoidingView,
+  SafeAreaView,
 } from 'react-native';
+import CustomTextInput from "../components/CustomTextInput";
 import { login } from '../reducers/user';
 // import ImageProfileSelector from '../components/ImageProfileSelector';
 import { colors } from "../styles/colors";
@@ -20,6 +24,13 @@ const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"
 
 export default function SignUpScreen({ navigation }) {
   const dispatch = useDispatch();
+
+  const [formStep, setFormStep] = useState(0);
+  const maxStep = 2;
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [errorText, setErrorText] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState(false);
@@ -42,33 +53,40 @@ export default function SignUpScreen({ navigation }) {
     if (!EMAIL_REGEX.test(email)) {
       setEmailError(true);
       isOk = false;
-    }
+    } else setEmailError(false);
+
     if (!(password.trim().length !== 0)) {
       setPasswordError(true);
       isOk = false;
-    }
+    } else setPassword(false);
+
     if (!(lastname.trim().length !== 0)) {
       setLastnameError(true);
       isOk = false;
-    }
+    } else setLastnameError(false);
+
     if (!(firstname.trim().length !== 0)) {
       setFirstnameError(true);
       isOk = false;
-    }
+    } else setFirstnameError(false);
+
     if (!(street.trim().length !== 0)) {
       setStreetError(true);
       isOk = false;
-    }
+    } else setStreetError(false);
+
     if (!(zipCode.trim().length !== 0) || !+zipCode) {
       setZipCodeError(true);
       isOk = false;
-    }
+    } else setZipCode(false);
+
     if (!(city.trim().length !== 0)) {
       setCityError(true);
       isOk = false;
-    }
+    } else setCityError(false);
 
     if (isOk) {
+      setIsLoading(true);
       fetch(`${BACKEND_URL}/users/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -84,6 +102,7 @@ export default function SignUpScreen({ navigation }) {
       })
         .then((response) => response.json())
         .then((data) => {
+          setIsLoading(false);
           if (data.result) {
             dispatch(
               login({
@@ -99,126 +118,146 @@ export default function SignUpScreen({ navigation }) {
             setZipCode("");
             setCity("");
             navigation.goBack();
+          } else {
+            setModalVisible(true);
+            setErrorText('L\'Email est déjà utilisé !');
           }
+        })
+        .catch(error => {
+          setModalVisible(true);
+          setErrorText('Une erreur est apparu durant la requête, veuillez Réessayer');
+          console.log(error)
         });
     }
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.text}>Créer votre profil </Text>
-      <View style={styles.inputContainer}>
-        <TextInput
-          placeholder="Email"
-          keyboardType="email-address"
-          textContentType="emailAddress"
-          autoComplete="email"
-          onChangeText={(value) => setEmail(value)}
-          value={email}
-          style={[styles.input, emailError && styles.error]}
-          placeholderTextColor={emailError ? colors.light : undefined}
-        />
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+    >
+      <SafeAreaView style={{ flex: 1 }}>
+        <ScrollView contentContainerStyle={styles.container}>
+          <Text style={styles.text}>Créer votre profil </Text>
+          {/* <View style={{ height: 200 }}></View> */}
+          <View style={styles.inputContainer}>
+            <TextInput
+              placeholder="Email"
+              keyboardType="email-address"
+              textContentType="emailAddress"
+              autoComplete="email"
+              onChangeText={(value) => setEmail(value)}
+              value={email}
+              style={[styles.input, emailError && styles.error]}
+              placeholderTextColor={emailError ? colors.light : undefined}
+            />
 
-        <TextInput
-          keyboardType="default"
-          placeholder={"Mot de passe"}
-          autoCorrect={false}
-          secureTextEntry={true}
-          textContentType={"password"}
-          onChangeText={(value) => setPassword(value)}
-          value={password}
-          style={[styles.input, passwordError && styles.error]}
-          placeholderTextColor={passwordError ? colors.light : undefined}
-        />
+            <TextInput
+              keyboardType="default"
+              placeholder={"Mot de passe"}
+              autoCorrect={false}
+              secureTextEntry={true}
+              textContentType={"password"}
+              onChangeText={(value) => setPassword(value)}
+              value={password}
+              style={[styles.input, passwordError && styles.error]}
+              placeholderTextColor={passwordError ? colors.light : undefined}
+            />
 
-        <TextInput
-          type="lastname"
-          onChangeText={(value) => setLastname(value)}
-          value={lastname}
-          placeholder="Nom"
-          style={[styles.input, lastnameError && styles.error]}
-          placeholderTextColor={lastnameError ? colors.light : undefined}
-        />
+            <TextInput
+              type="lastname"
+              onChangeText={(value) => setLastname(value)}
+              value={lastname}
+              placeholder="Nom"
+              style={[styles.input, lastnameError && styles.error]}
+              placeholderTextColor={lastnameError ? colors.light : undefined}
+            />
 
-        <TextInput
-          type="firstname"
-          onChangeText={(value) => setFirstname(value)}
-          value={firstname}
-          placeholder="Prénom"
-          style={[styles.input, firstnameError && styles.error]}
-          placeholderTextColor={firstnameError ? colors.light : undefined}
-        />
+            <TextInput
+              type="firstname"
+              onChangeText={(value) => setFirstname(value)}
+              value={firstname}
+              placeholder="Prénom"
+              style={[styles.input, firstnameError && styles.error]}
+              placeholderTextColor={firstnameError ? colors.light : undefined}
+            />
 
-        <TextInput
-          textContentType="streetAddressLine1"
-          onChangeText={(value) => setStreet(value)}
-          value={street}
-          placeholder="Adresse"
-          style={[styles.input, streetError && styles.error]}
-          placeholderTextColor={streetError ? colors.light : undefined}
-        />
+            <TextInput
+              textContentType="streetAddressLine1"
+              onChangeText={(value) => setStreet(value)}
+              value={street}
+              placeholder="Adresse"
+              style={[styles.input, streetError && styles.error]}
+              placeholderTextColor={streetError ? colors.light : undefined}
+            />
 
-        <TextInput
-          type="additionnal"
-          style={styles.input}
-          onChangeText={(value) => setAdditionnal(value)}
-          value={additionnal}
-          placeholder="Complément d'adresse"
-        />
-        <View style={styles.city}>
-          <TextInput
-            textContentType="postalCode"
-            keyboardType="numeric"
-            onChangeText={(value) => setZipCode(value)}
-            value={zipCode}
-            placeholder="C.P"
-            style={[styles.input1, zipCodeError && styles.error]}
-            placeholderTextColor={zipCodeError ? colors.light : undefined}
-          />
+            <TextInput
+              type="additionnal"
+              style={styles.input}
+              onChangeText={(value) => setAdditionnal(value)}
+              value={additionnal}
+              placeholder="Complément d'adresse"
+            />
+            <View style={styles.city}>
+              <TextInput
+                textContentType="postalCode"
+                keyboardType="numeric"
+                onChangeText={(value) => setZipCode(value)}
+                value={zipCode}
+                placeholder="C.P"
+                style={[styles.input1, zipCodeError && styles.error]}
+                placeholderTextColor={zipCodeError ? colors.light : undefined}
+              />
 
-          <TextInput
-            textContentType="addressCity"
-            onChangeText={(value) => setCity(value)}
-            value={city}
-            placeholder="Ville"
-            style={[styles.input2, cityError && styles.error]}
-            placeholderTextColor={cityError ? colors.light : undefined}
-          />
+              <TextInput
+                textContentType="addressCity"
+                onChangeText={(value) => setCity(value)}
+                value={city}
+                placeholder="Ville"
+                style={[styles.input2, cityError && styles.error]}
+                placeholderTextColor={cityError ? colors.light : undefined}
+              />
+            </View>
 
-        </View>
-        {/* <View>
-          <ImageProfileSelector />
-        </View> */}
-      </View>
+            {/* <View>
+              <ImageProfileSelector />
+            </View> */}
 
-      <View style={styles.group}>
-        <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={() => navigation.goBack()}>
-          <Text style={styles.text2}>retour</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => handleSubmit()}
-          style={styles.button}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.text2}>créer un compte</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+          </View>
+
+
+          <View style={styles.group}>
+            <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={() => navigation.goBack()}>
+              <Text style={styles.text2}>retour</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => handleSubmit()}
+              style={styles.button}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.text2}>créer un compte</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   );
-}
+};
+
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     alignItems: "center",
     backgroundColor: "white",
     justifyContent: "space-between",
     paddingTop: StatusBar.currentHeight + 20,
-    paddingBottom: 20,
   },
   inputContainer: {
+    flexGrow: 1,
     width: "100%",
     backgroundColor: "#ffffff",
     borderRadius: 1,
+    justifyContent: 'center',
     alignItems: "center",
   },
   text: {
@@ -265,6 +304,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     width: "90%",
+    marginVertical: 20,
   },
   input1: {
     flexDirection: "row",
