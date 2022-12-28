@@ -59,7 +59,7 @@ export default function SignUpScreen({ navigation }) {
       setStreetError(true);
       isOk = false;
     }
-    if (!(zipCode.trim().length !== 0)) {
+    if (!(zipCode.trim().length !== 0) || !+zipCode) {
       setZipCodeError(true);
       isOk = false;
     }
@@ -73,13 +73,13 @@ export default function SignUpScreen({ navigation }) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          email,
-          password,
-          lastname,
-          firstname,
-          street,
+          email: email.trim(),
+          password: password.trim(),
+          lastname: lastname.trim(),
+          firstname: firstname.trim(),
+          street: street.trim(),
           zipCode,
-          city,
+          city: city.trim(),
         }),
       })
         .then((response) => response.json())
@@ -88,7 +88,7 @@ export default function SignUpScreen({ navigation }) {
             dispatch(
               login({
                 token: data.token,
-                email,
+                email: data.email,
               })
             );
             setEmail("");
