@@ -3,6 +3,7 @@ const colors = {};
 colors.background = "white";
 colors.backgroundModal = "rgba(100, 100, 100, 0.7)";
 colors.backgroundError = "rgba(255, 0, 0, 0.6)";
+colors.error = "red";
 colors.borderError = "red";
 colors.light = "white";
 colors.dark = "#434449";
