@@ -419,7 +419,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   modalText: {
-    ...fonts.baseSmall,
+    ...fonts.baseSmall.normal,
     color: colors.dark,
   },
   modalButtons: {
