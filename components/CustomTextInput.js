@@ -14,7 +14,7 @@ const CustomTextInput = ({ label, width, isError, step, currentStep, maxStep, ..
 
     return (
         <View style={[{ width }, styles.container, isFocused && styles.containerFocused, isError && styles.containerError]}>
-            <Text style={[styles.label, isFocused && styles.labelFocused, isError && styles.labelError]}>{label}</Text>
+            <Text numberOfLines={1} style={[styles.label, isFocused && styles.labelFocused, isError && styles.labelError]}>{label}</Text>
             <TextInput
                 ref={ref}
                 style={[styles.input, isFocused && styles.inputFocused, isError && styles.inputError]}
