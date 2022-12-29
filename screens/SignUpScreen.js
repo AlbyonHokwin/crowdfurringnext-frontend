@@ -12,9 +12,10 @@ import {
   SafeAreaView,
   ActivityIndicator,
 } from 'react-native';
+import CameraPicker from "../components/CameraPicker";
 import CustomTextInput from "../components/CustomTextInput";
 import { login } from '../reducers/user';
-// import ImageProfileSelector from '../components/ImageProfileSelector';
+import ImageProfileSelector from '../components/ImageProfileSelector';
 import { colors } from "../styles/colors";
 import { fonts } from "../styles/fonts";
 
@@ -25,6 +26,8 @@ const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"
 export default function SignUpScreen({ navigation }) {
   const dispatch = useDispatch();
 
+  const [isOn, setIsOn] = useState(false);
+
   const [formStep, setFormStep] = useState(0);
   const maxStep = 8;
 
@@ -32,6 +35,7 @@ export default function SignUpScreen({ navigation }) {
   const [errorText, setErrorText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  const [image, setImage] = useState(null);
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState(false);
   const [password, setPassword] = useState("");
@@ -131,14 +135,31 @@ export default function SignUpScreen({ navigation }) {
     }
   };
 
+  // *************************************************** //
+
+  const takePicture = (picture) => setImage(picture.uri);
+
+  const handleCamera = (isOn) => setIsOn(isOn);
+
+  //******************** Display pages ******************* //
+
+  if (isOn) return <CameraPicker active={true} takePicture={takePicture} isOn={handleCamera} />
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
-      <SafeAreaView style={{ flex: 1 }}>
-        <ScrollView contentContainerStyle={styles.container}>
-          <Text style={styles.text}>Créer votre profil </Text>
+      <SafeAreaView style={styles.container}>
+        <Text style={styles.title}>Créer votre profil </Text>
+        <ImageProfileSelector
+          image={image}
+          setImage={setImage}
+          setIsOn={setIsOn}
+          size='15%'
+        />
+
+        <ScrollView contentContainerStyle={styles.content}>
           {/* <View style={{ height: 200 }}></View> */}
           <View style={styles.inputContainer}>
             <CustomTextInput
@@ -306,27 +327,21 @@ export default function SignUpScreen({ navigation }) {
                 }}
               />
             </View>
-
-            {/* <View>
-              <ImageProfileSelector />
-            </View> */}
-
-          </View>
-
-
-          <View style={styles.buttonsContainer}>
-            <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={() => navigation.goBack()}>
-              <Text style={styles.buttonText}>retour</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => handleSubmit()}
-              style={styles.button}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.buttonText}>créer un compte</Text>
-            </TouchableOpacity>
           </View>
         </ScrollView>
+
+        <View style={styles.buttonsContainer}>
+          <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={() => navigation.goBack()}>
+            <Text style={styles.buttonText}>retour</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => handleSubmit()}
+            style={styles.button}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.buttonText}>créer un compte</Text>
+          </TouchableOpacity>
+        </View>
 
         <Modal
           animationType="fade"
@@ -372,21 +387,22 @@ export default function SignUpScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
-    alignItems: "center",
-    backgroundColor: "white",
-    justifyContent: "space-between",
+    flex: 1,
+    backgroundColor: colors.background,
     paddingTop: StatusBar.currentHeight + 20,
+    alignItems: 'center',
+  },
+  content: {
+    paddingTop: 10,
+    minWidth: '100%',
+    maxWidth: '100%',
   },
   inputContainer: {
-    flexGrow: 1,
-    width: "100%",
-    backgroundColor: "#ffffff",
-    borderRadius: 1,
+    flex: 1,
     justifyContent: 'center',
     alignItems: "center",
   },
-  text: {
+  title: {
     ...fonts.baseBig.bold,
     color: colors.dark,
   },
@@ -400,6 +416,24 @@ const styles = StyleSheet.create({
     color: colors.dark,
     marginVertical: 5,
     borderRadius: 5,
+  },
+  city: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "90%",
+    marginVertical: 5,
+  },
+  error: {
+    color: colors.light,
+    backgroundColor: colors.backgroundError,
+    borderColor: colors.borderError,
+  },
+  buttonsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "90%",
+    marginVertical: 20,
   },
   button: {
     backgroundColor: colors.primary,
@@ -416,27 +450,9 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  error: {
-    color: colors.light,
-    backgroundColor: colors.backgroundError,
-    borderColor: colors.borderError,
-  },
   buttonText: {
     ...fonts.baseBig.bold,
     color: colors.light,
-  },
-  buttonsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "90%",
-    marginVertical: 20,
-  },
-  city: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "90%",
-    marginVertical: 5,
   },
   modalView: {
     flex: 1,
