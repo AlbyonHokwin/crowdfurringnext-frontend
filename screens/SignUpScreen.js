@@ -314,16 +314,16 @@ export default function SignUpScreen({ navigation }) {
           </View>
 
 
-          <View style={styles.group}>
+          <View style={styles.buttonsContainer}>
             <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={() => navigation.goBack()}>
-              <Text style={styles.text2}>retour</Text>
+              <Text style={styles.buttonText}>retour</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => handleSubmit()}
               style={styles.button}
               activeOpacity={0.8}
             >
-              <Text style={styles.text2}>créer un compte</Text>
+              <Text style={styles.buttonText}>créer un compte</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -421,11 +421,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.backgroundError,
     borderColor: colors.borderError,
   },
-  text2: {
+  buttonText: {
     ...fonts.baseBig.bold,
     color: colors.light,
   },
-  group: {
+  buttonsContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
