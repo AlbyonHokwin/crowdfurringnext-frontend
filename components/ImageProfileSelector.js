@@ -5,7 +5,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { colors } from '../styles/colors';
 import { fonts } from '../styles/fonts';
 
-export default function ImageProfilePicker({ image, setImage, setIsOn, size }) {
+export default function ImageProfilePicker({ image, originalImage, setImage, setIsOn, size }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   let usedSize;
@@ -32,8 +32,20 @@ export default function ImageProfilePicker({ image, setImage, setIsOn, size }) {
   };
 
   return (
-    <View style={[styles.container, { height: usedSize, width: usedSize }]}>
-      <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(!modalVisible)} activeOpacity={0.8}>
+    <View style={[styles.container, { height: usedSize, width: 2 * usedSize }]}>
+
+      <View style={[styles.modalViewLeft, { height: usedSize, width: 0.4 * usedSize }]}>
+        {modalVisible && originalImage &&
+          <TouchableOpacity style={[styles.modalButton, { height: 0.4 * usedSize, width: 0.4 * usedSize }]} onPress={() => setImage(originalImage)} activeOpacity={0.8}>
+            <FontAwesome name="refresh" size={0.2 * usedSize} color={colors.secondary} />
+          </TouchableOpacity>}
+        {modalVisible && image &&
+          <TouchableOpacity style={[styles.modalButton, { height: 0.4 * usedSize, width: 0.4 * usedSize }]} onPress={() => setImage('')} activeOpacity={0.8}>
+            <FontAwesome name="close" size={0.2 * usedSize} color={colors.danger} />
+          </TouchableOpacity>}
+      </View>
+
+      <TouchableOpacity style={[styles.addButton, { height: usedSize, width: usedSize }]} onPress={() => setModalVisible(!modalVisible)} activeOpacity={0.8}>
         {image ?
           <Image source={{ uri: image, width: '100%', height: '100%' }} style={styles.image} /> :
           isLoading ?
@@ -42,20 +54,17 @@ export default function ImageProfilePicker({ image, setImage, setIsOn, size }) {
         }
       </TouchableOpacity>
 
-      {image &&
-        <TouchableOpacity style={{ position: 'absolute', bottom: 0, left: -0.15 * usedSize }} onPress={pickImage} activeOpacity={0.8}>
-          <FontAwesome name="close" size={0.25 * usedSize} color={colors.danger} onPress={() => setImage(null)} style={styles.deleteButton} />
-        </TouchableOpacity>}
-
-      {modalVisible &&
-        <View style={[styles.modalView, { height: usedSize }]}>
-          <TouchableOpacity style={[styles.modalButton, { height: 0.4 * usedSize, width: 0.4 * usedSize }]} onPress={() => setIsOn(true)} activeOpacity={0.8}>
-            <FontAwesome name="camera" size={0.2 * usedSize} color={colors.secondary} />
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.modalButton, { height: 0.4 * usedSize, width: 0.4 * usedSize }]} onPress={pickImage} activeOpacity={0.8}>
-            <FontAwesome name="image" size={0.2 * usedSize} color={colors.secondary} />
-          </TouchableOpacity>
-        </View>}
+      <View style={[styles.modalViewRight, { height: usedSize, width: 0.4 * usedSize }]}>
+        {modalVisible &&
+          <>
+            <TouchableOpacity style={[styles.modalButton, { height: 0.4 * usedSize, width: 0.4 * usedSize }]} onPress={() => setIsOn(true)} activeOpacity={0.8}>
+              <FontAwesome name="camera" size={0.2 * usedSize} color={colors.secondary} />
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.modalButton, { height: 0.4 * usedSize, width: 0.4 * usedSize }]} onPress={pickImage} activeOpacity={0.8}>
+              <FontAwesome name="image" size={0.2 * usedSize} color={colors.secondary} />
+            </TouchableOpacity>
+          </>}
+      </View>
     </View>
 
 
@@ -67,9 +76,20 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     flexDirection: 'row',
   },
+  refreshButton: {
+    backgroundColor: colors.light,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 1000,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
   addButton: {
-    width: '100%',
-    height: '100%',
     backgroundColor: colors.light,
     justifyContent: 'center',
     alignItems: 'center',
@@ -85,7 +105,12 @@ const styles = StyleSheet.create({
   image: {
     borderRadius: 1000,
   },
-  modalView: {
+  modalViewLeft: {
+    marginRight: 10,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  modalViewRight: {
     marginLeft: 10,
     justifyContent: 'space-between',
     alignItems: 'center',
