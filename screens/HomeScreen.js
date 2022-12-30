@@ -18,7 +18,7 @@ import { useState, useEffect, useRef } from "react";
 import * as Location from "expo-location";
 import PotLayout from "../components/PotLayout";
 import SearchInput from "../components/SearchInput";
-import { CommonActions, useIsFocused } from "@react-navigation/native";
+import { CommonActions } from "@react-navigation/native";
 
 import { BACKEND_URL } from "../global";
 
@@ -29,15 +29,18 @@ export default function HomeScreen({ route, navigation }) {
   const [modalContent, setModalContent] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const scrollY = useRef(new Animated.Value(0)).current;
-  const isFocused = useIsFocused();
 
-  if (isFocused && route.params?.refresh && !isLoading) {
+  if (route.params?.refresh && !isLoading) {
     setIsLoading(true);
-    navigation.dispatch(CommonActions.setParams({ refresh: false }));
+    ;
   }
 
   useEffect(() => {
     if (isLoading) {
+      if (route.params?.refresh) {
+        navigation.dispatch(CommonActions.setParams({ refresh: false }))
+      }
+
       (async () => {
         setIsLoading(true);
         let latitude = "";
