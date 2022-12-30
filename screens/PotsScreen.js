@@ -23,7 +23,6 @@ import { BACKEND_URL } from "../global";
 export default function PotsScreen({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [id, setId] = useState("");
-  const [message, setMessage] = useState("");
   const [double, setDouble] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
@@ -80,7 +79,7 @@ export default function PotsScreen({ navigation }) {
       <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
         {(isEnabled && !pots.contributor.length) && (
           <View>
-            <Text style={styles.categoryName}>
+            <Text style={styles.noPotText}>
               Vous n'avez pas encore participé à des cagnottes
             </Text>
           </View>
@@ -99,7 +98,7 @@ export default function PotsScreen({ navigation }) {
 
         {!isEnabled && !draft.length && !validated.length && (
           <View>
-            <Text style={styles.categoryName}>
+            <Text style={styles.noPotText}>
               Vous n'avez pas encore de cagnottes
             </Text>
           </View>
@@ -162,25 +161,25 @@ const styles = StyleSheet.create({
   switchContainer: {
     flexDirection: "row",
     paddingHorizontal: 20,
-    backgroundColor: colors.light,
-    borderRadius: 10,
-    borderColor: colors.shade,
-    borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: colors.accent,
-    shadowOffset: {
-        width: 0,
-        height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
+    // backgroundColor: colors.light,
+    // borderRadius: 10,
+    // borderColor: colors.shade,
+    // borderWidth: 1,
+    // shadowColor: colors.accent,
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 2
+    // },
+    // shadowOpacity: 0.25,
+    // shadowRadius: 4,
+    // elevation: 5,
   },
   switchName: {
     ...fonts.baseSmall.bold,
     color: `${colors.dark}55`,
-},
+  },
   switchNameAccent: {
     ...fonts.baseSmall.bold,
     color: colors.accent,
@@ -191,6 +190,13 @@ const styles = StyleSheet.create({
   scrollContainer: {
     width: "100%",
     alignItems: "center",
+  },
+  noPotText: {
+    maxWidth: '80%',
+    ...fonts.base.normal,
+    color: colors.dark,
+    marginTop: 20,
+    textAlign: 'center',
   },
   categoryName: {
     ...fonts.base.bold,
