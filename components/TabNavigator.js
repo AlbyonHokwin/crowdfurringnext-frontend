@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Image } from "react-native";
 import React from "react";
 import { useSelector } from "react-redux";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
@@ -25,7 +25,12 @@ const TabNavigator = () => {
                 if (route.name === "Main") iconName = "paw";
                 if (route.name === "Message") iconName = "envelope";
                 if (route.name === "Pots") iconName = "cat";
-                if (route.name === "ProfileStack") iconName = "user";
+
+                if (route.name === "ProfileStack") {
+                    if (user.picture) {
+                        return <Image source={{ uri: user.picture, width: size, height: size }} style={styles.profilePicture} />
+                    } else iconName = "user";
+                }
 
                 return <FontAwesome name={iconName} size={size} color={color} />
             },
@@ -40,7 +45,7 @@ const TabNavigator = () => {
         })}>
             <Tab.Screen name="Main" component={MainStackNavigator} options={{ title: 'Accueil' }} />
             {/* <Tab.Screen name="Message" component={MessageScreen} /> */}
-            <Tab.Screen name="Pots" component={user.token ? PotsScreen : LoginScreen} options={{ title: 'Cagnottes' }}/>
+            <Tab.Screen name="Pots" component={user.token ? PotsScreen : LoginScreen} options={{ title: 'Cagnottes' }} />
             <Tab.Screen name="ProfileStack" component={user.token ? ProfileStackNavigator : LoginScreen} options={{ title: 'Profil' }} />
         </Tab.Navigator>
     );
@@ -48,4 +53,8 @@ const TabNavigator = () => {
 
 export default TabNavigator;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    profilePicture: {
+        borderRadius: 1000,
+    },
+});
