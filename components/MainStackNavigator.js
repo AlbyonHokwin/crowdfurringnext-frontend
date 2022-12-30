@@ -21,8 +21,8 @@ const MainStackNavigator = () => {
       <MainStack.Screen name="Pot" component={PotScreen} />
       <MainStack.Screen name="Payment" component={PaymentScreen} />
       <MainStack.Screen name="CreatePot" component={user.token ? CreatePotScreen : LoginScreen} />
-      {user.token ? <MainStack.Screen name="Login" component={LoginScreen} /> : <></>}
-      {user.token ? <MainStack.Screen name="SignUp" component={SignUpScreen} /> : <></>}
+      {!user.token ? <MainStack.Screen name="Login" component={LoginScreen} /> : <></>}
+      {!user.token ? <MainStack.Screen name="SignUp" component={SignUpScreen} /> : <></>}
     </MainStack.Navigator>
   );
 };
