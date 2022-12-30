@@ -1,5 +1,3 @@
-import { useDispatch } from "react-redux";
-import { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -12,10 +10,14 @@ import {
   SafeAreaView,
   ActivityIndicator,
 } from 'react-native';
-import CameraPicker from "../components/CameraPicker";
 import CustomTextInput from "../components/CustomTextInput";
-import { login, updatePicture } from '../reducers/user';
+import CameraPicker from "../components/CameraPicker";
 import ImageProfileSelector from '../components/ImageProfileSelector';
+import { useState } from "react";
+
+import { useDispatch } from "react-redux";
+import { login } from '../reducers/user';
+
 import { colors } from "../styles/colors";
 import { fonts } from "../styles/fonts";
 
@@ -63,6 +65,7 @@ export default function SignUpScreen({ navigation }) {
 
     if (!(emailError || passwordError || lastnameError || firstnameError || streetError || zipCodeError || cityError)) {
       setIsLoading(true);
+      setModalVisible(true);
 
       const formData = new FormData();
       if (image) {
@@ -91,14 +94,13 @@ export default function SignUpScreen({ navigation }) {
 
         const data = await response.json();
 
-
-        console.log(data);
         setIsLoading(false);
+        setModalVisible(false);
 
         if (data.result) {
           dispatch(login({ token: data.token, email: data.email, picture: data.picture }));
 
-          setImage(null);
+          setImage('');
           setEmail("");
           setPassword("");
           setLastname("");
@@ -109,11 +111,10 @@ export default function SignUpScreen({ navigation }) {
 
           navigation.goBack()
         } else if (data.error === 'User already exists') {
-          setIsLoading(false);
+          setEmailError(true);
           setModalVisible(true);
           setErrorText('L\'Email est déjà utilisé !');
         } else {
-          setIsLoading(false);
           setModalVisible(true);
           setErrorText('Une erreur est apparu durant la requête, veuillez Réessayer');
         }
@@ -142,7 +143,7 @@ export default function SignUpScreen({ navigation }) {
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
       <SafeAreaView style={styles.container}>
-        <Text style={styles.title}>Créer votre profil </Text>
+        <Text style={styles.title}>Créer votre profil</Text>
         <ImageProfileSelector
           image={image}
           setImage={setImage}
@@ -151,7 +152,6 @@ export default function SignUpScreen({ navigation }) {
         />
 
         <ScrollView contentContainerStyle={styles.content}>
-          {/* <View style={{ height: 200 }}></View> */}
           <View style={styles.inputContainer}>
             <CustomTextInput
               step={1}
@@ -167,13 +167,13 @@ export default function SignUpScreen({ navigation }) {
               autoCapitalize="none"
               onChangeText={(value) => setEmail(value)}
               value={email}
-              blurOnSubmit={false}
               onBlur={() => setFormStep(0)}
               onFocus={() => setFormStep(1)}
               onSubmitEditing={() => {
                 setEmail(email.trim());
                 setFormStep(2)
               }}
+              editable={!isLoading}
             />
 
             <CustomTextInput
@@ -190,10 +190,10 @@ export default function SignUpScreen({ navigation }) {
               secureTextEntry={true}
               onChangeText={(value) => setPassword(value)}
               value={password}
-              blurOnSubmit={false}
               onBlur={() => setFormStep(0)}
               onFocus={() => setFormStep(2)}
               onSubmitEditing={() => setFormStep(3)}
+              editable={!isLoading}
             />
 
             <CustomTextInput
@@ -208,13 +208,13 @@ export default function SignUpScreen({ navigation }) {
               textContentType='name'
               onChangeText={(value) => setLastname(value)}
               value={lastname}
-              blurOnSubmit={false}
               onBlur={() => setFormStep(0)}
               onFocus={() => setFormStep(3)}
               onSubmitEditing={() => {
                 setLastname(lastname.trim());
                 setFormStep(4)
               }}
+              editable={!isLoading}
             />
 
             <CustomTextInput
@@ -229,13 +229,13 @@ export default function SignUpScreen({ navigation }) {
               textContentType='name'
               onChangeText={(value) => setFirstname(value)}
               value={firstname}
-              blurOnSubmit={false}
               onBlur={() => setFormStep(0)}
               onFocus={() => setFormStep(4)}
               onSubmitEditing={() => {
                 setFirstname(firstname.trim());
                 setFormStep(5)
               }}
+              editable={!isLoading}
             />
 
             <CustomTextInput
@@ -250,13 +250,13 @@ export default function SignUpScreen({ navigation }) {
               textContentType='fullStreetAddress'
               onChangeText={(value) => setStreet(value)}
               value={street}
-              blurOnSubmit={false}
               onBlur={() => setFormStep(0)}
               onFocus={() => setFormStep(5)}
               onSubmitEditing={() => {
                 setStreet(street.trim());
                 setFormStep(6)
               }}
+              editable={!isLoading}
             />
 
             <CustomTextInput
@@ -269,13 +269,13 @@ export default function SignUpScreen({ navigation }) {
               placeholder="Complément d'adresse"
               onChangeText={(value) => setAdditionnal(value)}
               value={additionnal}
-              blurOnSubmit={false}
               onBlur={() => setFormStep(0)}
               onFocus={() => setFormStep(6)}
               onSubmitEditing={() => {
                 setAdditionnal(additionnal.trim());
                 setFormStep(7)
               }}
+              editable={!isLoading}
             />
 
             <View style={styles.city}>
@@ -291,10 +291,10 @@ export default function SignUpScreen({ navigation }) {
                 textContentType="postalCode"
                 onChangeText={(value) => setZipCode(value)}
                 value={zipCode}
-                blurOnSubmit={false}
                 onBlur={() => setFormStep(0)}
                 onFocus={() => setFormStep(7)}
                 onSubmitEditing={() => setFormStep(8)}
+                editable={!isLoading}
               />
 
               <CustomTextInput
@@ -308,7 +308,6 @@ export default function SignUpScreen({ navigation }) {
                 textContentType="addressCity"
                 onChangeText={(value) => setCity(value)}
                 value={city}
-                blurOnSubmit={false}
                 onBlur={() => setFormStep(0)}
                 onFocus={() => setFormStep(8)}
                 onSubmitEditing={() => {
@@ -316,6 +315,7 @@ export default function SignUpScreen({ navigation }) {
                   setFormStep(0);
                   handleSubmit();
                 }}
+                editable={!isLoading}
               />
             </View>
           </View>
@@ -343,32 +343,30 @@ export default function SignUpScreen({ navigation }) {
           }}
           statusBarTranslucent={true}
         >
-          {isLoading &&
-            <View style={styles.modalView}>
-              <View style={styles.modalContent}>
+          <TouchableOpacity
+            style={styles.modalView}
+            onPress={() => setModalVisible(!modalVisible)}
+            activeOpacity={1}
+          >
+            <View style={styles.modalContent}>
+              {isLoading &&
                 <ActivityIndicator
                   style={{ margin: 10 }}
                   size="large"
                   color={colors.primary}
-                />
-              </View>
-            </View>}
-          {errorText &&
-            <TouchableOpacity
-              style={styles.modalView}
-              onPress={() => setModalVisible(!modalVisible)}
-              activeOpacity={1}
-            >
-              <View style={styles.modalContent}>
-                <Text style={styles.modalText}>{errorText}</Text>
-                <TouchableOpacity
-                  style={styles.modalButton}
-                  onPress={() => setModalVisible(false)}
-                >
-                  <Text style={styles.modalButtonText}>Fermer</Text>
-                </TouchableOpacity>
-              </View>
-            </TouchableOpacity>}
+                />}
+              {errorText &&
+                <>
+                  <Text style={styles.modalText}>{errorText}</Text>
+                  <TouchableOpacity
+                    style={styles.modalButton}
+                    onPress={() => setModalVisible(false)}
+                  >
+                    <Text style={styles.modalButtonText}>Fermer</Text>
+                  </TouchableOpacity>
+                </>}
+            </View>
+          </TouchableOpacity>
         </Modal>
 
       </SafeAreaView>
@@ -455,7 +453,7 @@ const styles = StyleSheet.create({
     maxWidth: "70%",
     backgroundColor: colors.background,
     borderRadius: 10,
-    padding: 10,
+    padding: 20,
     alignItems: "center",
     shadowColor: colors.dark,
     shadowOffset: {
@@ -476,11 +474,10 @@ const styles = StyleSheet.create({
     padding: 10,
     elevation: 2,
     backgroundColor: colors.primary,
-    marginVertical: 10,
+    marginTop: 20,
   },
   modalButtonText: {
     ...fonts.baseSmall.normal,
     color: colors.light,
   },
 });
-
