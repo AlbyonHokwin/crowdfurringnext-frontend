@@ -40,19 +40,10 @@ export default function LoginScreen({ navigation }) {
   const [passwordError, setPasswordError] = useState(false);
 
   const handleConnection = () => {
-    let signinOk = true;
+    setEmailError(!EMAIL_REGEX.test(email));
+    setPasswordError(!password.trim())
 
-    if (!EMAIL_REGEX.test(email)) {
-      setEmailError(true);
-      signinOk = false;
-    } else setEmailError(false);
-
-    if (!password.trim()) {
-      setPasswordError(true);
-      signinOk = false;
-    } else setPasswordError(false);
-
-    if (signinOk) {
+    if (!(emailError || passwordError)) {
       setIsLoading(true);
       fetch(`${BACKEND_URL}/users/signin`, {
         method: "POST",
