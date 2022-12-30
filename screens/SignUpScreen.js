@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import CameraPicker from "../components/CameraPicker";
 import CustomTextInput from "../components/CustomTextInput";
-import { login } from '../reducers/user';
+import { login, updatePicture } from '../reducers/user';
 import ImageProfileSelector from '../components/ImageProfileSelector';
 import { colors } from "../styles/colors";
 import { fonts } from "../styles/fonts";
@@ -52,86 +52,77 @@ export default function SignUpScreen({ navigation }) {
   const [cityError, setCityError] = useState(false);
   const [additionnal, setAdditionnal] = useState("");
 
-  const handleSubmit = () => {
-    let isOk = true;
-    if (!EMAIL_REGEX.test(email)) {
-      setEmailError(true);
-      isOk = false;
-    } else setEmailError(false);
+  const handleSubmit = async () => {
+    setEmailError(!EMAIL_REGEX.test(email));
+    setPasswordError(!password.trim())
+    setLastnameError(!lastname.trim());
+    setFirstnameError(!firstname.trim());
+    setStreetError(!street.trim());
+    setZipCodeError(!+zipCode);
+    setCityError(!city.trim());
 
-    if (!(password.trim().length !== 0)) {
-      setPasswordError(true);
-      isOk = false;
-    } else setPasswordError(false);
-
-    if (!(lastname.trim().length !== 0)) {
-      setLastnameError(true);
-      isOk = false;
-    } else setLastnameError(false);
-
-    if (!(firstname.trim().length !== 0)) {
-      setFirstnameError(true);
-      isOk = false;
-    } else setFirstnameError(false);
-
-    if (!(street.trim().length !== 0)) {
-      setStreetError(true);
-      isOk = false;
-    } else setStreetError(false);
-
-    if (!(zipCode.trim().length !== 0) || !+zipCode) {
-      setZipCodeError(true);
-      isOk = false;
-    } else setZipCodeError(false);
-
-    if (!(city.trim().length !== 0)) {
-      setCityError(true);
-      isOk = false;
-    } else setCityError(false);
-
-    if (isOk) {
+    if (!(emailError || passwordError || lastnameError || firstnameError || streetError || zipCodeError || cityError)) {
       setIsLoading(true);
-      fetch(`${BACKEND_URL}/users/signup`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: email.trim(),
-          password: password.trim(),
-          lastname: lastname.trim(),
-          firstname: firstname.trim(),
-          street: street.trim(),
-          zipCode,
-          city: city.trim(),
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
+
+      const formData = new FormData();
+      if (image) {
+        formData.append('profilePicture', {
+          uri: image,
+          name: 'profilePicture.jpg',
+          type: 'image/jpeg',
+        });
+      }
+
+      formData.append('email', email.trim());
+      formData.append('password', password.trim());
+      formData.append('lastname', lastname.trim());
+      formData.append('firstname', firstname.trim());
+      formData.append('street', street.trim());
+      formData.append('additionnal', additionnal.trim());
+      formData.append('zipCode', zipCode.trim());
+      formData.append('city', city.trim());
+
+      try {
+        const response = await fetch(`${BACKEND_URL}/users/signup`, {
+          method: "POST",
+          headers: { "Content-Type": "multipart/form-data" },
+          body: formData,
+        });
+
+        const data = await response.json();
+
+
+        console.log(data);
+        setIsLoading(false);
+
+        if (data.result) {
+          dispatch(login({ token: data.token, email: data.email, picture: data.picture }));
+
+          setImage(null);
+          setEmail("");
+          setPassword("");
+          setLastname("");
+          setFirstname("");
+          setStreet("");
+          setZipCode("");
+          setCity("");
+
+          navigation.goBack()
+        } else if (data.error === 'User already exists') {
           setIsLoading(false);
-          if (data.result) {
-            dispatch(
-              login({
-                token: data.token,
-                email: data.email,
-              })
-            );
-            setEmail("");
-            setPassword("");
-            setLastname("");
-            setFirstname("");
-            setStreet("");
-            setZipCode("");
-            setCity("");
-            navigation.goBack();
-          } else {
-            setModalVisible(true);
-            setErrorText('L\'Email est déjà utilisé !');
-          }
-        })
-        .catch(error => {
+          setModalVisible(true);
+          setErrorText('L\'Email est déjà utilisé !');
+        } else {
+          setIsLoading(false);
           setModalVisible(true);
           setErrorText('Une erreur est apparu durant la requête, veuillez Réessayer');
-          console.log(error)
-        });
+        }
+      } catch (error) {
+        setIsLoading(false);
+        setModalVisible(true);
+        setErrorText('Une erreur est apparu durant la requête, veuillez Réessayer');
+        console.log(error)
+      }
     }
   };
 
@@ -143,7 +134,7 @@ export default function SignUpScreen({ navigation }) {
 
   //******************** Display pages ******************* //
 
-  if (isOn) return <CameraPicker active={true} takePicture={takePicture} isOn={handleCamera} />
+  if (isOn) return <CameraPicker active={true} takePicture={takePicture} isOn={handleCamera} />;
 
   return (
     <KeyboardAvoidingView
