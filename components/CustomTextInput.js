@@ -1,15 +1,13 @@
 import { StyleSheet, View, Text, TextInput } from 'react-native';
 import React from 'react';
-import { useState, useRef } from 'react';
+import { useRef } from 'react';
 import { colors } from '../styles/colors';
 import { fonts } from '../styles/fonts';
 
 const CustomTextInput = ({ label, width, isError, step, currentStep, maxStep, ...props }) => {
-    // const [isFocused, setIsFocused] = useState(false)
     const ref = useRef(null);
 
     const isFocused = step === currentStep;
-
     isFocused && ref.current.focus();
 
     return (
@@ -20,6 +18,7 @@ const CustomTextInput = ({ label, width, isError, step, currentStep, maxStep, ..
                 style={[styles.input, isFocused && styles.inputFocused, isError && styles.inputError]}
                 placeholderTextColor={isFocused ? `${colors.accent}55` : isError ? colors.error : colors.shade}
                 returnKeyType={step < maxStep ? 'next' : 'done'}
+                blurOnSubmit={false}
                 {...props}
             />
         </View>
